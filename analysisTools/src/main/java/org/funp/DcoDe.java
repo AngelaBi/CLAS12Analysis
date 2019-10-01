@@ -19,11 +19,11 @@ public class DcoDe
 {
   public static void main( String[] args )
   {
-    int user=0;//user==1 is justin
+    int user=1;//user==1 is justin
     HipoReader reader = new HipoReader(); // Create a reader obejct
     //reader.open("/home/jnp/data/out_6489_2xx_3xx.hipo"); // open a file
     if(user==1)
-    reader.open("/home/justind/DATA/out_6489_2xx_3xx.hipo"); // open a file
+    reader.open("/home/justind/DATA/dst_edeut_006596.hipo"); // open a file
     else
     reader.open("/Users/biselli/Data/clas12/rgB/pass0v15/out_6595_2xx-3xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
@@ -51,10 +51,11 @@ public class DcoDe
         hNC.fillBasicHisto(ev);
         if(ev.DVCScut()){
           ndvcs++;
-          //if(vMMass.mass2()>-1 && vMMass.mass2()<1 && (vphoton.theta()*180./Math.PI)<5){
+          if(vMMass.mass2()>-1 && vMMass.mass2()<1){
           //    MMom.fill(vMMom.p());
           hDC.fillBasicHisto(ev);
-          if((Math.toDegrees(ev.vphoton.theta())<5)  && ev.coneangle()<3 && ev.X("ehg").mass2()<15){
+          //(Math.toDegrees(ev.vphoton.theta())<5)  && ev.vphoton.getInt("status",ng)<2000 &&
+          if( ev.coneangle()<5 && ev.X("ehg").e()<2){
             hAC.fillBasicHisto(ev);
             counter++;
           }

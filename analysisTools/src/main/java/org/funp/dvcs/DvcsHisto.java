@@ -111,7 +111,7 @@ public class DvcsHisto {
     PhiPlaneHist.setTitle("Photon Phi Plane");
     DPhiHist = new H1F("DPhiHist",100,-180,180);
     DPhiHist.setTitle("DPhi");
-    DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-100,100);
+    DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-10,10);
     DeltaPhiPlaneHist.setTitle("Delta Phi Plane");
     DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane",100,-100,100);
     DeltaPhiPlaneMattHist.setTitle("Delta Phi Plane Hattawy");
