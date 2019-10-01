@@ -31,14 +31,16 @@ public class DvcsHisto {
 
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
   public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
-
+  public H2F egXmissingM2vsTh;
 
   public H2F ThvsPhi;//Theta vs phi for hadron
+  public H2F ThvsP;//Theta vs mom for hadron
 
   //public H2F MMvsMpz;
   //public H2F MpxvsMpz;
 
-  public H1F ThetaHist;//theta gamma
+  public H1F hgTh;//theta gamma
+  public H1F hgEn;//Energy gamma
   //public H1F DAngleGammaHist ; //angle between gamma vector and missing hadron+e vector
   public H1F ConeAngleHist;//angle between gamma vector and missing hadron+e vector
   public H1F MissThetaHist;//theta missing hadron+e vector
@@ -52,6 +54,11 @@ public class DvcsHisto {
   public H2F betavsP ;
   public H2F betacalcvsP;
   public H1F deltabeta;
+
+  public H2F ctofdedxvsp;
+
+
+
 
   public DvcsHisto() {
     W= new H1F("W" ,100, 0, 10.0);
@@ -73,25 +80,29 @@ public class DvcsHisto {
 
     edgXmissingE = new H1F("edgXmissingE",100,0,10);
     edgXmissingE.setTitle("eDGammaX Missing Energy");
-    edgXmissingM2 = new H1F("edgXmissingM2",100,-10,10);
+    edgXmissingM2 = new H1F("edgXmissingM2",100,-4,4);
     edgXmissingM2.setTitle("eDGammaX Missing Mass2");
-    edgXmissingP = new H1F("edgXmissingP",100,0,10);
+    edgXmissingP = new H1F("edgXmissingP",100,0,4);
     edgXmissingP.setTitle("eDGammaX Missing Momentum");
-    edgXmissingPx = new H1F("MMomx",100,-5,5);
+    edgXmissingPx = new H1F("MMomx",100,-1,1);
     edgXmissingPx.setTitleX("Missing X Momentum");
-    edgXmissingPy = new H1F("MMomy",100,-5,5);
+    edgXmissingPy = new H1F("MMomy",100,-1,1);
     edgXmissingPy.setTitleX("Missing Y Momentum");
     edgXmissingPz = new H1F("MMomz",100,-5,5);
     edgXmissingPz.setTitleX("Missing Z Momentum");
 
     edXmissingM2 = new H1F("edXmissingM2",100,-10,10);
     edXmissingM2.setTitle("eDX Missing Mass2");
-    egXmissingM2 = new H1F("egXmissingM2",100,-10,10);
+    egXmissingM2 = new H1F("egXmissingM2",100,-0,10);
     egXmissingM2.setTitle("eGammaX Missing Mass2");
+    egXmissingM2vsTh =new H2F("egXmissingM2vsTh",100,0,140,100,0,10);
 
     ThvsPhi = new H2F("Theta vs Phi","Theta vs Phi",100,-180,180,100,0,180);
     ThvsPhi.setTitleX("Phi [Degrees]");
     ThvsPhi.setTitleY("Theta [Degrees]");
+    ThvsP = new H2F("Theta vs Phi","Theta vs Phi",100,0,1,100,0,140);
+    ThvsP.setTitleX("p [GeV]");
+    ThvsP.setTitleY("Theta [Degrees]");
 
     //MMvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
     //MMvsMpz.setTitleX("Missing Mass");
@@ -99,17 +110,19 @@ public class DvcsHisto {
     //MpxvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
     //MpxvsMpz.setTitleX("Missing X Momentum");
     //MpxvsMpz.setTitleY("Missing Z Momentum");
-    ThetaHist = new H1F("ThetaHist",100,0,50);
-    ThetaHist.setTitle("Photon Theta");
+    hgTh = new H1F("hgTh",100,0,50);
+    hgTh.setTitle("Photon Theta");
+    hgEn = new H1F("Photon energy",100,0,10);
+    hgEn.setTitle("Photon Energy");
     //DAngleGammaHist = new H1F("DAngleGammaHist",100,-15,100);
     //DAngleGammaHist.setTitle("Angle between gamma and missing eDX");
-    ConeAngleHist = new H1F("ConeAngleHist",100,-15,100);
+    ConeAngleHist = new H1F("ConeAngleHist",100,-3,10);
     ConeAngleHist.setTitle("Angle between gamma and missing eDX");
     MissThetaHist = new H1F("MissThetaHist",100,0,180);
     MissThetaHist.setTitle("Missing Photon Theta");
     PhiPlaneHist = new H1F("PhiPlaneHist",100,0,180);
     PhiPlaneHist.setTitle("Photon Phi Plane");
-    DPhiHist = new H1F("DPhiHist",100,-180,180);
+    DPhiHist = new H1F("DPhiHist",100,-10,10);
     DPhiHist.setTitle("DPhi");
     DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-10,10);
     DeltaPhiPlaneHist.setTitle("Delta Phi Plane");
@@ -125,10 +138,14 @@ public class DvcsHisto {
     coneanglevsedXM2.setTitleY("eDX missing M2 (GeV)");
 
     //pid histograms
-    betavsP = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.2);
-    betacalcvsP = new H2F("BetaCalc vs P","BetaCalc vs P", 100,0,10.2,100,0,1.2);
+    betavsP = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
+    betacalcvsP = new H2F("BetaCalc vs P","BetaCalc vs P", 100,0,10.2,100,0,1.1);
     deltabeta = new H1F("Beta - BetaCalc",100,-0.6,0.2);
     deltabeta.setTitle("Beta - BetaCalc");
+
+    ctofdedxvsp=new H2F("CTOF energy vs p",100,0,2,100,0,100);
+
+
 
     //System.out.println("creating histograms"  );
   }
@@ -148,11 +165,14 @@ public class DvcsHisto {
 
     edXmissingM2.fill(ev.X("eh").mass2());
     egXmissingM2.fill(ev.X("eg").mass2());
+    egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("eg").mass2());
 
     ThvsPhi.fill(Math.toDegrees(ev.vhadron.phi()),Math.toDegrees(ev.vhadron.theta()));
+    ThvsP.fill(ev.vhadron.p(),Math.toDegrees(ev.vhadron.theta()));
 //Xbj=ev.Xb();
 
-    ThetaHist.fill(Math.toDegrees(ev.vphoton.theta()));
+    hgTh.fill(Math.toDegrees(ev.vphoton.theta()));
+    hgEn.fill(ev.vphoton.e());
     //DAngleGammaHist.fill(ev.DTheta());
     ConeAngleHist.fill(ev.coneangle());
     MissThetaHist.fill(Math.toDegrees(ev.X("eh").theta()));
@@ -168,6 +188,12 @@ public class DvcsHisto {
     betacalcvsP.fill(ev.vhadron.p(),ev.BetaCalc());
     deltabeta.fill(ev.beta()-ev.BetaCalc());
 
+    ctofdedxvsp.fill(ev.vhadron.p(),ev.ctofen());
+
+
+
+
+
   }
   public void DrawBasic(TCanvas ec){
     ec.divide(3,3);
@@ -178,9 +204,10 @@ public class DvcsHisto {
     ec.cd(2).draw(W);
     ec.cd(3).draw(Q2);
     ec.cd(4).draw(ThvsPhi);
-    ec.cd(5).draw(edgXmissingPx);
-    ec.cd(6).draw(edgXmissingPy);
-    ec.cd(7).draw(edgXmissingPz);
+    ec.cd(5).draw(ThvsP);
+    ec.cd(6).draw(edgXmissingPx);
+    ec.cd(7).draw(edgXmissingPy);
+    ec.cd(8).draw(edgXmissingPz);
     ec.getCanvas().getScreenShot();
     ec.getCanvas().save("test.png");
 
@@ -189,22 +216,26 @@ public class DvcsHisto {
 
   public void DrawMissing(TCanvas ec4){
 
-    ec4.divide(3,3);
+    ec4.divide(3,4);
     ec4.cd(0).draw(DeltaPhiPlaneHist);
-    ec4.cd(1).draw(edgXmissingE);
-    ec4.cd(2).draw(edgXmissingM2);
-    ec4.cd(3).draw(edgXmissingP);
-    ec4.cd(4).draw(edXmissingM2);
-    ec4.cd(5).draw(egXmissingM2);
-    ec4.cd(6).draw(ConeAngleHist);
-    ec4.cd(7).draw(edgXmissingPx);
-    ec4.cd(8).draw(edgXmissingPy);
+    ec4.cd(1).draw(DeltaPhiPlaneMattHist);
+    ec4.cd(2).draw(ConeAngleHist);
+    ec4.cd(3).draw(edgXmissingE);
+    ec4.cd(4).draw(edgXmissingM2);
+    ec4.cd(5).draw(edgXmissingP);
+    ec4.cd(6).draw(edXmissingM2);
+    ec4.cd(7).draw(egXmissingM2);
+
+    ec4.cd(8).draw(hgEn);
+    ec4.cd(9).draw(edgXmissingPx);
+    ec4.cd(10).draw(edgXmissingPy);
+    ec4.cd(11).draw(edgXmissingPz);
     //ec4.getScreenShot();
 
 
   }
-  public void DrawAll(TCanvas ec,TCanvas ec2){
-    ec.divide(4,4);
+  public void DrawAll(TCanvas ec){
+    ec.divide(5,6);
     ec.cd(0).draw(W);
     ec.cd(1).draw(Q2);
     ec.cd(2).draw(WvsQ2);
@@ -219,22 +250,26 @@ public class DvcsHisto {
     ec.cd(10).draw(edXmissingM2);
     ec.cd(11).draw(egXmissingM2);
     ec.cd(12).draw(ThvsPhi);
-    ec.cd(13).draw(ThetaHist);
+    ec.cd(13).draw(hgTh);
+    ec.cd(14).draw(hgEn);
 
-    ec2.divide(4,3);
-    //ec2.cd(0).draw(DAngleGammaHist);
-    ec2.cd(1).draw(ConeAngleHist);
-    ec2.cd(2).draw(MissThetaHist);
+    ec.cd(16).draw(ConeAngleHist);
+    ec.cd(17).draw(MissThetaHist);
     //ec.getPad(1).getAxisZ().setLog(true);
-    ec2.cd(3).draw(PhiPlaneHist);
-    ec2.cd(4).draw(DPhiHist);
-    ec2.cd(5).draw(DeltaPhiPlaneHist);
-    ec2.cd(6).draw(DeltaPhiPlaneMattHist);
-    ec2.cd(7).draw(coneanglevsedgXM2);
-    ec2.cd(8).draw(coneanglevsedXM2);
-    ec2.cd(9).draw(betavsP);
-    ec2.cd(10).draw(betacalcvsP);
-    ec2.cd(11).draw(deltabeta);
+    ec.cd(18).draw(PhiPlaneHist);
+    ec.cd(19).draw(DPhiHist);
+    ec.cd(20).draw(DeltaPhiPlaneHist);
+    ec.cd(21).draw(DeltaPhiPlaneMattHist);
+    ec.cd(22).draw(coneanglevsedgXM2);
+    ec.cd(23).draw(coneanglevsedXM2);
+    ec.cd(24).draw(betavsP);
+    ec.cd(25).draw(betacalcvsP);
+    ec.cd(26).draw(deltabeta);
+    ec.cd(26).draw(ctofdedxvsp);
+
+    //ec.divide(4,3);
+    //ec2.cd(0).draw(DAngleGammaHist);
+
     // ec2.cd(10).draw(ThvsPhi);
     // ec2.cd(11).draw(MMomx);
     // ec2.cd(12).draw(MMomy);
@@ -245,6 +280,6 @@ public class DvcsHisto {
     // ec2.cd(17).draw(edXmissingM2);
     // ec2.cd(18).draw(egXmissingM2);
     // ec2.cd(19).draw(ThvsPhi);
-    // ec2.cd(20).draw(ThetaHist);
+    // ec2.cd(20).draw(hgTh);
   }
 }
