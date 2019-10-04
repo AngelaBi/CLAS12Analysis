@@ -17,8 +17,6 @@ public class processInput {
 	private String[] args = null;
 	private Options options = new Options();
 
-	public String DataLocation=new String("/Users/biselli/Data/clas12/rgB/pass0v16/");
-	public String FileListName=new String("/Users/biselli/Data/clas12/rgB/pass0v16/fileslist.txt");
 	public List<String> filenames = new ArrayList<String>();
 	public processInput(String[] args) {
 
