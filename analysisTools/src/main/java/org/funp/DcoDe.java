@@ -33,6 +33,8 @@ public class DcoDe
     DvcsHisto hNC     = new DvcsHisto();//No cuts
     DvcsHisto hDC     = new DvcsHisto();//DVCS cuts
     DvcsHisto hAC     = new DvcsHisto();//All cuts
+    DvcsHisto hft     = new DvcsHisto();//Forward Tagger
+    DvcsHisto hfd     = new DvcsHisto();//Forward Detector
     int times=0;
 
     int ndvcs=0;
@@ -85,7 +87,7 @@ public class DcoDe
           //    MMom.fill(vMMom.p());
           hDC.fillBasicHisto(ev);
           //Math.abs(ev.X("eh").mass2())<3  && ev.X("ehg").e()<1 (Math.toDegrees(ev.vphoton.theta())<5) &&  Math.abs(ev.X("ehg").e())<2 && (Math.toDegrees(ev.vphoton.theta())<5)   Math.abs(ev.deltaPhiPlane2())<20 (ev.beta()-ev.BetaCalc())>-0.3  &&  Math.abs(ev.deltaPhiPlane())<1 &&  && (ev.beta()-ev.BetaCalc())>-0.3
-          if( ev.X("eh").mass2() < (-1.5* ev.coneangle()+2)  && ev.X("eh").mass2() >-2  && ((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))) {
+          if( ev.Exclusivitycut() ) {
             //&& (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
             hAC.fillBasicHisto(ev);
             counter++;
@@ -103,6 +105,9 @@ public class DcoDe
     System.out.println("total deuteron event with CTOF info: " + ev.tmpdeutctof);
     System.out.println("total deuteron event with no CTOF info: " + ev.tmpdeutnoctof);
     System.out.println("total deuteron event with CND info: " + ev.tmpdeutcnd);
+    System.out.println("total helicity+: " + ev.helicityplus);
+    System.out.println("total helicity-: " + ev.helicityminus);
+    System.out.println("total events after excl cuts: " + counter);
     //TCanvas ec = new TCanvas("Before cuts",1200,1000);
     //hNC.DrawBasic( ec);
     //TCanvas ec2 = new TCanvas("After DVCS cuts",1200,1000);
@@ -128,9 +133,42 @@ public class DcoDe
     TCanvas ec11 = new TCanvas("AllDVCSexcCuts",1200,1000);
     hAC.DrawAll2(ec11);
 
-
     TCanvas ecA = new TCanvas("Asymmetry",1200,1200);
     hAC.drawAsym(ecA);
+
+    /*TCanvas ecP = new TCanvas("Plotdvcscuts",1800,1200);
+    ecP.divide(2,1);
+    ecP.cd(0);
+    hDC.drawPlot1(ecP);
+    ecP.cd(1);
+    hAC.drawPlot1(ecP);
+    ecP.cd(2);
+    hDC.drawPlot3(ecP);
+    ecP.cd(3);
+    hDC.drawPlot4(ecP);
+    ecP.cd(4);
+    hDC.drawPlot5(ecP);
+    //ecP.cd(5);
+    //hDC.drawPlot6(ecP);
+
+
+
+
+    TCanvas ecP2 = new TCanvas("Plotallcuts",900,9000);
+    ecP2.divide(1,2);
+    ecP2.cd(0);
+    hAC.drawPlot1(ecP2);
+    ecP2.cd(1);
+    hAC.drawPlot2(ecP2);
+
+
+
+    TCanvas ecP3 = new TCanvas("Plotexclcuts",1200,1200);
+    //hNC.drawPlot1(ecP);
+    hAC.drawPlot(ecP3);*/
+
+
+
 
     //TCanvas ec7 = new TCanvas("call2",1200,1000);
 }

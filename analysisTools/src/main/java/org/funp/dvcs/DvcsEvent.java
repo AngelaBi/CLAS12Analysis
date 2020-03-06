@@ -35,6 +35,7 @@ public class DvcsEvent {
   public LorentzVector  velectron = new LorentzVector();
   public LorentzVector  vphoton = new LorentzVector();
   public LorentzVector  vhadron = new LorentzVector();
+  public LorentzVector  vpositive = new LorentzVector();
 
   double el_en_max=0;
   double ph_en_max=0;
@@ -45,20 +46,30 @@ public class DvcsEvent {
   int nphot=0;
   int ndeut=0;
   int nother=0;
+  int npositives=0;
   int ne=-1;
   int ng=-1;
   int nd=-1;
+  int np=-1;
   boolean FoundEvent= false;
+  boolean FoundPositives = false;
   //boolean NewEvent=false;
   double betahad=-10;
+  double betapos=-10;
   double ctofenergyhad=-10;
+  double ctofenergypos=-10;
   double chi2pidhad=-10;
   public int tmpdeutctof=0;
   public int tmpdeut=0;
   public int tmpdeutcnd=0;
   public int tmpdeutnoctof=0;
+  public int helicityplus=0;
+  public int helicityminus=0;
   int helicity=-3;
   int helicityraw=-3;
+  //conf is 1 for gamma in FT and e FD, 2 is for gamma and e in FD
+  int conf=0;
+
 
   public DvcsEvent() {
     // This constructor no parameter.
@@ -113,9 +124,18 @@ public class DvcsEvent {
       }
     }
   }
+  public void setPositives(Bank particles, Bank scint, int np){
+    vpositive.setPxPyPzM(particles.getFloat("px",np),
+    particles.getFloat("py",np),
+    particles.getFloat("pz",np),
+    this.MNUC);
+    betapos=particles.getFloat("beta",np);
+  }
   public void setHelicity(Bank hel){
     helicity = hel.getInt("helicity", 0);
     helicityraw = hel.getInt("helicityRaw", 0);
+    if(helicity>0) helicityplus++;
+    else if (helicity<0) helicityminus++;
   }
   public  void pidStudies(Bank particles, Bank scint){
 
@@ -171,7 +191,7 @@ public class DvcsEvent {
             this.el_en_max=vtmp.e();
           }
         }
-        else if(pid==22 && status<2000){
+        else if(pid==22 && Math.abs(status)<4000){
           nphot++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
@@ -180,10 +200,12 @@ public class DvcsEvent {
           if(vtmp.e()>this.ph_en_max){
             ng=npart;
             this.ph_en_max=vtmp.e();
+            if(status<=2000)conf=1;
+            else if(status>=2000 && status<4000)conf=2;
 
           }
         }
-        else if(pid==PIDNUC && beta>0.16 && status>=4000 && ctofen>5){
+        else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
           ndeut++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
@@ -212,6 +234,47 @@ public class DvcsEvent {
     return FoundEvent;
   }
 
+  public boolean FilterPositives(Bank particles, Bank scint){
+    Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
+
+    LorentzVector  vtmp = new LorentzVector();
+    double mpos;
+    double ctofenpos=-10;
+    FoundPositives = false;
+
+    if(particles.getRows()>0){
+      for(int npart=0; npart<particles.getRows(); npart++){
+        int pid = particles.getInt("pid", npart);
+        int status = particles.getInt("status", npart);
+        float beta = particles.getFloat("beta", npart);
+        int charge = particles.getInt("charge",npart);
+
+        if(scintMap.get(npart)!=null){
+          for (int iscint : scintMap.get(npart)) {
+            //System.out.println(scintMap.get(nh));
+            final byte layer = scint.getByte("layer",iscint);
+            final byte detector = scint.getByte("detector",iscint);
+            //System.out.println(detector);
+            if(detector==4){
+              ctofenergypos = scint.getFloat("energy",iscint);
+            }
+          }
+        }
+
+        if(charge >= 0 && pid==45){
+          FoundPositives = true;
+          npositives++;
+          np = npart;
+          if(pid==45){
+            mpos = this.MNUC;
+          }
+          this.setPositives(particles,scint,np);
+        }
+      }
+    }
+    return FoundPositives;
+  }
+
   public LorentzVector W(){
     LorentzVector  tmp = new LorentzVector();
     tmp.copy(vBeam);
@@ -225,6 +288,19 @@ public class DvcsEvent {
     tmp.sub(velectron);
     return tmp;
 
+  }
+  public LorentzVector t(){
+    LorentzVector tmp = new LorentzVector();
+    tmp.copy(vphoton);
+    tmp.sub(velectron);
+    tmp.sub(vBeam);
+    tmp.sub(vphoton);
+    return tmp;
+  }
+  public double pPerp(){
+    double px=(this.vBeam.px()-this.velectron.px()-this.vhadron.px()-this.vphoton.px());
+    double py=(this.vBeam.py()-this.velectron.py()-this.vhadron.py()-this.vphoton.py());
+    return Math.sqrt(px*px+py*py);
   }
   // public LorentzVector DVCSmissX(){
   //     LorentzVector  tmp = new LorentzVector();
@@ -270,6 +346,16 @@ public class DvcsEvent {
   public boolean DVCScut(){
     //&& Math.toDegrees(this.vphoton.theta())<5
     boolean cut=(-this.Q().mass2()>1 && this.W().mass()>2  && this.vhadron.p()<2  && this.vphoton.e()>2);
+    return cut;
+  }
+  public boolean Exclusivitycut(){
+    boolean cut=false;
+    if (conf==1){
+      cut=(this.X("eh").mass2() < (-1.5* this.coneangle()+2) && this.X("eh").mass2() >-2  && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) && this.X("ehg").e()<2 && this.pPerp()<0.5);
+    }
+    else if (conf==2){
+      cut=(this.X("eh").mass2() < (-1* this.coneangle()+2) && this.X("eh").mass2()>-2 && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) && this.X("ehg").mass2()>-0.75 && this.X("ehg").e()<3 && this.pPerp()<0.5);
+    }
     return cut;
   }
   public double Xb(){
@@ -368,8 +454,14 @@ if(leptonicPlane.dot(vphoton.vect()) < 0){
   public double beta(){
     return betahad;
   }
+  public double betapos(){
+    return betapos;
+  }
   public double ctofen(){
     return ctofenergyhad;
+  }
+  public double ctofenpos(){
+    return ctofenergypos;
   }
   public double chi2pid(){
     return chi2pidhad;
