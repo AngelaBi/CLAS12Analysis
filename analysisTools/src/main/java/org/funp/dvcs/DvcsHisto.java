@@ -63,7 +63,10 @@ public class DvcsHisto {
   public H2F coneanglevsegXM2;
   public H1F betahadhisto;
   public H1F betacalchisto;
-  public H2F betavsP ;
+  public H2F betavsP;
+  public H2F betavsPdeut;
+  public H2F betavsPpion;
+  public H2F betavsPkaon;
   public H2F betavsPplus;
   public H2F betacalcvsP;
   public H1F deltabeta;
@@ -189,6 +192,9 @@ public class DvcsHisto {
     //pid histograms
     betavsP = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
     betavsPplus = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
+    betavsPdeut = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
+    betavsPpion = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
+    betavsPkaon = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
     betacalchisto = new H1F("#beta_calc","#beta_calc",100,0,1);
     betacalchisto.setTitleX("#beta calculated from relativistic momentum");
     betahadhisto = new H1F("#beta","#beta",100,0,1);
@@ -202,7 +208,7 @@ public class DvcsHisto {
     chisqHad=new H1F("Chi2Pid",100,-5,5);
     chisqHad.setTitle("ChiSquared PID");
 
-    chi2vsdeltabeta=new H2F("#chi^2_PID vs #Delta#beta_d","#chi^2_PID vs #Delta#beta_d",100,0,30,100,-0.6,0.02);
+    chi2vsdeltabeta=new H2F("#chi^2_PID vs #Delta#beta_d","#chi^2_PID vs #Delta#beta_d",100,-30,30,100,-0.6,0.6);
     chi2vsdeltabeta.setTitleX("#chi^2_PID");
     chi2vsdeltabeta.setTitleY("#Delta#beta_d");
 
@@ -289,13 +295,27 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
   public void fillPositives(DvcsEvent ev){
     betavsPplus.fill(ev.vpositive.p(),ev.betapos());
     ctofdedxvspplus.fill(ev.vpositive.p(),ev.ctofenpos());
-
+    if (ev.mpos==ev.MNUC){
+      betavsPdeut.fill(ev.vpositive.p(),ev.betapos());
+      betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+    }
+    else if (ev.mpos==ev.MPION){
+      betavsPpion.fill(ev.vpositive.p(),ev.betapos());
+      betavsPpion.setTitle("Beta vs Momentum #pi+");
+    }
+    else if (ev.mpos==ev.MKAON){
+      betavsPkaon.fill(ev.vpositive.p(),ev.betapos());
+      betavsPkaon.setTitle("Beta vs Momentum #kappa");
+    }
   }
 
   public void drawPositives(TCanvas ecP){
-    ecP.divide(2,1);
+    ecP.divide(2,2);
     ecP.cd(0).draw(betavsPplus);
-    ecP.cd(1).draw(ctofdedxvspplus);
+    ecP.cd(1).draw(betavsPdeut);
+    ecP.cd(2).draw(betavsPpion);
+    ecP.cd(3).draw(betavsPkaon);
+    //ecP.cd(1).draw(ctofdedxvspplus);
   }
 
   public H1F buildAsym(){
@@ -402,17 +422,20 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     ec.cd(20).draw(DeltaPhiPlaneHist);
     ec.cd(21).draw(DeltaPhiPlaneMattHist);
     //ec.cd(22).draw(coneanglevsedgXM2);
-    //ec.cd(23).draw(coneanglevsedXM2);
+    ec.cd(23);
+    ec.getPad().getAxisZ().setLog(true);
+    ec.draw(coneanglevsedXM2);
+    //ec.getPad().getAxisZ().setLog(true);
     //ec.cd(24).draw(coneanglevsegXM2);
 
     ec.cd(25).draw(betavsP);
     //ec.getPad().getAxisZ().setLog(true);
     ec.cd(22).draw(betacalcvsP);
     //ec.cd(22).draw(deltabeta);
-    ec.cd(23).draw(ctofdedxvsp);
+    //ec.cd(23).draw(ctofdedxvsp);
     ec.cd(24).draw(helicityhisto);
     //ec.cd(25).draw(helicityrawhisto);
-    ec.cd(26).draw(delta);
+    ec.cd(26).draw(deltabeta);
     ec.cd(27).draw(chisqHad);
     ec.cd(28).draw(betacalchisto);
     ec.cd(29).draw(betahadhisto);

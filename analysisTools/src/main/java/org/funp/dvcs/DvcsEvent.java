@@ -27,6 +27,9 @@ import java.util.ArrayList;
 
 public class DvcsEvent {
   double MNUC=1.875612;
+  double MPION = 0.139570;
+  double MKAON = 0.4977;
+  public double mpos;
   //Dmass = 1.8756;
   //double MNUC=0.938;
   public double BeamEnergy=10.1998;
@@ -238,7 +241,6 @@ public class DvcsEvent {
     Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
 
     LorentzVector  vtmp = new LorentzVector();
-    double mpos;
     double ctofenpos=-10;
     FoundPositives = false;
 
@@ -261,12 +263,18 @@ public class DvcsEvent {
           }
         }
 
-        if(charge >= 0 && pid==45){
+        if(charge >= 0){
           FoundPositives = true;
           npositives++;
           np = npart;
-          if(pid==45){
+          if(Math.abs(pid)==45){
             mpos = this.MNUC;
+          }
+          else if(Math.abs(pid)==211){
+            mpos = this.MPION;
+          }
+          else if(Math.abs(pid)==321){
+            mpos = this.MKAON;
           }
           this.setPositives(particles,scint,np);
         }
@@ -351,10 +359,10 @@ public class DvcsEvent {
   public boolean Exclusivitycut(){
     boolean cut=false;
     if (conf==1){
-      cut=(this.X("eh").mass2() < (-1.5* this.coneangle()+2) && this.X("eh").mass2() >-2  && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) && this.X("ehg").e()<2 && this.pPerp()<0.5);
+      cut=(this.X("eh").mass2() < (-1.5* this.coneangle()+2) && this.X("eh").mass2() >-2  && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && /*((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) &&*/ this.X("ehg").e()<2 && this.pPerp()<0.5);
     }
     else if (conf==2){
-      cut=(this.X("eh").mass2() < (-1* this.coneangle()+2) && this.X("eh").mass2()>-2 && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) && this.X("ehg").mass2()>-0.75 && this.X("ehg").e()<3 && this.pPerp()<0.5);
+      cut=(this.X("eh").mass2() < (-1* this.coneangle()+2) && this.X("eh").mass2()>-2 && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) && /*((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) &&*/ this.X("ehg").mass2()>-0.75 && this.X("ehg").e()<3 && this.pPerp()<0.5);
     }
     return cut;
   }
