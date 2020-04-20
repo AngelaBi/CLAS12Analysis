@@ -29,6 +29,7 @@ public class DvcsEvent {
   double MNUC=1.875612;
   double MPION = 0.139570;
   double MKAON = 0.4977;
+  double MPROT = 0.93828;
   public double mpos;
   //Dmass = 1.8756;
   //double MNUC=0.938;
@@ -39,6 +40,11 @@ public class DvcsEvent {
   public LorentzVector  vphoton = new LorentzVector();
   public LorentzVector  vhadron = new LorentzVector();
   public LorentzVector  vpositive = new LorentzVector();
+  public LorentzVector  vdeuteron = new LorentzVector();
+  public LorentzVector  vproton = new LorentzVector();
+  public LorentzVector  vpion = new LorentzVector();
+  public LorentzVector  vkaon = new LorentzVector();
+
 
   double el_en_max=0;
   double ph_en_max=0;
@@ -56,11 +62,23 @@ public class DvcsEvent {
   int np=-1;
   boolean FoundEvent= false;
   boolean FoundPositives = false;
+  boolean FoundDeuteron = false;
+  boolean FoundProton = false;
+  boolean FoundKaon = false;
+  boolean FoundPion = false;
   //boolean NewEvent=false;
   double betahad=-10;
   double betapos=-10;
+  double betadeut=-10;
+  double betaprot=-10;
+  double betakaon=-10;
+  double betapion=-10;
   double ctofenergyhad=-10;
   double ctofenergypos=-10;
+  double ctofenergydeut=-10;
+  double ctofenergyprot=-10;
+  double ctofenergykaon=-10;
+  double ctofenergypion=-10;
   double chi2pidhad=-10;
   public int tmpdeutctof=0;
   public int tmpdeut=0;
@@ -128,12 +146,35 @@ public class DvcsEvent {
     }
   }
   public void setPositives(Bank particles, Bank scint, int np){
-    vpositive.setPxPyPzM(particles.getFloat("px",np),
+    if (this.FoundDeuteron==true){
+    vdeuteron.setPxPyPzM(particles.getFloat("px",np),
     particles.getFloat("py",np),
     particles.getFloat("pz",np),
     this.MNUC);
-    betapos=particles.getFloat("beta",np);
+    betadeut=particles.getFloat("beta",np);
   }
+  else if (this.FoundProton==true){
+    vproton.setPxPyPzM(particles.getFloat("px",np),
+    particles.getFloat("py",np),
+    particles.getFloat("pz",np),
+    this.MPROT);
+    betaprot=particles.getFloat("beta",np);
+  }
+  else if (this.FoundPion==true){
+    vpion.setPxPyPzM(particles.getFloat("px",np),
+    particles.getFloat("py",np),
+    particles.getFloat("pz",np),
+    this.MPION);
+    betapion=particles.getFloat("beta",np);
+  }
+  else if (this.FoundKaon==true){
+    vkaon.setPxPyPzM(particles.getFloat("px",np),
+    particles.getFloat("py",np),
+    particles.getFloat("pz",np),
+    this.MKAON);
+    betakaon=particles.getFloat("beta",np);
+  }
+}
   public void setHelicity(Bank hel){
     helicity = hel.getInt("helicity", 0);
     helicityraw = hel.getInt("helicityRaw", 0);
@@ -251,6 +292,35 @@ public class DvcsEvent {
         float beta = particles.getFloat("beta", npart);
         int charge = particles.getInt("charge",npart);
 
+
+        if(charge >= 0){
+          FoundPositives = true;
+          FoundDeuteron = false;
+          FoundProton = false;
+          FoundKaon = false;
+          FoundPion = false;
+          FoundProton = false;
+          npositives++;
+          np = npart;
+          if(Math.abs(pid)==45){
+            mpos = this.MNUC;
+            FoundDeuteron = true;
+          }
+          else if(Math.abs(pid)==211){
+            mpos = this.MPION;
+            FoundPion = true;
+          }
+          else if(Math.abs(pid)==321){
+            mpos = this.MKAON;
+            FoundKaon = true;
+          }
+          else if(Math.abs(pid)==2212){
+            mpos = this.MPROT;
+            FoundProton = true;
+          }
+          this.setPositives(particles,scint,np);
+        }
+
         if(scintMap.get(npart)!=null){
           for (int iscint : scintMap.get(npart)) {
             //System.out.println(scintMap.get(nh));
@@ -258,27 +328,25 @@ public class DvcsEvent {
             final byte detector = scint.getByte("detector",iscint);
             //System.out.println(detector);
             if(detector==4){
-              ctofenergypos = scint.getFloat("energy",iscint);
+              if(FoundDeuteron==true){
+                ctofenergydeut = scint.getFloat("energy",iscint);
+              }
+              if (FoundKaon==true){
+                ctofenergykaon = scint.getFloat("energy",iscint);
+              }
+              if (FoundProton==true){
+                ctofenergyprot = scint.getFloat("energy",iscint);
+              }
+              if (FoundPion==true){
+                ctofenergypion = scint.getFloat("energy",iscint);
+              }
             }
           }
         }
-
-        if(charge >= 0){
-          FoundPositives = true;
-          npositives++;
-          np = npart;
-          if(Math.abs(pid)==45){
-            mpos = this.MNUC;
-          }
-          else if(Math.abs(pid)==211){
-            mpos = this.MPION;
-          }
-          else if(Math.abs(pid)==321){
-            mpos = this.MKAON;
-          }
-          this.setPositives(particles,scint,np);
-        }
       }
+    }
+    if (FoundDeuteron==true || FoundProton==true || FoundKaon==true|| FoundPion==true){
+      FoundPositives = true;
     }
     return FoundPositives;
   }
