@@ -39,6 +39,10 @@ public class PositivesStudies
         reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
         Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
         event.read(runconfig);
+        while (runconfig.getInt("run",0)==0) {
+          reader.nextEvent(event);
+          event.read(runconfig);
+        }
         if(hmap.get(runconfig.getInt("run",0))!=null){
           ev.BeamEnergy=hmap.get(runconfig.getInt("run",0));
           ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy*ev.BeamEnergy-0.0005*0.0005), ev.BeamEnergy);

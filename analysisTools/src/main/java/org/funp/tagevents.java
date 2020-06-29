@@ -52,6 +52,10 @@ public class tagevents
 
       Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
       event.read(runconfig);
+      while (runconfig.getInt("run",0)==0) {
+        reader.nextEvent(event);
+        event.read(runconfig);
+      }
       //map beam energies
       if(hmap.get(runconfig.getInt("run",0))!=null){
         ev.BeamEnergy=hmap.get(runconfig.getInt("run",0));
