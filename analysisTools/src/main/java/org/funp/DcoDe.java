@@ -54,6 +54,10 @@ public class DcoDe
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
       Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
       event.read(runconfig);
+      while (runconfig.getInt("run",0)==0) {
+        reader.nextEvent(event);
+        event.read(runconfig);
+      }
       System.out.println("Reading run :"+runconfig.getInt("run",0) );
       if(hmap.get(runconfig.getInt("run",0))!=null){
         ev.BeamEnergy=hmap.get(runconfig.getInt("run",0));
