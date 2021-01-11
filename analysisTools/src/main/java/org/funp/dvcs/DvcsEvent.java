@@ -223,6 +223,8 @@ public class DvcsEvent {
           }
         }
 
+        //status 2000-2999 is FD
+        //if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
 
         if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
           nelec++;
@@ -235,6 +237,8 @@ public class DvcsEvent {
             this.el_en_max=vtmp.e();
           }
         }
+        // status  1000-3999 is FT FD
+        //else if(pid==22 && Math.abs(status)<4000){
         else if(pid==22 && Math.abs(status)<4000){
           nphot++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
@@ -249,7 +253,9 @@ public class DvcsEvent {
 
           }
         }
-        else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
+        //status 4000 is FD
+        //else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
+        else if(pid==PIDNUC && Math.abs(status)>=4000 && beta>0.16 && ctofen>5){
           ndeut++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
