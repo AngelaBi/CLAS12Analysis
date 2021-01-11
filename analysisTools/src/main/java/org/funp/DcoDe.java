@@ -182,6 +182,7 @@ public class DcoDe
     HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
     Double beam10p6=10.5986;
     Double beam10p2=10.1998;
+    Double beam10p4=10.4096;
     //5nA runs
         hmap.put(6226,beam10p6);
         hmap.put(6322,beam10p6);
@@ -225,6 +226,7 @@ public class DcoDe
         hmap.put(6571,beam10p2);
         hmap.put(6586,beam10p2);
         hmap.put(6595,beam10p2);
+        hmap.put(11159,beam10p4);
 
     return hmap;
 
