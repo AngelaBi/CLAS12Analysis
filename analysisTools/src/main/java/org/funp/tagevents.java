@@ -45,7 +45,7 @@ public class tagevents
       reader.open(inputParam.getFileName(i)); // open a file
       HipoWriterSorted writer = new HipoWriterSorted();
       writer.getSchemaFactory().copy(reader.getSchemaFactory());
-      writer.open("/Users/biselli/Data/dst_edeut_" + filenumber + "_trimmed_test.hipo");
+      writer.open("/Users/biselli/Data/clas12/rgB/pass1/dst_edeut_" + filenumber + "_trimmed.hipo");
 	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
 
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
