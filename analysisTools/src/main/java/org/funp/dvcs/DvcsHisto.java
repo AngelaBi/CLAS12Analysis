@@ -93,6 +93,12 @@ public class DvcsHisto {
   public H1F thisto;
   public H1F pPerphisto;
 
+  private String outputdir=new String(".");
+  public void setOutputDir(String otherdir){
+    
+    this.outputdir=otherdir;
+    System.out.println("**** setting out dir for plots to" + this.outputdir);
+  }
 
   public DvcsHisto() {
     W= new H1F("W" ,100, 0, 10.0);
@@ -392,7 +398,7 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     ec.cd(7).draw(edgXmissingPy);
     ec.cd(8).draw(edgXmissingPz);
     ec.getCanvas().getScreenShot();
-    ec.getCanvas().save(ec.getTitle()+".png");
+    ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
 
   }
@@ -416,7 +422,8 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     ec4.cd(14).draw(edgXmissingPy);
     ec4.cd(15).draw(edgXmissingPz);
     ec4.getCanvas().getScreenShot();
-    ec4.getCanvas().save(ec4.getTitle()+".png");
+    System.out.println(this.outputdir+"/"+ec4.getTitle()+".png" );
+    ec4.getCanvas().save(this.outputdir+"/"+ec4.getTitle()+".png");
     //ec4.getScreenShot();
 
 
@@ -468,7 +475,7 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     ec.cd(29).draw(betahadhisto);
 
     ec.getCanvas().getScreenShot();
-    ec.getCanvas().save(ec.getTitle()+".png");
+    ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
 
     //ec.divide(4,3);
