@@ -89,7 +89,7 @@ public class DvcsEvent {
   int helicity=-3;
   int helicityraw=-3;
   //conf is 1 for gamma in FT and e FD, 2 is for gamma and e in FD
-  int conf=0;
+  public int conf=0;
 
 
   public DvcsEvent() {
@@ -373,9 +373,7 @@ public class DvcsEvent {
   }
   public LorentzVector t(){
     LorentzVector tmp = new LorentzVector();
-    tmp.copy(vphoton);
-    tmp.sub(velectron);
-    tmp.sub(vBeam);
+    tmp.copy(this.Q());
     tmp.sub(vphoton);
     return tmp;
   }

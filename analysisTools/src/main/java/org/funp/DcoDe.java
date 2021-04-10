@@ -24,6 +24,8 @@ public class DcoDe
   public static void main( String[] args )
   {
     processInput inputParam=new processInput(args);
+    runUtil runInfo=new runUtil();
+    
 
     double beamenergy;
 
@@ -31,18 +33,20 @@ public class DcoDe
 
     DvcsEvent ev    = new DvcsEvent();
     DvcsHisto hNC     = new DvcsHisto();//No cuts
+    hNC.setOutputDir(inputParam.getOutputDir());
     DvcsHisto hDC     = new DvcsHisto();//DVCS cuts
     DvcsHisto hAC     = new DvcsHisto();//All cuts
     DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     DvcsHisto hfd     = new DvcsHisto();//Forward Detector
+  
     int times=0;
 
     int ndvcs=0;
 
     int counter=0;
 
-    HashMap<Integer, Double> hmap=createrunmap();
-
+    //HashMap<Integer, Double> hmap=createrunmap();
+    HashMap<Integer, Double> hmap=runUtil.createrunmap();
 
 
     //System.out.println(hmap.get(6310));
@@ -92,7 +96,7 @@ public class DcoDe
           //    MMom.fill(vMMom.p());
           hDC.fillBasicHisto(ev);
           //Math.abs(ev.X("eh").mass2())<3  && ev.X("ehg").e()<1 (Math.toDegrees(ev.vphoton.theta())<5) &&  Math.abs(ev.X("ehg").e())<2 && (Math.toDegrees(ev.vphoton.theta())<5)   Math.abs(ev.deltaPhiPlane2())<20 (ev.beta()-ev.BetaCalc())>-0.3  &&  Math.abs(ev.deltaPhiPlane())<1 &&  && (ev.beta()-ev.BetaCalc())>-0.3
-          if( ev.Exclusivitycut() ) {
+          if( ev.Exclusivitycut()) {
             //&& (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
             hAC.fillBasicHisto(ev);
             counter++;
@@ -178,59 +182,59 @@ public class DcoDe
     //TCanvas ec7 = new TCanvas("call2",1200,1000);
 }
 
-  static HashMap<Integer, Double> createrunmap(){
-    HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
-    Double beam10p6=10.5986;
-    Double beam10p2=10.1998;
-    Double beam10p4=10.4096;
-    //5nA runs
-        hmap.put(6226,beam10p6);
-        hmap.put(6322,beam10p6);
-        hmap.put(6323,beam10p6);
-        hmap.put(6371,beam10p6);
-        hmap.put(6373,beam10p6);
-        hmap.put(6374,beam10p6);
-        hmap.put(6446,beam10p2);
-        hmap.put(6447,beam10p2);
-        hmap.put(6448,beam10p2);
-    //regular runs
-        hmap.put(6303,beam10p6);
-        hmap.put(6305,beam10p6);
-        hmap.put(6307,beam10p6);
-        hmap.put(6310,beam10p6);
-        hmap.put(6311,beam10p6);
-        hmap.put(6313,beam10p6);
-        hmap.put(6321,beam10p6);
-        hmap.put(6326,beam10p6);
-        hmap.put(6327,beam10p6);
-        hmap.put(6328,beam10p6);
-        hmap.put(6346,beam10p6);
-        hmap.put(6347,beam10p6);
-        hmap.put(6349,beam10p6);
+  // static HashMap<Integer, Double> createrunmap(){
+  //   HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
+  //   Double beam10p6=10.5986;
+  //   Double beam10p2=10.1998;
+  //   Double beam10p4=10.4096;
+  //   //5nA runs
+  //       hmap.put(6226,beam10p6);
+  //       hmap.put(6322,beam10p6);
+  //       hmap.put(6323,beam10p6);
+  //       hmap.put(6371,beam10p6);
+  //       hmap.put(6373,beam10p6);
+  //       hmap.put(6374,beam10p6);
+  //       hmap.put(6446,beam10p2);
+  //       hmap.put(6447,beam10p2);
+  //       hmap.put(6448,beam10p2);
+  //   //regular runs
+  //       hmap.put(6303,beam10p6);
+  //       hmap.put(6305,beam10p6);
+  //       hmap.put(6307,beam10p6);
+  //       hmap.put(6310,beam10p6);
+  //       hmap.put(6311,beam10p6);
+  //       hmap.put(6313,beam10p6);
+  //       hmap.put(6321,beam10p6);
+  //       hmap.put(6326,beam10p6);
+  //       hmap.put(6327,beam10p6);
+  //       hmap.put(6328,beam10p6);
+  //       hmap.put(6346,beam10p6);
+  //       hmap.put(6347,beam10p6);
+  //       hmap.put(6349,beam10p6);
 
-        hmap.put(6420,beam10p2);
-        hmap.put(6428,beam10p2);
-        hmap.put(6433,beam10p2);
-        hmap.put(6442,beam10p2);
-        hmap.put(6450,beam10p2);
-        hmap.put(6467,beam10p2);
-        hmap.put(6474,beam10p2);
-        hmap.put(6481,beam10p2);
-        hmap.put(6492,beam10p2);
-        hmap.put(6501,beam10p2);
-        hmap.put(6515,beam10p2);
-        hmap.put(6522,beam10p2);
-        hmap.put(6524,beam10p2);
-        hmap.put(6546,beam10p2);
-        hmap.put(6559,beam10p2);
-        hmap.put(6571,beam10p2);
-        hmap.put(6586,beam10p2);
-        hmap.put(6595,beam10p2);
-        hmap.put(11159,beam10p4);
+  //       hmap.put(6420,beam10p2);
+  //       hmap.put(6428,beam10p2);
+  //       hmap.put(6433,beam10p2);
+  //       hmap.put(6442,beam10p2);
+  //       hmap.put(6450,beam10p2);
+  //       hmap.put(6467,beam10p2);
+  //       hmap.put(6474,beam10p2);
+  //       hmap.put(6481,beam10p2);
+  //       hmap.put(6492,beam10p2);
+  //       hmap.put(6501,beam10p2);
+  //       hmap.put(6515,beam10p2);
+  //       hmap.put(6522,beam10p2);
+  //       hmap.put(6524,beam10p2);
+  //       hmap.put(6546,beam10p2);
+  //       hmap.put(6559,beam10p2);
+  //       hmap.put(6571,beam10p2);
+  //       hmap.put(6586,beam10p2);
+  //       hmap.put(6595,beam10p2);
+  //       hmap.put(11159,beam10p4);
 
-    return hmap;
+  //   return hmap;
 
-  }
+  // }
 
 
 }

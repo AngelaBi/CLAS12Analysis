@@ -22,6 +22,7 @@ public class tagevents
   {
 
     processInput inputParam=new processInput(args);
+    runUtil runInfo=new runUtil();
 
     int ndeut=0;
     int nphot=0;
@@ -31,11 +32,10 @@ public class tagevents
 
     Event     event = new Event();
     DvcsEvent ev    = new DvcsEvent();
-    DvcsHisto hNC     = new DvcsHisto();//No cuts
-    DvcsHisto hDC     = new DvcsHisto();//DVCS cuts
-    DvcsHisto hAC     = new DvcsHisto();//All cuts
 
-    HashMap<Integer, Double> hmap=createrunmap();
+
+    //HashMap<Integer, Double> hmap=createrunmap();
+    HashMap<Integer, Double> hmap=runUtil.createrunmap();
 
     for (int i=0; i<inputParam.getNfiles(); i++) {
       String filename = new String(inputParam.getFileName(i));
@@ -107,54 +107,36 @@ public class tagevents
       System.out.println("dvcs counter: " + dvcscounter);
     }
 
-  /*TCanvas ec4 = new TCanvas("Excl after DVCS cuts",1500,1500);
-  hDC.DrawMissing(ec4);
 
-  TCanvas ec5 = new TCanvas("Excl after DVCS and exc cuts",1500,1500);
-  hAC.DrawMissing(ec5);
-
-  TCanvas ec6 = new TCanvas("AllNoCuts",1200,1000);
-  hNC.DrawAll(ec6);
-  TCanvas ec7 = new TCanvas("AllDVCSCuts",1200,1000);
-  hDC.DrawAll(ec7);
-  TCanvas ec8 = new TCanvas("AllDVCSexcCuts",1200,1000);
-  hAC.DrawAll(ec8);
-
-  TCanvas ec9 = new TCanvas("AllNoCuts",1200,1000);
-  hNC.DrawAll2(ec9);
-  TCanvas ec10 = new TCanvas("AllDVCSCuts",1200,1000);
-  hDC.DrawAll2(ec10);
-  TCanvas ec11 = new TCanvas("AllDVCSexcCuts",1200,1000);
-  hAC.DrawAll2(ec11);*/
 
 }
-  static HashMap<Integer, Double> createrunmap(){
-    HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
-    Double beam10p6=10.5986;
-    Double beam10p2=10.1998;
-    hmap.put(6302,beam10p6);
-    hmap.put(6303,beam10p6);
-    hmap.put(6305,beam10p6);
-    hmap.put(6307,beam10p6);
-    hmap.put(6310,beam10p6);
-    hmap.put(6313,beam10p6);
-    hmap.put(6321,beam10p6);
-    hmap.put(6311,beam10p6);
-    hmap.put(6327,beam10p6);
-    hmap.put(6346,beam10p6);
-    hmap.put(6347,beam10p6);
-    hmap.put(6349,beam10p6);
+  // static HashMap<Integer, Double> createrunmap(){
+  //   HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
+  //   Double beam10p6=10.5986;
+  //   Double beam10p2=10.1998;
+  //   hmap.put(6302,beam10p6);
+  //   hmap.put(6303,beam10p6);
+  //   hmap.put(6305,beam10p6);
+  //   hmap.put(6307,beam10p6);
+  //   hmap.put(6310,beam10p6);
+  //   hmap.put(6313,beam10p6);
+  //   hmap.put(6321,beam10p6);
+  //   hmap.put(6311,beam10p6);
+  //   hmap.put(6327,beam10p6);
+  //   hmap.put(6346,beam10p6);
+  //   hmap.put(6347,beam10p6);
+  //   hmap.put(6349,beam10p6);
 
-    hmap.put(6428,beam10p2);
-    hmap.put(6433,beam10p2);
-    hmap.put(6442,beam10p2);
-    hmap.put(6450,beam10p2);
-    hmap.put(6467,beam10p2);
-    hmap.put(6474,beam10p2);
-    hmap.put(6481,beam10p2);
-    hmap.put(6492,beam10p2);
-    return hmap;
+  //   hmap.put(6428,beam10p2);
+  //   hmap.put(6433,beam10p2);
+  //   hmap.put(6442,beam10p2);
+  //   hmap.put(6450,beam10p2);
+  //   hmap.put(6467,beam10p2);
+  //   hmap.put(6474,beam10p2);
+  //   hmap.put(6481,beam10p2);
+  //   hmap.put(6492,beam10p2);
+  //   return hmap;
 
-  }
+  // }
 
 }

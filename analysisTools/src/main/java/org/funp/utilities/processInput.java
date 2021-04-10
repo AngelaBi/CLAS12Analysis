@@ -17,21 +17,22 @@ public class processInput {
 	private String[] args = null;
 	private Options options = new Options();
 
-	public String DataLocation=new String("/Users/biselli/Data/clas12/rgB/pass0v16/");
-	public String FileListName=new String("/Users/biselli/Data/clas12/rgB/pass0v16/fileslist.txt");
+	//public String DataLocation=new String(".");
+	public String FileListName=new String("fileslist.txt");
 	public List<String> filenames = new ArrayList<String>();
+	public String OutputLocation=new String(".");
 	public processInput(String[] args) {
 
 		this.args = args;
 		//if true that option is requires an argument
 		options.addOption("h", "help", false, "show help.");
-		options.addOption("l", "location", true, "Set DATA files location .");
+		//options.addOption("l", "input dir", true, "Set DATA files location .");
 		options.addOption("f", "file", true, "Set input file with data files list .");
-
+		options.addOption("o", "output dir", true, "Set output file dir .");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
-		System.out.println(this.DataLocation);
+		//System.out.println(this.DataLocation);
 		System.out.println(this.FileListName);
 
 	}
@@ -43,13 +44,23 @@ public class processInput {
 			cmd = parser.parse(options, args);
 			if (cmd.hasOption("h"))
 			help();
-			if (cmd.hasOption("l")) {
+			// if (cmd.hasOption("l")) {
+			// 	//System.out.println("here"+cmd.getOptionValue("l"));
+			// 	DataLocation=cmd.getOptionValue("l")+"/";
+			// 	log.log(Level.INFO, "Using processInput argument -l=" + DataLocation+"/");
+			// 	// Whatever you want to do with the setting goes here
+			// } else {
+			// 	log.log(Level.INFO, "Using location data default value=" + DataLocation);
+			// 	//log.log(Level.SEVERE, "MIssing l option");
+			// 	//help();
+			// }
+			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
-				DataLocation=cmd.getOptionValue("l");
-				log.log(Level.INFO, "Using processInput argument -l=" + DataLocation);
+				OutputLocation=cmd.getOptionValue("o")+"/";
+				log.log(Level.INFO, "Using processInput argument -o=" + OutputLocation+"/");
 				// Whatever you want to do with the setting goes here
 			} else {
-				log.log(Level.INFO, "Using location data default value=" + DataLocation);
+				log.log(Level.INFO, "Using location output default value=" + OutputLocation);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
@@ -133,6 +144,10 @@ public class processInput {
 	}
 	public String getFileName(int i){
 		//String tmp=new String();
-		return this.DataLocation+this.filenames.get(i);
+		//return this.DataLocation+this.filenames.get(i);
+		return this.filenames.get(i);
+	}
+	public String getOutputDir(){
+		return this.OutputLocation;
 	}
 }
