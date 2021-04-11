@@ -39,15 +39,10 @@ public class tagevents
 
     for (int i=0; i<inputParam.getNfiles(); i++) {
       String filename = new String(inputParam.getFileName(i));
-      String filenumber = new String(filename.substring(inputParam.getFileName(i).length()-10,inputParam.getFileName(i).length()-5));
-      HipoReader reader = new HipoReader(); // Create a reader object
-      System.out.println(inputParam.getFileName(i));
-      reader.open(inputParam.getFileName(i)); // open a file
-      HipoWriterSorted writer = new HipoWriterSorted();
-      writer.getSchemaFactory().copy(reader.getSchemaFactory());
-      writer.open("/Users/biselli/Data/clas12/rgB/pass1/dst_edeut_" + filenumber + "_trimmed.hipo");
-	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
 
+      HipoReader reader = new HipoReader(); // Create a reader object
+      System.out.println(filename);
+      reader.open(filename); // open a file
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
 
       Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
@@ -56,8 +51,22 @@ public class tagevents
         reader.nextEvent(event);
         event.read(runconfig);
       }
+      int runNumber=runconfig.getInt("run",0);
+      //String filenumber = new String(filename.substring(inputParam.getFileName(i).length()-10,inputParam.getFileName(i).length()-5));
+
+
+      
+      
+      HipoWriterSorted writer = new HipoWriterSorted();
+      String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
+      writer.getSchemaFactory().copy(reader.getSchemaFactory());
+      writer.open(outfilename);
+	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
+      System.out.println(outfilename);
+      
+
       //map beam energies
-      if(hmap.get(runconfig.getInt("run",0))!=null){
+      if(hmap.get(runNumber)!=null){
         ev.BeamEnergy=hmap.get(runconfig.getInt("run",0));
         ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy*ev.BeamEnergy-0.0005*0.0005), ev.BeamEnergy);
 
