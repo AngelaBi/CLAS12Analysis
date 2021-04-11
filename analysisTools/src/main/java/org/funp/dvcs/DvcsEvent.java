@@ -294,7 +294,7 @@ public class DvcsEvent {
     if(particles.getRows()>0){
       for(int npart=0; npart<particles.getRows(); npart++){
         int pid = particles.getInt("pid", npart);
-        int status = particles.getInt("status", npart);
+        //int status = particles.getInt("status", npart);
         float beta = particles.getFloat("beta", npart);
         int charge = particles.getInt("charge",npart);
 
