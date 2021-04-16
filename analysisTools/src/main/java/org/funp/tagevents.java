@@ -1,20 +1,20 @@
 package org.funp;
-import org.jlab.groot.ui.TCanvas;
+// import org.jlab.groot.ui.TCanvas;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*;
 import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
-import org.jlab.groot.data.*;
-import org.jlab.groot.graphics.*;
+//import org.jlab.groot.data.*;
+//import org.jlab.groot.graphics.*;
 //---- imports for PHYSICS library
-import org.jlab.jnp.physics.*;
-import org.jlab.jnp.reader.*;
+//import org.jlab.jnp.physics.*;
+//import org.jlab.jnp.reader.*;
 
 import org.funp.dvcs.*;
 import org.funp.utilities.*;
 
 import java.util.*;
-import java.io.*;
+//import java.io.*;
 
 public class tagevents
 {
@@ -22,11 +22,11 @@ public class tagevents
   {
 
     processInput inputParam=new processInput(args);
-    runUtil runInfo=new runUtil();
+    //runUtil runInfo=new runUtil();
 
-    int ndeut=0;
-    int nphot=0;
-    int nelec=0;
+    //int ndeut=0;
+    //int nphot=0;
+    //int nelec=0;
     int totalcounter=0;
     int dvcscounter=0;
 
@@ -114,38 +114,12 @@ public class tagevents
       writer.close();
       System.out.println("total counter: " + totalcounter);
       System.out.println("dvcs counter: " + dvcscounter);
+      reader.close();
     }
 
 
 
 }
-  // static HashMap<Integer, Double> createrunmap(){
-  //   HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
-  //   Double beam10p6=10.5986;
-  //   Double beam10p2=10.1998;
-  //   hmap.put(6302,beam10p6);
-  //   hmap.put(6303,beam10p6);
-  //   hmap.put(6305,beam10p6);
-  //   hmap.put(6307,beam10p6);
-  //   hmap.put(6310,beam10p6);
-  //   hmap.put(6313,beam10p6);
-  //   hmap.put(6321,beam10p6);
-  //   hmap.put(6311,beam10p6);
-  //   hmap.put(6327,beam10p6);
-  //   hmap.put(6346,beam10p6);
-  //   hmap.put(6347,beam10p6);
-  //   hmap.put(6349,beam10p6);
-
-  //   hmap.put(6428,beam10p2);
-  //   hmap.put(6433,beam10p2);
-  //   hmap.put(6442,beam10p2);
-  //   hmap.put(6450,beam10p2);
-  //   hmap.put(6467,beam10p2);
-  //   hmap.put(6474,beam10p2);
-  //   hmap.put(6481,beam10p2);
-  //   hmap.put(6492,beam10p2);
-  //   return hmap;
-
-  // }
+  
 
 }
