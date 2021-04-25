@@ -24,10 +24,10 @@ public class DcoDe
   public static void main( String[] args )
   {
     processInput inputParam=new processInput(args);
-    runUtil runInfo=new runUtil();
+    //runUtil runInfo=new runUtil();
     
 
-    double beamenergy;
+    //double beamenergy;
 
     Event     event = new Event();
 
@@ -36,16 +36,17 @@ public class DcoDe
     hNC.setOutputDir(inputParam.getOutputDir());
     DvcsHisto hDC     = new DvcsHisto();//DVCS cuts
     DvcsHisto hAC     = new DvcsHisto();//All cuts
-    DvcsHisto hft     = new DvcsHisto();//Forward Tagger
-    DvcsHisto hfd     = new DvcsHisto();//Forward Detector
+    //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
+    //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
-    int times=0;
+    //int times=0;
 
     int ndvcs=0;
 
     int counter=0;
 
     //HashMap<Integer, Double> hmap=createrunmap();
+    //Why calling createrunmap using the class name and not object
     HashMap<Integer, Double> hmap=runUtil.createrunmap();
 
 
