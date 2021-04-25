@@ -18,6 +18,7 @@ public class runUtil {
         hmap.put(6447,beam10p2);
         hmap.put(6448,beam10p2);
         //regular runs
+        hmap.put(6302,beam10p6);//check
         hmap.put(6303,beam10p6);
         hmap.put(6305,beam10p6);
         hmap.put(6307,beam10p6);
