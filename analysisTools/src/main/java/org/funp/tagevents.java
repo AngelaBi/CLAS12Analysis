@@ -28,7 +28,8 @@ public class tagevents
     //int nphot=0;
     //int nelec=0;
     int totalcounter=0;
-    int dvcscounter=0;
+    int ndegamma=0;
+    //int dvcscounter=0;
 
     Event     event = new Event();
     DvcsEvent ev    = new DvcsEvent();
@@ -89,7 +90,8 @@ public class tagevents
         if(ev.FilterParticles(particles,scint,hel)){
           //if(((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))){
             writer.addEvent(event);
-            dvcscounter++;
+            ndegamma++;
+            //dvcscounter++;
           //}
           /*hNC.fillBasicHisto(ev);
           if(ev.DVCScut()){
@@ -113,7 +115,7 @@ public class tagevents
     }
       writer.close();
       System.out.println("total counter: " + totalcounter);
-      System.out.println("dvcs counter: " + dvcscounter);
+      System.out.println("total e d gamma events: " + ndegamma);
       reader.close();
     }
 

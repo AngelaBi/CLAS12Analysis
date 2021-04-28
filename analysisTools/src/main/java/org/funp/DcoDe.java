@@ -36,13 +36,20 @@ public class DcoDe
     hNC.setOutputDir(inputParam.getOutputDir());
     DvcsHisto hDC     = new DvcsHisto();//DVCS cuts
     DvcsHisto hAC     = new DvcsHisto();//All cuts
+
+    DvcsHisto hDCFT     = new DvcsHisto();//DVCS cuts conf 1
+    DvcsHisto hDCFD     = new DvcsHisto();//All cuts conf 2
+
+    DvcsHisto hACFT     = new DvcsHisto();//DVCS cuts conf 1
+    DvcsHisto hACFD     = new DvcsHisto();//All cuts conf 2
+
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
     //int times=0;
 
     int ndvcs=0;
-
+    int ndegamma=0;
     int counter=0;
 
     //HashMap<Integer, Double> hmap=createrunmap();
@@ -91,15 +98,28 @@ public class DcoDe
 
       if(ev.FilterParticles(particles,scint,hel)){
         hNC.fillBasicHisto(ev);
+        ndegamma++;
         if(ev.DVCScut()){
           ndvcs++;
           //if(vMMass.mass2()>-1 && vMMass.mass2()<1 && (vphoton.theta()*180./Math.PI)<5){
           //    MMom.fill(vMMom.p());
           hDC.fillBasicHisto(ev);
+          if (ev.GetConf()==1){
+            hDCFT.fillBasicHisto(ev);
+          }
+          else if (ev.GetConf()==2){
+            hDCFD.fillBasicHisto(ev);
+          }
           //Math.abs(ev.X("eh").mass2())<3  && ev.X("ehg").e()<1 (Math.toDegrees(ev.vphoton.theta())<5) &&  Math.abs(ev.X("ehg").e())<2 && (Math.toDegrees(ev.vphoton.theta())<5)   Math.abs(ev.deltaPhiPlane2())<20 (ev.beta()-ev.BetaCalc())>-0.3  &&  Math.abs(ev.deltaPhiPlane())<1 &&  && (ev.beta()-ev.BetaCalc())>-0.3
           if( ev.Exclusivitycut()) {
             //&& (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
             hAC.fillBasicHisto(ev);
+            if (ev.GetConf()==1){
+              hACFT.fillBasicHisto(ev);
+            }
+            else if (ev.GetConf()==2){
+              hACFD.fillBasicHisto(ev);
+            }
             counter++;
           }
         }
@@ -111,6 +131,7 @@ public class DcoDe
     //counter--;
 
     System.out.println("total dvcs events: " + ndvcs);
+    System.out.println("total deuteron gamma electron events : " + ndegamma);
     System.out.println("total deuteron event : " + ev.tmpdeut);
     System.out.println("total deuteron event with CTOF info: " + ev.tmpdeutctof);
     System.out.println("total deuteron event with no CTOF info: " + ev.tmpdeutnoctof);
@@ -135,6 +156,10 @@ public class DcoDe
     hDC.DrawAll(ec7);
     TCanvas ec8 = new TCanvas("AllDVCSexcCuts",1200,1000);
     hAC.DrawAll(ec8);
+    TCanvas ec88 = new TCanvas("AllDVCSexcCuts FT",1200,1000);
+    hACFT.DrawMissing(ec88);
+    TCanvas ec89 = new TCanvas("AllDVCSexcCuts FD",1200,1000);
+    hACFD.DrawMissing(ec89);
 
     TCanvas ec9 = new TCanvas("AllNoCuts",1200,1000);
     hNC.DrawAll2(ec9);
@@ -142,6 +167,10 @@ public class DcoDe
     hDC.DrawAll2(ec10);
     TCanvas ec11 = new TCanvas("AllDVCSexcCuts",1200,1000);
     hAC.DrawAll2(ec11);
+    TCanvas ec881 = new TCanvas("AllDVCSCuts FT",1200,1000);
+    hDCFT.DrawMissing(ec881);
+    TCanvas ec891 = new TCanvas("AllDVCSCuts FD",1200,1000);
+    hDCFD.DrawMissing(ec891);
 
     TCanvas ecA = new TCanvas("Asymmetry",1200,1200);
     hAC.drawAsym(ecA);
