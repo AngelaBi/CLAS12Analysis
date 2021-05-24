@@ -27,7 +27,7 @@ public class readBanks
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
-    reader.open("/Users/biselli/Data/clas12/rgB/pass1/dst_edeut_06467_trimmed.hipo"); // open a file
+    reader.open("/Users/biselli/Data/clas12/rg-b/pass1/dst_edeut_06467_trimmed.hipo"); // open a file
    HashMap<Integer, Double> hmap=createrunmap();
 
     if(hmap.get(6310)!=null){
@@ -46,8 +46,8 @@ public class readBanks
     Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
 
     Bank calos      = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
-    //Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
-    Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+    Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
+    Bank scintExtra      = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
 
     Bank evn      = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
 
@@ -55,19 +55,24 @@ public class readBanks
     reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
 
     reader.nextEvent(event);
+    runconfig.show();
+    evn.show();
     event.read(particles);
     event.read(calos);
     event.read(scint);
+    event.read(scintExtra);
     event.read(evn);
     event.read(runconfig);
     particles.show();
     scint.show();
-    runconfig.show();
-    //calos.show();
-    evn.show();
+    scintExtra.show();
+    
+    calos.show();
+    
     System.out.println("n rows  part : " + particles.getRows());
     //System.out.println("n rows  calo : " + calos.getRows());
     System.out.println("n rows  scint : " + scint.getRows());
+    System.out.println("n rows  scint : " + scintExtra.getRows());
     System.out.println("pid of xx.   : " + particles.getInt("pid",3));
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(scint,"pindex");
     System.out.println(evn.getFloat("startTime",0));
