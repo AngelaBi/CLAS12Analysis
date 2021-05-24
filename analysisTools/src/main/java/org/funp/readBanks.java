@@ -26,8 +26,9 @@ public class readBanks
     HipoReader reader = new HipoReader(); // Create a reader obejct
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
-    reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_edeut_006596.hipo"); // open a file
-    HashMap<Integer, Double> hmap=createrunmap();
+    //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
+    reader.open("/Users/biselli/Data/clas12/rgB/pass1/dst_edeut_06467_trimmed.hipo"); // open a file
+   HashMap<Integer, Double> hmap=createrunmap();
 
     if(hmap.get(6310)!=null){
       beamenergy=hmap.get(6310);
@@ -45,7 +46,9 @@ public class readBanks
     Bank  runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
 
     Bank calos      = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
-    Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
+    //Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
+    Bank scint      = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+
     Bank evn      = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
 
 

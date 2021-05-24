@@ -206,15 +206,15 @@ public class DvcsEvent {
 
     double ctofen=-10;
 
-    if(particles.getRows()>0){
-      for(int npart=0; npart<particles.getRows(); npart++){
+    if(particles.getRows()>0){//loop over the events
+      for(int npart=0; npart<particles.getRows(); npart++){//loop over the particles in
         ctofen=-10;
         int pid = particles.getInt("pid", npart);
         int status = particles.getInt("status", npart);
         float beta = particles.getFloat("beta", npart);
 
 
-        if(scintMap.get(npart)!=null){
+        if(scintMap.get(npart)!=null){//check if there scintillator info
           for (int iscint : scintMap.get(npart)) {
             //System.out.println(scintMap.get(nh));
             final byte layer = scint.getByte("layer",iscint);
