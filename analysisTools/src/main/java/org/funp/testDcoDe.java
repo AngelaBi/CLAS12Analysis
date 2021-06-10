@@ -17,7 +17,7 @@
 // */
 // public class testDcoDe
 // {
-//   public static void main( String[] args )
+//   public static void main( String[] args  ) 
 //   {
 //     int user=0;//user==1 is justin
 //     HipoReader reader = new HipoReader(); // Create a reader obejct
