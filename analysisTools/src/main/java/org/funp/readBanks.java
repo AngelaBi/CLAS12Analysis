@@ -27,7 +27,7 @@ public class readBanks
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
-    reader.open("/Users/biselli/Data/clas12/rg-b/pass1/dst_edeut_06467_trimmed.hipo"); // open a file
+    reader.open("../../../../DATA/pass1/dst_edeut_6302_trimmed.hipo"); // open a file
    HashMap<Integer, Double> hmap=createrunmap();
 
     if(hmap.get(6310)!=null){

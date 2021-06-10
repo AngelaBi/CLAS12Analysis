@@ -1,7 +1,37 @@
 package org.funp.utilities;
 import java.util.*;
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 public class runUtil {
+
+    public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException {
+      int index = 0;
+      HashMap<Integer, List<Double>> runMap = new HashMap<Integer, List<Double>>();
+		  try (BufferedReader br = new BufferedReader(new FileReader("RUNS.csv"))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+            ArrayList<Double> helperList = new ArrayList<Double>();
+            helperList.clear();//this helper list is how I append the list to the value part of the map
+		        String[] values = line.split(",");
+            for (int iter = 1; iter<4; iter++){
+              helperList.add(Double.valueOf(values[iter]));
+            }
+		        // records.add(Arrays.asList(values));
+            runMap.put(Integer.valueOf(values[0]),helperList);
+            index++;
+		    }
+		  }
+      return runMap;
+    }
+
     public static HashMap<Integer, Double> createrunmap(){
         HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
         Double beam10p6=10.5986;

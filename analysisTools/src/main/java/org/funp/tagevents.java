@@ -82,12 +82,16 @@ public class tagevents
         Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
         Bank  scint     = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
         Bank  hel     = new Bank(reader.getSchemaFactory().getSchema("HEL::online"));
+        Bank  scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+
         reader.nextEvent(event);
         event.read(particles);
-	      event.read(scint);
+	    event.read(scint);
+        event.read(scintExtras);
+
         totalcounter++;
 
-        if(ev.FilterParticles(particles,scint,hel)){
+        if(ev.FilterParticles(particles,scint,hel,scintExtras)){
           //if(((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))){
             writer.addEvent(event);
             ndegamma++;
