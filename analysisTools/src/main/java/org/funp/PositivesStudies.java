@@ -66,13 +66,13 @@ public class PositivesStudies
         event.read(hel);
 
 
-        if(ev.FilterPositives(particles,scint)){
-          hNC.fillPositives(ev);
-        }
+        // if(ev.FilterPositives(particles,scint)){
+        //   hNC.fillPositives(ev);
+        // }
       }
     }
-    TCanvas ec = new TCanvas("Before cuts",1200,1000);
-    hNC.drawPositives(ec);
+    // TCanvas ec = new TCanvas("Before cuts",1200,1000);
+    // hNC.drawPositives(ec);
   }
   static HashMap<Integer, Double> createrunmap(){
     HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
