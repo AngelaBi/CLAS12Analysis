@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 public class runUtil {
 
-    public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException {
+    public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException  {
       int index = 0;
       HashMap<Integer, List<Double>> runMap = new HashMap<Integer, List<Double>>();
 		  try (BufferedReader br = new BufferedReader(new FileReader("RUNS.csv"))) {
