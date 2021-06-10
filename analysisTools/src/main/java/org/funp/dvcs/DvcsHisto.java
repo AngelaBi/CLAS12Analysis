@@ -21,6 +21,12 @@ public class DvcsHisto {
   public H1F hadmom;
   public H2F WvsQ2;
   public H2F Q2vsXbj;
+//Nick Add
+  public H1F VertexElectron;
+  public H1F VertexDuetron;
+
+
+  public H2F dedxDeutvsP;
   //Missing quantities
   //public H1F MMass;// missing mass of a complete DVCS final state e hadron gamma
   //public H1F MMom;// missing mom of a complete DVCS final state e hadron gamma
@@ -57,6 +63,8 @@ public class DvcsHisto {
   public H1F DPhiHist ;//phi gamma minus phi missing hadron+e vector
   public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
   public H1F DeltaPhiPlaneMattHist;//angle planes Q2/hadron and Q2/gamma
+
+  public H1F ConeAngleBtElectronPhotonFD;
 
   public H2F coneanglevsedgXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehgX
   public H2F coneanglevsedXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehX
@@ -114,6 +122,12 @@ public class DvcsHisto {
     Q2vsXbj.setTitleX("Q^2 [GeV/c^2]");
     Q2vsXbj.setTitleY("X_bj");
 
+    //Nick Add
+    dedxDeutvsP = new H2F("dedxDeutvsP","dedxDeutvsP",100,0,2,100,0,50);
+    VertexElectron = new H1F("Vertex Electron", 100,-10.0,10.0);
+    VertexElectron.setTitleX("Vertex Electron");
+    VertexDuetron = new H1F("Vertex Dueteron", 100,-10.0,10.0);
+    VertexDuetron.setTitleX("Vertex Dueteron");
     //MMass = new H1F("MMass",100,-10,10);
     //MMass.setTitleX("Missing Mass Squared");
     //MMom = new H1F("MMom",100,0,10);
@@ -189,7 +203,8 @@ public class DvcsHisto {
     DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane",100,-100,100);
     DeltaPhiPlaneMattHist.setTitle("Delta Phi Plane Hattawy");
 
-
+     ConeAngleBtElectronPhotonFD = new H1F("Cone Angle Bt Electron and Photon", 100,0,80);
+     ConeAngleBtElectronPhotonFD.setTitleX("Cone Angle Between Electron and Photon");
     coneanglevsedgXM2 = new H2F("Cone Angle vs eDGammaX missing M2","Cone Angle vs eDGammaX missing M2",100,0,20,100,-2,2);
     coneanglevsedgXM2.setTitleX("Cone Angle (deg.)");
     coneanglevsedgXM2.setTitleY("eDGammaX missing M2 (GeV)");
@@ -281,7 +296,9 @@ public class DvcsHisto {
 
     coneanglevsedgXM2.fill(ev.coneangle(),ev.X("egh").mass2());
     coneanglevsedXM2.fill(ev.coneangle(),ev.X("eh").mass2());
-coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
+    coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
+
+    ConeAngleBtElectronPhotonFD.fill(ev.angleBetweenElectronPhoton()); 
 
     betavsP.fill(ev.vhadron.p(),ev.beta());
     betahadhisto.fill(ev.beta());
@@ -290,6 +307,10 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     deltabeta.fill(ev.beta()-ev.BetaCalc());
 
     ctofdedxvsp.fill(ev.vhadron.p(),ev.ctofen());
+    //NickAdd
+    VertexDuetron.fill(ev.getVertexDeuteron());
+    VertexElectron.fill(ev.getVertexElectron());
+    dedxDeutvsP.fill(ev.vhadron.p(),ev.getDedxDeut());
     chisqHad.fill(ev.chi2pid());
     chi2vsdeltabeta.fill(ev.chi2pid(),ev.beta()-ev.BetaCalc());
 
@@ -308,48 +329,50 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
 
   }
 
-  public void fillPositives(DvcsEvent ev){
-    //betavsPplus.fill(ev.vpositive.p(),ev.betapos());
-    //ctofdedxvspplus.fill(ev.vpositive.p(),ev.ctofenpos());
-    //if (ev.FoundDeuteron==true){
-      betavsPdeut.fill(ev.vdeuteron.p(),ev.betadeut);
-      betavsPdeut.setTitle("Beta vs Momentum Deuteron");
-      ctofdedxvspdeut.fill(ev.vdeuteron.p(),ev.ctofenergydeut);
-      ctofdedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
-    //}
-    //else if (ev.FoundProton==true){
-      betavsPprot.fill(ev.vproton.p(),ev.betaprot);
-      betavsPprot.setTitle("Beta vs Momentum Proton");
-      ctofdedxvspdeut.fill(ev.vproton.p(),ev.ctofenergyprot);
-      ctofdedxvspdeut.setTitle("dE/dx vs Momentum Proton");
-    //}
-    //else if (ev.FoundPion==true){
-      betavsPpion.fill(ev.vpion.p(),ev.betapion);
-      betavsPpion.setTitle("Beta vs Momentum #pi+");
-      ctofdedxvspdeut.fill(ev.vpion.p(),ev.ctofenergypion);
-      ctofdedxvspdeut.setTitle("dE/dx vs Momentum #pi+");
-    //}
-    //else if (ev.FoundKaon==true){
-      betavsPkaon.fill(ev.vkaon.p(),ev.betakaon);
-      betavsPkaon.setTitle("Beta vs Momentum #kappa");
-      ctofdedxvspdeut.fill(ev.vkaon.p(),ev.ctofenergykaon);
-      ctofdedxvspdeut.setTitle("dE/dx vs Momentum #kappa");
-    //}
-  }
+  /*This stuff is all wrong for positive particles */
 
-  public void drawPositives(TCanvas ecP){
-    ecP.divide(2,2);
-    /*betavsPplus.add(betavsPprot);
-    betavsPplus.add(betavsPdeut);
-    betavsPplus.add(betavsPpion);
-    betavsPplus.add(betavsPkaon);
-    //ecP.getPad().getAxisZ().setLog(true);
-    ecP.draw(betavsPplus);*/
-    ecP.cd(0).draw(betavsPdeut);
-    ecP.cd(1).draw(betavsPprot);
-    ecP.cd(2).draw(betavsPpion);
-    ecP.cd(3).draw(betavsPkaon);
-  }
+  // public void fillPositives(DvcsEvent ev){
+  //   //betavsPplus.fill(ev.vpositive.p(),ev.betapos());
+  //   //ctofdedxvspplus.fill(ev.vpositive.p(),ev.ctofenpos());
+  //   //if (ev.FoundDeuteron==true){
+  //     betavsPdeut.fill(ev.vdeuteron.p(),ev.betadeut);
+  //     betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+  //     ctofdedxvspdeut.fill(ev.vdeuteron.p(),ev.ctofenergydeut);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+  //   //}
+  //   //else if (ev.FoundProton==true){
+  //     betavsPprot.fill(ev.vproton.p(),ev.betaprot);
+  //     betavsPprot.setTitle("Beta vs Momentum Proton");
+  //     ctofdedxvspdeut.fill(ev.vproton.p(),ev.ctofenergyprot);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Proton");
+  //   //}
+  //   //else if (ev.FoundPion==true){
+  //     betavsPpion.fill(ev.vpion.p(),ev.betapion);
+  //     betavsPpion.setTitle("Beta vs Momentum #pi+");
+  //     ctofdedxvspdeut.fill(ev.vpion.p(),ev.ctofenergypion);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #pi+");
+  //   //}
+  //   //else if (ev.FoundKaon==true){
+  //     betavsPkaon.fill(ev.vkaon.p(),ev.betakaon);
+  //     betavsPkaon.setTitle("Beta vs Momentum #kappa");
+  //     ctofdedxvspdeut.fill(ev.vkaon.p(),ev.ctofenergykaon);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #kappa");
+  //   //}
+  // }
+
+  // public void drawPositives(TCanvas ecP){
+  //   ecP.divide(2,2);
+  //   /*betavsPplus.add(betavsPprot);
+  //   betavsPplus.add(betavsPdeut);
+  //   betavsPplus.add(betavsPpion);
+  //   betavsPplus.add(betavsPkaon);
+  //   //ecP.getPad().getAxisZ().setLog(true);
+  //   ecP.draw(betavsPplus);*/
+  //   ecP.cd(0).draw(betavsPdeut);
+  //   ecP.cd(1).draw(betavsPprot);
+  //   ecP.cd(2).draw(betavsPpion);
+  //   ecP.cd(3).draw(betavsPkaon);
+  // }
 
   public H1F buildAsym(){
   H1F num;
@@ -382,45 +405,60 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
   Asymfunc.setParameter(2,-0.2);
   DataFitter.fit(Asymfunc,this.buildAsym(),"");
   ecA.draw(Asymfunc,"same");
+  ecA.getCanvas().save(this.outputdir+"/"+ecA.getTitle()+".png");
 }
 
-  public void DrawBasic(TCanvas ec){
-    ec.divide(3,3);
-    //ec.getPad(0).getAxisZ().setLog(true);
-    ec.cd(0).draw(WvsQ2);
-    //ec.getPad(1).getAxisZ().setLog(true);
-    ec.cd(1).draw(Q2vsXbj);
-    ec.cd(2).draw(W);
-    ec.cd(3).draw(Q2);
-    ec.cd(4).draw(ThvsPhi);
-    ec.cd(5).draw(ThvsP);
-    ec.cd(6).draw(deltabeta);
-    ec.cd(7).draw(edgXmissingPy);
-    ec.cd(8).draw(edgXmissingPz);
-    ec.getCanvas().getScreenShot();
-    ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
+  // public void DrawBasic(TCanvas ec){
+  //   ec.divide(3,3);
+  //   //ec.getPad(0).getAxisZ().setLog(true);
+  //   ec.cd(0).draw(WvsQ2);
+  //   //ec.getPad(1).getAxisZ().setLog(true);
+  //   ec.cd(1).draw(Q2vsXbj);
+  //   ec.cd(2).draw(W);
+  //   ec.cd(3).draw(Q2);
+  //   ec.cd(4).draw(ThvsPhi);
+  //   ec.cd(5).draw(ThvsP);
+  //   ec.cd(6).draw(deltabeta);
+    
+  //   ec.getCanvas().getScreenShot();
+  //   ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
+
+  // }
+
+
+  public void DrawParticleComparison(TCanvas ecPP){
+    ecPP.divide(2,4);
+    ecPP.cd(0).draw(elecThvsPhi);
+    ecPP.cd(1).draw(elecThvsP);
+    ecPP.cd(2).draw(photThvsPhi);
+    ecPP.cd(3).draw(photThvsP);
+    ecPP.cd(4).draw(ThvsPhi);
+    ecPP.cd(5).draw(ThvsP);
+    ecPP.cd(6).draw(dedxDeutvsP);
+    ecPP.getCanvas().getScreenShot();
+    System.out.println(this.outputdir+"/"+ecPP.getTitle()+".png" );
+    ecPP.getCanvas().save(this.outputdir+"/"+ecPP.getTitle()+".png");
 
   }
 
-  public void DrawMissing(TCanvas ec4){
+  public void DrawMissingQuants(TCanvas ec4){
 
-    ec4.divide(4,4);
-    ec4.cd(0).draw(DeltaPhiPlaneHist);
-    ec4.cd(1).draw(DeltaPhiPlaneMattHist);
-    ec4.cd(2).draw(ConeAngleHist);
-    ec4.cd(4).draw(edgXmissingE);
-    ec4.cd(5).draw(edgXmissingM2);
-    ec4.cd(6).draw(edgXmissingP);
-    ec4.cd(8).draw(edXmissingM);
-    ec4.cd(9).draw(edXmissingM2);
-    ec4.cd(10).draw(egXmissingM);
-    ec4.cd(11).draw(egXmissingM2);
+    ec4.divide(3,4);
+    ec4.cd(0).draw(edgXmissingE);
+    ec4.cd(1).draw(edgXmissingM2);
+    ec4.cd(2).draw(edgXmissingP);
+   
 
-    ec4.cd(12).draw(hgEn);
-    ec4.cd(13).draw(edgXmissingPx);
-    ec4.cd(14).draw(edgXmissingPy);
-    ec4.cd(15).draw(edgXmissingPz);
+    ec4.cd(3).draw(edXmissingM);
+    ec4.cd(4).draw(edXmissingM2);
+    ec4.cd(5).draw(egXmissingM);
+    ec4.cd(6).draw(egXmissingM2);
+
+    ec4.cd(7).draw(edgXmissingPx);
+    ec4.cd(8).draw(edgXmissingPy);
+    ec4.cd(9).draw(edgXmissingPz);
+    ec4.cd(10).draw(MissThetaHist);
     ec4.getCanvas().getScreenShot();
     System.out.println(this.outputdir+"/"+ec4.getTitle()+".png" );
     ec4.getCanvas().save(this.outputdir+"/"+ec4.getTitle()+".png");
@@ -429,50 +467,37 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
 
 
   }
-  public void DrawAll(TCanvas ec){
-    ec.divide(6,5);
-    ec.cd(0).draw(W);
-    ec.cd(1).draw(Q2);
-    ec.cd(2).draw(WvsQ2);
-    //ec.getPad(1).getAxisZ().setLog(true);
-    ec.cd(3).draw(Q2vsXbj);
-    ec.cd(4).draw(edgXmissingE);
-    ec.cd(5).draw(edgXmissingM2);
-    ec.cd(6).draw(edgXmissingP);
-    ec.cd(7).draw(edgXmissingPx);
-    ec.cd(8).draw(edgXmissingPy);
-    ec.cd(9).draw(edgXmissingPz);
-    ec.cd(10).draw(edXmissingM);
-    ec.cd(11).draw(egXmissingM);
-    ec.cd(12).draw(ThvsPhi);
-    ec.cd(13).draw(hgTh);
-    ec.cd(14).draw(hgEn);
-    ec.cd(15).draw(chi2vsdeltabeta);
-    ec.cd(16).draw(ConeAngleHist);
-    ec.cd(17).draw(MissThetaHist);
-    //ec.getPad(1).getAxisZ().setLog(true);
-    ec.cd(18).draw(PhiPlaneHist);
-    ec.cd(19).draw(DPhiHist);
-    ec.cd(20).draw(DeltaPhiPlaneHist);
-    ec.cd(21).draw(DeltaPhiPlaneMattHist);
-    //ec.cd(22).draw(coneanglevsedgXM2);
-    ec.cd(23);
-    ec.getPad().getAxisZ().setLog(true);
-    ec.draw(coneanglevsedXM2);
-    //ec.getPad().getAxisZ().setLog(true);
-    //ec.cd(24).draw(coneanglevsegXM2);
+  public void DrawKinematics(TCanvas ec){
+    ec.divide(4,5);
+    ec.cd(0).draw(WvsQ2);
+    ec.cd(1).draw(Q2vsXbj);
+    ec.cd(2).draw(betacalcvsP);
 
-    ec.cd(25).draw(betavsP);
-    //ec.getPad().getAxisZ().setLog(true);
-    ec.cd(22).draw(betacalcvsP);
-    //ec.cd(22).draw(deltabeta);
-    //ec.cd(23).draw(ctofdedxvsp);
-    ec.cd(24).draw(helicityhisto);
+    ec.cd(3).draw(chi2vsdeltabeta);
+    //ec.getPad(1).getAxisZ().setLog(true);
+    ec.cd(4).draw(W);
+    ec.cd(5).draw(hgTh);
+    ec.cd(6).draw(hgEn);
+    ec.cd(7).draw(Q2);
+    ec.cd(8).draw(ConeAngleHist);
+    ec.cd(9).draw(ConeAngleBtElectronPhotonFD);
+    //ec.getPad(1).getAxisZ().setLog(true);
+    ec.cd(10).draw(PhiPlaneHist);
+    ec.cd(11).draw(DPhiHist);
+    ec.cd(12).draw(DeltaPhiPlaneHist);
+    ec.cd(13).draw(DeltaPhiPlaneMattHist);
+
     //ec.cd(25).draw(helicityrawhisto);
-    ec.cd(26).draw(deltabeta);
-    ec.cd(27).draw(chisqHad);
-    ec.cd(28).draw(betacalchisto);
-    ec.cd(29).draw(betahadhisto);
+    ec.cd(14).draw(deltabeta);
+    ec.cd(15).draw(chisqHad);
+    ec.cd(16).draw(betacalchisto);
+    ec.cd(17).draw(betahadhisto);
+    ec.cd(18).draw(VertexElectron);
+    ec.cd(19).draw(VertexDuetron);
+
+    //i removed this jsut because its not useful and i wanted to make plot 4/5
+//    ec.cd(14).draw(helicityhisto);
+    
 
     ec.getCanvas().getScreenShot();
     ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
@@ -493,7 +518,7 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
     // ec2.cd(19).draw(ThvsPhi);
     // ec2.cd(20).draw(hgTh);
   }
-  public void DrawAll2(TCanvas ec){
+  public void DrawConeAngle(TCanvas ec){
     ec.divide(2,2);
     ec.cd(0).draw(coneanglevsedgXM2);
     ec.cd(1).draw(coneanglevsedXM2);
@@ -501,7 +526,7 @@ coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
 
     ec.cd(3).draw(betavsP);
     ec.getPad().getAxisZ().setLog(true);
-
+    ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
 
     //ec.divide(4,3);
