@@ -12,6 +12,8 @@
   <!-- FIXME change it to the project's website 1.7-->
   <url>http://www.example.com</url>
 
+	    <packaging>jar</packaging>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>11</maven.compiler.source>
@@ -38,15 +40,7 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    <!--
-    <dependency>
-    <groupId>org.funp</groupId>
-    <artifactId>analysis</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${HOME}/local/src/coatjava/lib/clas/coat-libs-6.1.0-SNAPSHOT.jar</systemPath>
-  </dependency>
--->
+   
 <dependency>
        <groupId>org.jlab.jnp</groupId>
        <artifactId>jnp-physics</artifactId>
@@ -68,12 +62,19 @@
 
 
 <build>
-  <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-
+  
     <plugins>
-      
+      <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+            <source>11</source>
+            <target>11</target>
+        </configuration>
+       </plugin> -->
     <plugin>
       <artifactId>maven-assembly-plugin</artifactId>
+      <version>2.6</version>
       <configuration>
         <archive>
           <manifest>
@@ -95,7 +96,10 @@
           </executions>
     </plugin>
   </plugins>
-</pluginManagement>
+ 
+  <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+ <!-- <pluginManagement>
+</pluginManagement> -->
 </build>
 
 </project>
