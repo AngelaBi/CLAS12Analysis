@@ -32,21 +32,55 @@ public class PositiveEvent{
     public LorentzVector  vproton = new LorentzVector();
     public LorentzVector  vpion = new LorentzVector();
     public LorentzVector  vkaon = new LorentzVector();
+
     
-    double betadeut=-10;
-    double betaprot=-10;
-    double betakaon=-10;
-    double betapion=-10;
+    double betadeutCTOF=-10;
+    double betaprotCTOF=-10;
+    double betakaonCTOF=-10;
+    double betapionCTOF=-10;
+
+    double betadeutCND=-10;
+    double betaprotCND=-10;
+    double betakaonCND=-10;
+    double betapionCND=-10;
    
-    double dedxDeut=-10;
-    double dedxProt=-10;
-    double dedxKaon=-10;
-    double dedxPion=-10;
+    double dedxDeutCTOF=-10;
+    double dedxProtCTOF=-10;
+    double dedxKaonCTOF=-10;
+    double dedxPionCTOF=-10;
+
+    double dedxDeutCND=-10;
+    double dedxProtCND=-10;
+    double dedxKaonCND=-10;
+    double dedxPionCND=-10;
+
+    double chi2piddeutCTOF=-10;
+    double chi2pidprotCTOF=-10;
+    double chi2pidkaonCTOF=-10;
+    double chi2pidpionCTOF=-10;
+
+    double chi2piddeutCND=-10;
+    double chi2pidprotCND=-10;
+    double chi2pidkaonCND=-10;
+    double chi2pidpionCND=-10;
 
     double MNUC = 1.875612;
     double MPION = 0.139570;
     double MKAON = 0.4977;
     double MPROT = 0.93828;
+    
+
+    public static boolean found_in_CND = false;
+    public static boolean found_in_CTOF = false;
+    public int num_deut_CND = 0;
+    public int num_deut_CTOF = 0;
+    public int num_pion_CND = 0;
+    public int num_pion_CTOF = 0;
+    public int num_kaon_CND = 0;
+    public int num_kaon_CTOF = 0;
+    public int num_prot_CND = 0;
+    public int num_prot_CTOF = 0;
+
 
     int numDeutEvents = 0;
     public int getDeutEvents(){
@@ -61,21 +95,31 @@ public class PositiveEvent{
         particles.getFloat("py",npart),
         particles.getFloat("pz",npart),
         this.MNUC);
-        betadeut=-10;
-        dedxDeut = -10;
+        betadeutCTOF=-10;
+        betadeutCND=-10;
+        dedxDeutCTOF = -10;
+        dedxDeutCND = -10;
+        chi2piddeutCND = -100;
+        chi2piddeutCTOF = -100;
+        found_in_CND = false;
+
+        found_in_CTOF = false;
         //chi2pidhad=particles.getFloat("chi2pid",npart);
         //vertexDeuteron = particles.getFloat("vz", npart);
-        boolean goodDeut = false;
         if(scintMap.get(npart)!=null){
             for (int iscint : scintMap.get(npart)) {
                 //System.out.println(scintMap.get(nh));
                 final byte layer = scint.getByte("layer",iscint);
                 final byte detector = scint.getByte("detector",iscint);
                 //System.out.println(detector);
-                if(detector==3){
+                if(detector==4){ //CTOF
+
                     //ctofenergyhad = scint.getFloat("energy",iscint);
-                    dedxDeut = scintExtras.getFloat("dedx", iscint);
-                    betadeut=particles.getFloat("beta",npart);
+                    chi2piddeutCTOF=particles.getFloat("chi2pid",npart);
+                    dedxDeutCTOF = scintExtras.getFloat("dedx", iscint);
+                    betadeutCTOF=particles.getFloat("beta",npart);
+                    found_in_CTOF = true;
+                    num_deut_CTOF++;
                     // if (particles.getFloat("vz",npart)<-1 && particles.getFloat("vz",npart)>-5){
                     //     goodDeut = true;
                     //     numDeutEvents++;
@@ -85,8 +129,13 @@ public class PositiveEvent{
 
                     //tmpdeutctof++;
                 }
-                else if(detector==3) {
+                else if(detector==3) {//CND
+                    found_in_CND = true;
+                    chi2piddeutCND=particles.getFloat("chi2pid",npart);
+                    dedxDeutCND = scintExtras.getFloat("dedx", iscint);
+                    betadeutCND=particles.getFloat("beta",npart);
                     //tmpdeutcnd++;
+                    num_deut_CND++;
                     //dedxDeut = scintExtras.getFloat("dedx", iscint);
 
                 }
@@ -99,7 +148,6 @@ public class PositiveEvent{
             
 
         }
-       //return goodDeut;
 
     }
 
@@ -111,8 +159,11 @@ public class PositiveEvent{
         particles.getFloat("py",npart),
         particles.getFloat("pz",npart),
         this.MPION);
-        betapion=-10;
-        dedxPion=-10;
+        betapionCND=-10;
+        betapionCTOF=-10;
+        dedxPionCTOF=-10;
+        dedxPionCND=-10;
+        int detected_in = -1;
         //chi2pidhad=particles.getFloat("chi2pid",npart);
        // vertexDeuteron = particles.getFloat("vz", npart);
         if(scintMap.get(npart)!=null){
@@ -121,21 +172,30 @@ public class PositiveEvent{
                 final byte layer = scint.getByte("layer",iscint);
                 final byte detector = scint.getByte("detector",iscint);
                 //System.out.println(detector);
-                if(detector==3){
+                if(detector==4){ //CTOF
                     //ctofenergyhad = scint.getFloat("energy",iscint);
-                    dedxPion = scintExtras.getFloat("dedx", iscint);
-                    betapion=particles.getFloat("beta",npart);
-
+                    found_in_CTOF = true;
+                    dedxPionCTOF = scintExtras.getFloat("dedx",iscint);
+                    betapionCTOF=particles.getFloat("beta",npart);
+                    num_pion_CTOF++;
+                    // break;
                     //tmpdeutctof++;
                 }
-                else if(detector==3) {
+                else if(detector==3) { //CND
                     //tmpdeutcnd++;
+                    found_in_CND = true;
+                    dedxPionCND = scintExtras.getFloat("dedx",iscint);
+                    betapionCND=particles.getFloat("beta",npart);
+                    num_pion_CND++;
+                    // dedxPion = scintExtras.getFloat("dedx",iscint);
+                    // betapion=particles.getFloat("beta",npart);
+                    // break;
                 }
-                else  {
-                    //tmpdeutnoctof++;
-                //particles.show();
-                //scint.show();
-                }
+                // else  {
+                //     //tmpdeutnoctof++;
+                // //particles.show();
+                // //scint.show();
+                // }
             }
 
         }
@@ -143,15 +203,17 @@ public class PositiveEvent{
     }
     public void setKaon(Bank particles, Bank scint, Bank scintExtras, int npart){
         
-
-
         Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
         vkaon.setPxPyPzM(particles.getFloat("px",npart),
         particles.getFloat("py",npart),
         particles.getFloat("pz",npart),
         this.MKAON);
-        betakaon=-10;
-        dedxKaon=-10;
+        betakaonCTOF=-10;
+        betakaonCND=-10;
+        dedxKaonCTOF=-10;
+        dedxKaonCND=-10;
+        found_in_CND = false;
+        found_in_CTOF = false;
         //chi2pidhad=particles.getFloat("chi2pid",npart);
         //vertexDeuteron = particles.getFloat("vz", npart);
         if(scintMap.get(npart)!=null){
@@ -160,15 +222,21 @@ public class PositiveEvent{
                 final byte layer = scint.getByte("layer",iscint);
                 final byte detector = scint.getByte("detector",iscint);
                 //System.out.println(detector);
-                if(detector==3){
+                if(detector==4){ //CTOF
                     //ctofenergyhad = scint.getFloat("energy",iscint);
-                    dedxKaon = scintExtras.getFloat("dedx", iscint);
-                    betakaon=particles.getFloat("beta",npart);
+                    found_in_CTOF = true;
+                    dedxKaonCTOF = scintExtras.getFloat("dedx", iscint);
+                    betakaonCTOF=particles.getFloat("beta",npart);
+                    num_kaon_CTOF++;
 
                     //tmpdeutctof++;
                 }
-                else if(detector==3) {
+                else if(detector==3) { //CND
                     //tmpdeutcnd++;
+                    found_in_CND = true;
+                    dedxKaonCND = scintExtras.getFloat("dedx", iscint);
+                    betakaonCND=particles.getFloat("beta",npart);
+                    num_kaon_CND++;
                 }
                 else  {
                     //tmpdeutnoctof++;
@@ -187,9 +255,16 @@ public class PositiveEvent{
                     particles.getFloat("py",npart),
                     particles.getFloat("pz",npart),
                     this.MPROT);
-        betaprot = -10;
-        dedxProt = -10;
-        //chi2pidhad=particles.getFloat("chi2pid",npart);
+
+        betaprotCTOF = -10;
+        betaprotCND = -10;
+        dedxProtCND = -10;
+        dedxProtCTOF = -10;
+        double chi2pidprotCND=-10; 
+        double chi2pidprotCTOF=-10; 
+        int detected_in = -1;
+        found_in_CND = false;
+        found_in_CTOF = false;
         //vertexDeuteron = particles.getFloat("vz", npart);
         if(scintMap.get(npart)!=null){
             for (int iscint : scintMap.get(npart)) {
@@ -197,16 +272,22 @@ public class PositiveEvent{
                 final byte layer = scint.getByte("layer",iscint);
                 final byte detector = scint.getByte("detector",iscint);
                 //System.out.println(detector);
-                if(detector==3){
-                    
+                if(detector==4){ //CTOF
+                    found_in_CTOF = true;
                     //ctofenergyhad = scint.getFloat("energy",iscint);
-                    dedxProt = scintExtras.getFloat("dedx", iscint);
-                    betaprot=particles.getFloat("beta",npart);
-
+                    dedxProtCTOF = scintExtras.getFloat("dedx", iscint);
+                    betaprotCTOF=particles.getFloat("beta",npart);
+                    chi2pidprotCTOF=particles.getFloat("chi2pid",npart);
+                    num_prot_CTOF++;
                     //tmpdeutctof++;
                 }
-                else if(detector==3) {
+                else if(detector==3) { //CND
                     //tmpdeutcnd++;
+                    found_in_CND = true;
+                    dedxProtCND = scintExtras.getFloat("dedx", iscint);
+                    betaprotCND =particles.getFloat("beta",npart);
+                    chi2pidprotCND=particles.getFloat("chi2pid",npart);
+                    num_prot_CND++;
                 }
                 else  {
                     //tmpdeutnoctof++;
