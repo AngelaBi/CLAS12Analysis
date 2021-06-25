@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 public class runUtil {
 
-    public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException  {
+    public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException {
       int index = 0;
       HashMap<Integer, List<Double>> runMap = new HashMap<Integer, List<Double>>();
-		  try (BufferedReader br = new BufferedReader(new FileReader("RUNS.csv"))) {
+		  try (BufferedReader br = new BufferedReader(new FileReader("/home/nickrichardson/local/src/clas12analysis/analysisTools/src/main/java/org/funp/utilities/All2019Runs.csv"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
             ArrayList<Double> helperList = new ArrayList<Double>();
