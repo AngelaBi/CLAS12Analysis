@@ -22,12 +22,17 @@ public class readBanks
 {
   public static void main( String[] args )
   {
+     int pindexPhoton = -1;
+    float elec_w = -1;
+    byte electron_layer = -1;
+    byte elec_sector = -1;
+    byte electron_detector = -1;
     double beamenergy=-10;
     HipoReader reader = new HipoReader(); // Create a reader obejct
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
-    reader.open("../../../../DATA/pass1/dst_edeut_6302_trimmed.hipo");  // open a file
+    reader.open("/DATA/pass1/dst_edeut_6302_trimmed.hipo");  // open a file
    HashMap<Integer, Double> hmap=createrunmap();
 
     if(hmap.get(6310)!=null){
@@ -53,37 +58,84 @@ public class readBanks
 
 
     reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
-
     reader.nextEvent(event);
-    runconfig.show();
-    evn.show();
+    
+    // runconfig.show();
+    // evn.show();
     event.read(particles);
-    event.read(calos);
+    
     event.read(scint);
     event.read(scintExtra);
     event.read(evn);
     event.read(runconfig);
+    System.out.println("This is particle bank");
     particles.show();
-    scint.show();
-    scintExtra.show();
-    
+    // scint.show();
+    // scintExtra.show();
+    event.read(calos);
+    System.out.println("This is calorimeter bank");
+
     calos.show();
+    
+    
     
     System.out.println("n rows  part : " + particles.getRows());
     //System.out.println("n rows  calo : " + calos.getRows());
     System.out.println("n rows  scint : " + scint.getRows());
-    System.out.println("n rows  scint : " + scintExtra.getRows());
+    System.out.println("n rows  scintExtra : " + scintExtra.getRows());
     System.out.println("pid of xx.   : " + particles.getInt("pid",3));
-    Map<Integer,List<Integer>> caloMap = loadMapByIndex(scint,"pindex");
-    System.out.println(evn.getFloat("startTime",0));
 
 
+    Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
+    System.out.println("This is the calomap");
+    System.out.println(caloMap);
+    // Bank parts = event.getBank("REC::Particle");
+    // for (int ipart=0; ipart<particles.getRows(); ipart++) {
+    //     System.out.println("hi");
+    //     System.out.println(caloMap.get(ipart));
+        
+    //       for (int icalo : caloMap.get(ipart)) {
+    //         System.out.println(particles.getInt("pid",ipart));
+    //         if (particles.getInt("pid",ipart)==2112){
+    //           System.out.println("photon found");
+    //           final float lu = calos.getFloat("lu",icalo);
+    //           final float lw = calos.getFloat("lw",icalo);
+    //           System.out.println("lu:" + lu + " lw:" + lw);
+    //         }else{
+    //           System.out.println("not found");
+    //         }
+    //       }
+    //   //System.out.println("new ieration");
+        
+    // 
+   
+    for (int ipart=0; ipart<particles.getRows(); ipart++) {
+      if (particles.getInt("pid",ipart)==22){
+        pindexPhoton =ipart;
+        break;
+      }
+    }
+    if(caloMap.get(pindexPhoton)!=null){
+      for (int icalo : caloMap.get(pindexPhoton)) {
+        //System.out.println(scintMap.get(nh));
+        electron_layer = calos.getByte("layer",icalo);
+        electron_detector = calos.getByte("detector",icalo);
+        elec_sector = calos.getByte("sector",icalo);
+        System.out.println(electron_detector);
+        //System.out.println(detector);
+        if(electron_detector==7){//This is for ECAL in PCAL
+          elec_w = calos.getFloat("lw",icalo);
+           System.out.println("the w of phton"+ elec_w);
+          
+
+        }
 
 
-
-
-}
-/**
+      }
+    }
+    System.out.println("the w of phton"+ elec_w);
+  }
+/*
    * @param fromBank the bank containing the index variable
    * @param idxVarName the name of the index variable
    * @return map with keys being the index in toBank and values the indices in fromBank
@@ -103,6 +155,8 @@ public class readBanks
        }
        return map;
    }
+
+ 
    static HashMap<Integer, Double> createrunmap(){
      HashMap<Integer, Double> hmap = new HashMap<Integer, Double>();
      Double beam10p6=10.5986;
