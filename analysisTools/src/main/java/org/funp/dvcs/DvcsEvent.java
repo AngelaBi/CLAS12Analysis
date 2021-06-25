@@ -90,7 +90,25 @@ public class DvcsEvent {
   public int helicityminus=0;
   int helicity=-3;
   int helicityraw=-3;
+  public double elec_w;
+  public double elec_v;
+  public double elec_x;
+  public double elec_y;
+  public byte elec_sector;
 
+  public double photon_w;
+  public double photon_v;
+  public double photon_x;
+  public double photon_y;
+  public byte photon_sector;
+  public double beforeFidCut=0;
+  // public double elec_layer_4_x;
+  // public double elec_layer_4_y;
+  // public double elec_layer_7_x;
+  // public double elec_layer_7_y;
+  public byte electron_layer;
+  public byte photon_layer;
+ 
 
   //Nick Add
   double vertexElectron=-100;
@@ -112,21 +130,114 @@ public class DvcsEvent {
     System.out.println("setting the default DVCS event for hadron :" + MNUC );
   }
 
-  public void setElectron(Bank particles, int ne) {
+  public void setElectron(Bank particles, Bank calos, int ne) {
     velectron.setPxPyPzM(particles.getFloat("px",ne),
     particles.getFloat("py",ne),
     particles.getFloat("pz",ne),
     0.0005);
     vertexElectron = particles.getFloat("vz", ne);
+    elec_v = -10;
+    elec_w = -10;
+    // elec_layer_4_x = -10000;
+    // elec_layer_4_y = -10000;
+    // elec_layer_7_x = -10000;
+    // elec_layer_7_y = -10000;
+    
+      
+    
+    Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
+
+    if(caloMap.get(ne)!=null){
+      for (int icalo : caloMap.get(ne)) {
+        //System.out.println(scintMap.get(nh));
+        electron_layer = calos.getByte("layer",icalo);
+        final byte electron_detector = calos.getByte("detector",icalo);
+        elec_sector = calos.getByte("sector",icalo);
+       // System.out.println(electron_detector);
+        //System.out.println(detector);
+        if(electron_detector==7 && electron_layer==1){//This is for ECAL in PCAL
+          elec_w = calos.getFloat("lw",icalo);
+          elec_v = calos.getFloat("lv",icalo);
+          elec_x = calos.getFloat("x",icalo);
+          elec_y = calos.getFloat("y",icalo);
+          beforeFidCut++;
+         
+
+         
+        }
+        
+      }
+    }
+
     
   }
 
-  public void setPhoton(Bank particles, int ng) {
+  public void setPhoton(Bank particles, Bank calos, ArrayList<Integer> photonsNumber) {
+    
+
+    LorentzVector  minimize = new LorentzVector();
+    LorentzVector  vtmp = new LorentzVector();
+
+    minimize.copy(vBeam);
+    minimize.add(vTarget).sub(velectron);
+    minimize.sub(vhadron);
+    double minEnergy = minimize.e();
+    for(int i = 0; i < photonsNumber.size(); i++){
+      int pid = particles.getInt("pid", photonsNumber.get(i));
+      int status = particles.getInt("status", photonsNumber.get(i));
+      float beta = particles.getFloat("beta", photonsNumber.get(i));
+      
+      if(pid==22 && Math.abs(status)<4000){
+
+        vtmp.setPxPyPzM(particles.getFloat("px",photonsNumber.get(i)),
+        particles.getFloat("py",photonsNumber.get(i)),
+        particles.getFloat("pz",photonsNumber.get(i)),
+        0.0);
+        if(minEnergy > Math.abs(minimize.e()-vtmp.e()) ){
+          ng=photonsNumber.get(i);
+          minEnergy = (minimize.e()-vtmp.e()) ;
+          status = particles.getInt("status", photonsNumber.get(i));
+          beta = particles.getFloat("beta", photonsNumber.get(i));
+
+          if(status<2000)conf=1;
+          else if(status>=2000 && status<4000)conf=2;
+
+        }
+      }
+    }
+
+
     vphoton.setPxPyPzM( particles.getFloat("px",ng),
     particles.getFloat("py",ng),
     particles.getFloat("pz",ng),
     0.0);
+
+    Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
+
+      if(caloMap.get(ng)!=null){
+        for (int icalo : caloMap.get(ng)) {
+          //System.out.println(scintMap.get(nh));
+          photon_layer = calos.getByte("layer",icalo);
+          final byte photon_detector = calos.getByte("detector",icalo);
+          photon_sector = calos.getByte("sector",icalo);
+        // System.out.println(electron_detector);
+          //System.out.println(detector);
+          if(photon_detector==7 && photon_layer==1){//This is for ECAL in PCAL
+            photon_w = calos.getFloat("lw",icalo);
+            photon_v = calos.getFloat("lv",icalo);
+            photon_x = calos.getFloat("x",icalo);
+            photon_y = calos.getFloat("y",icalo);
+            beforeFidCut++;
+          
+
+          
+          }
+          
+        }
+      }
+
   }
+
   public void setHadron(Bank particles, Bank scint, Bank scintExtras, int nh) {
     tmpdeut++;
    
@@ -146,11 +257,11 @@ public class DvcsEvent {
         //System.out.println(detector);
         if(detector==4){
           ctofenergyhad = scint.getFloat("energy",iscint);
-          //dedxDeut = scintExtras.getFloat("dedx", iscint);
+          dedxDeut = scintExtras.getFloat("dedx", iscint);
           tmpdeutctof++;
         }
         else if(detector==3) {
-          dedxDeut = scintExtras.getFloat("dedx", iscint);
+         // dedxDeut = scintExtras.getFloat("dedx", iscint);
 
           tmpdeutcnd++;
         }
@@ -201,13 +312,13 @@ public class DvcsEvent {
   public  void pidStudies(Bank particles, Bank scint){
 
   }
-  public  boolean FilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras) {
+  public  boolean FilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras,Bank calos) {
     LorentzVector  vtmp = new LorentzVector();
     FoundEvent= false;
     this.el_en_max=0;
     this.ph_en_max=0;
     this.d_en_max=0;
-
+    ArrayList<Integer> photonsNumber =  new ArrayList<Integer>();
     Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
 
     nelec=0;
@@ -250,18 +361,20 @@ public class DvcsEvent {
         // status  1000-3999 is FT FD
         //else if(pid==22 && Math.abs(status)<4000){
         else if(pid==22 && Math.abs(status)<4000){
+          photonsNumber.add(npart);
           nphot++;
-          vtmp.setPxPyPzM(particles.getFloat("px",npart),
-          particles.getFloat("py",npart),
-          particles.getFloat("pz",npart),
-          0.0);
-          if(vtmp.e()>this.ph_en_max){
-            ng=npart;
-            this.ph_en_max=vtmp.e();
-            if(status<=2000)conf=1;
-            else if(status>=2000 && status<4000)conf=2;
+          // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+          // particles.getFloat("py",npart),
+          // particles.getFloat("pz",npart),
+          // 0.0);
 
-          }
+          // if(vtmp.e()>this.ph_en_max){
+          //   ng=npart;
+          //   this.ph_en_max=vtmp.e();
+          //   if(status<=2000)conf=1;
+          //   else if(status>=2000 && status<4000)conf=2;
+
+          // }
         }
         //status 4000 is FD
         //else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
@@ -274,13 +387,13 @@ public class DvcsEvent {
                   final byte layer = scint.getByte("layer",iscint);
                   final byte detector = scint.getByte("detector",iscint);
                   //System.out.println(detector);
-                  if(detector==3){
+                  if(detector==4){
                     ctofen = scint.getFloat("energy",iscint);
                     dedxDeut = scintExtras.getFloat("dedx",iscint);
                   }
                 }
               }
-              if (beta>0.16 /*&& ctofen>5 */ && dedxDeut>3.5){
+              if (beta>0.16 && ctofen>5  && dedxDeut>1){
                 ndeut++;
                 vtmp.setPxPyPzM(particles.getFloat("px",npart),
                 particles.getFloat("py",npart),
@@ -298,11 +411,17 @@ public class DvcsEvent {
         }
 
       }
+
+      //beginning of new way to select photon
+
+    
+
       //
       if( ndeut>=1 && nelec>=1 && nphot>=1){
-        this.setElectron(particles,ne);
-        this.setPhoton(particles,ng);
+        this.setElectron(particles,calos,ne);
         this.setHadron(particles,scint, scintExtras, nd);
+        this.setPhoton(particles,calos,photonsNumber);
+
         this.setHelicity(hel);
         FoundEvent=true;
       }
@@ -452,12 +571,27 @@ public class DvcsEvent {
   //}
   public boolean DVCScut(){
     //&& Math.toDegrees(this.vphoton.theta())<5
+    
+    boolean fiducialCutElectron = false;
+    //System.out.println(elec_sector);
+    if ((elec_sector==1 && elec_v >9.7824 && elec_v < 402.06 && elec_w>0.47359 && elec_w<393.895)|| (elec_sector ==  2 && elec_v>8.62768 && elec_v<402.389 && elec_w>8.57818 && elec_w<402.064)|| (elec_sector ==  3 && elec_v>9.23112 && elec_v<403.875 && elec_w>8.23956 && elec_w<403.622)||(elec_sector ==  4 && elec_v>19.2814 && elec_v<403.021 && elec_w>8.26354 && elec_w<392.355)|| (elec_sector ==  5 && elec_v>8.73336 && elec_v<402.915 && elec_w>9.28017 && elec_w<403.634)||(elec_sector ==  6 && elec_v>9.12088 && elec_v<403.581 && elec_w>8.13996 && elec_w<403.886)){
+      fiducialCutElectron = true;
+    }
+
+    boolean fiducialCutPhoton = false;
+    //System.out.println(elec_sector);
+    if ((photon_sector==1 && photon_v >9.7824 && photon_v < 402.06 && photon_w>0.47359 && photon_w<393.895)|| (photon_sector ==  2 && photon_v>8.62768 && photon_v<402.389 && photon_w>8.57818 && photon_w<402.064)|| (photon_sector ==  3 && photon_v>9.23112 && photon_v<403.875 && photon_w>8.23956 && photon_w<403.622)||(photon_sector ==  4 && photon_v>19.2814 && photon_v<403.021 && photon_w>8.26354 && photon_w<392.355)|| (photon_sector ==  5 && photon_v>8.73336 && photon_v<402.915 && photon_w>9.28017 && photon_w<403.634)||(photon_sector ==  6 && photon_v>9.12088 && photon_v<403.581 && photon_w>8.13996 && photon_w<403.886)){
+      fiducialCutPhoton = true;
+    }
+    //return fiducialCutElectron;
     boolean cut=
     (-this.Q().mass2()>1 
     && this.W().mass()>2  
     && this.vhadron.p()<2  
     && this.vphoton.e()>2
-    && this.angleBetweenElectronPhoton()>8);
+    && this.angleBetweenElectronPhoton()>8
+    && fiducialCutPhoton
+    && fiducialCutElectron);
     return cut;
   }
   public boolean Exclusivitycut(){
@@ -471,22 +605,31 @@ public class DvcsEvent {
       && this.X("ehg").e()<2 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
-      //&& Math.abs(this.chi2pid()) < 4 
-      && this.X("eh").mass() < 0.7);
+     && Math.abs(this.chi2pid()) < 4
+      && this.X("eh").mass() < 0.7
+      && vertexElectron > -6 && vertexElectron < 0
+     && vertexElectron > (-1.5 + vertexDeuteron)
+      && vertexElectron < (1.5 + vertexDeuteron)
+      /*&& getDedxDeut()> (-30*vhadron.p() +30)*/);
     }
     else if (conf==2){
       cut=
       (this.X("eh").mass2() < (-1* this.coneangle()+2) 
       && this.X("eh").mass2()>-2 
-     // && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
+      && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /*&& ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
       && this.X("ehg").mass2()>-0.75 
       && this.X("ehg").e()<3 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
-      && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
-      //&& Math.abs(this.chi2pid()) < 3 
-      && this.X("eh").mass() < 0.7));
+     // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
+      && Math.abs(this.chi2pid()) < 4
+      && this.X("eh").mass() < 0.7
+      && vertexElectron > -6 && vertexElectron < 0
+      && vertexElectron > (-1.5 + vertexDeuteron)
+      && vertexElectron < (1.5 + vertexDeuteron)
+      
+     /* && getDedxDeut()> (-30*vhadron.p()+30)*/);
     } 
     return cut;
   }
