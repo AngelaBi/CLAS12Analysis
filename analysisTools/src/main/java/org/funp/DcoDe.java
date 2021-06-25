@@ -44,6 +44,9 @@ public class DcoDe
     static  DvcsHisto hACFT;//DVCS cuts conf 1
     static  DvcsHisto hACFD ;//All cuts conf 2
 
+    static DvcsHisto Beforefiducial;
+
+
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
@@ -54,6 +57,9 @@ public class DcoDe
     static int counter;
     static int FDCounter;
     static  int FTCounter;
+    
+    static int beforefid;
+    static int afterfid;
     //static List<List<String>> records ;
     static HashMap<Integer, List<Double>> runMap;
 
@@ -65,6 +71,8 @@ public class DcoDe
     
 
     //double beamenergy;
+      beforefid = 0;
+      afterfid = 0;
 
       event = new Event();
       ev    = new DvcsEvent();
@@ -113,7 +121,6 @@ public class DcoDe
     // runnumber:firstevent, lastevent, beamenergy
     
     runMap = runUtil.createMapGagikStyle();
-    
 
     for (int i=0; i<inputParam.getNfiles(); i++) {
       HipoReader reader = new HipoReader();
@@ -147,6 +154,7 @@ public class DcoDe
           Bank  scint     = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
           Bank  scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
           Bank  hel       = new Bank(reader.getSchemaFactory().getSchema("HEL::online"));
+          Bank  calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
           //runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
 
 
@@ -156,6 +164,7 @@ public class DcoDe
           event.read(scintExtras);
           event.read(hel);
           event.read(runconfig);
+          event.read(calos);
           //System.out.println(" Current event number " + runconfig.getInt("event",0));
          
         //goodEventFilterParticles(particles,scint,hel,scintExtras);
@@ -163,21 +172,21 @@ public class DcoDe
           
           if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
             
-              goodEventFilterParticles(particles,scint,hel,scintExtras);
+              goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
   
           } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
               if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
-                  goodEventFilterParticles(particles,scint,hel,scintExtras);
+                  goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
   
               }
           } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
             if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
-                goodEventFilterParticles(particles,scint,hel,scintExtras);
+                goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
   
             }
           } else{
             if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
-                goodEventFilterParticles(particles,scint,hel,scintExtras);
+                goodEventFilterParticles(particles,scint,hel ,scintExtras,calos);
         
             }
           }
@@ -207,6 +216,10 @@ public class DcoDe
     System.out.println("total events after excl cuts: " + counter);
     System.out.println("total events after excl cuts in FT: " +FTCounter);
     System.out.println("total events after excl cuts in FD: " + FDCounter);
+    System.out.println("number before fid"+ev.beforeFidCut);
+    System.out.println("number after fid" + afterfid);
+
+   
     //TCanvas ec = new TCanvas("Before cuts",1200,1000);
     //hNC.DrawBasic( ec);
     //TCanvas ec2 = new TCanvas("After DVCS cuts",1200,1000);
@@ -216,34 +229,42 @@ public class DcoDe
     boolean showNOCUT_kinematics_FT = false;
     boolean showNOCUT_kinematics_FD = false;
 
-    boolean showNOCUT_missing_quants_ALL=false;
+    boolean showNOCUT_missing_quants_ALL=true;
     boolean showNOCUT_missing_quants_FT=false;
     boolean showNOCUT_missing_quants_FD=false;
 
-    boolean showDVCS_kinematics_All = false;
-    boolean showDVCS_kinematics_FT = false;
-    boolean showDVCS_kinematics_FD = false;
+    boolean showDVCS_kinematics_All = true;
+    boolean showDVCS_kinematics_FT = true;
+    boolean showDVCS_kinematics_FD = true;
 
-    boolean showDVCS_missing_quants_ALL = false;
-    boolean showDVCS_missing_quants_FT = false;
-    boolean showDVCS_missing_quants_FD = false;
+    boolean showDVCS_missing_quants_ALL = true;
+    boolean showDVCS_missing_quants_FT = true;
+    boolean showDVCS_missing_quants_FD = true;
 
-    boolean showExcl_kinematicss_ALL = false;
-    boolean showExcl_kinematics_FT = false;
-    boolean showExcl_kinematics_FD = false;
+    boolean showExcl_kinematicss_ALL = true;
+    boolean showExcl_kinematics_FT = true;
+    boolean showExcl_kinematics_FD = true;
 
-    boolean showExcl_missing_quants_ALL = false;
-    boolean showExcl_missing_quants_FT = false;
-    boolean showExcl_missing_quants_FD = false;
+    boolean showExcl_missing_quants_ALL = true;
+    boolean showExcl_missing_quants_FT = true;
+    boolean showExcl_missing_quants_FD = true;
 
-    boolean showParticleComparison_NO_CUTS = true;
-    boolean showParticleComparison_DVCS_CUTS = true;
-    boolean showParticleComparison_Excl_CUTS = true;
+    boolean showParticleComparison_NO_CUTS = false;
+    boolean showParticleComparison_DVCS_CUTS = false;
+    boolean showParticleComparison_Excl_CUTS = false;
 
 
-    boolean showConeAngle_NO_CUTS = false;
-    boolean showConeAngle_DVCS_CUTS = false;
-    boolean showConeAngle_Excl_CUTS = false;
+    boolean showConeAngle_NO_CUTS_All = true;
+    boolean showConeAngle_DVCS_CUTS_All = true;
+    boolean showConeAngle_Excl_CUTS_All = true;
+
+    boolean showConeAngle_NO_CUTS_FT = true;
+    boolean showConeAngle_DVCS_CUTS_FT = true;
+    boolean showConeAngle_Excl_CUTS_FT = true;
+
+    boolean showConeAngle_NO_CUTS_FD = true;
+    boolean showConeAngle_DVCS_CUTS_FD = true;
+    boolean showConeAngle_Excl_CUTS_FD = true;
 
 
     boolean showAsymm_All = true;
@@ -274,13 +295,22 @@ public class DcoDe
         hDCFT.DrawMissingQuants(ec40);
     }
     if (showDVCS_missing_quants_FD){
-        TCanvas ec401 = new TCanvas("Excl after DVCS cuts FT",1500,1500);
+        TCanvas ec401 = new TCanvas("Excl after DVCS cuts FD",1500,1500);
         hDCFD.DrawMissingQuants(ec401);
     }
 
     if (showExcl_missing_quants_ALL){
         TCanvas ec5 = new TCanvas("Excl after DVCS and exc cuts",1500,1500);
         hAC.DrawMissingQuants(ec5);
+    }
+
+    if (showExcl_missing_quants_FT){
+      TCanvas ec555 = new TCanvas("Excl after DVCS and exc cuts FT",1500,1500);
+      hACFT.DrawMissingQuants(ec555);
+    }
+     if (showExcl_missing_quants_FD){
+      TCanvas ec5551 = new TCanvas("Excl after DVCS and exc cuts FDs",1500,1500);
+      hACFD.DrawMissingQuants(ec5551);
     }
     
     if (showNOCUT_kinematics_ALL){
@@ -328,19 +358,49 @@ public class DcoDe
     hACFD.DrawKinematics(ec89);//changed this line
    }
     
-    if (showConeAngle_NO_CUTS){
-      TCanvas ec9 = new TCanvas("AllNoCuts ConeAngle",1200,1000);
+    if (showConeAngle_NO_CUTS_All){
+      TCanvas ec9 = new TCanvas("AllNoCuts ConeAngle All",1200,1000);
       hNC.DrawConeAngle(ec9);
     }
 
-    if (showConeAngle_DVCS_CUTS){
-      TCanvas ec10 = new TCanvas("AllDVCSCuts ConeAngle",1200,1000);
+    if (showConeAngle_DVCS_CUTS_All){
+      TCanvas ec10 = new TCanvas("AllDVCSCuts ConeAngle All",1200,1000);
       hDC.DrawConeAngle(ec10);
     }
 
-    if (showConeAngle_Excl_CUTS){
-      TCanvas ec11 = new TCanvas("AllDVCSexcCuts ConeAngle",1200,1000);
+    if (showConeAngle_Excl_CUTS_All){
+      TCanvas ec11 = new TCanvas("AllDVCSexcCuts ConeAngle All",1200,1000);
       hAC.DrawConeAngle(ec11);
+    }
+
+    if (showConeAngle_NO_CUTS_FT){
+      TCanvas ec91 = new TCanvas("AllNoCuts ConeAngle FT",1200,1000);
+      hNCFT.DrawConeAngle(ec91);
+    }
+
+    if (showConeAngle_DVCS_CUTS_FT){
+      TCanvas ec101 = new TCanvas("AllDVCSCuts ConeAngle FT",1200,1000);
+      hDCFT.DrawConeAngle(ec101);
+    }
+
+    if (showConeAngle_Excl_CUTS_FT){
+      TCanvas ec111 = new TCanvas("AllDVCSexcCuts ConeAngle FT",1200,1000);
+      hACFT.DrawConeAngle(ec111);
+    }
+
+    if (showConeAngle_NO_CUTS_FD){
+      TCanvas ec911 = new TCanvas("AllNoCuts ConeAngle FD",1200,1000);
+      hNCFD.DrawConeAngle(ec911);
+    }
+
+    if (showConeAngle_DVCS_CUTS_FD){
+      TCanvas ec1011 = new TCanvas("AllDVCSCuts ConeAngle FD",1200,1000);
+      hDCFD.DrawConeAngle(ec1011);
+    }
+
+    if (showConeAngle_Excl_CUTS_FD){
+      TCanvas ec1111 = new TCanvas("AllDVCSexcCuts ConeAngle FD",1200,1000);
+      hACFD.DrawConeAngle(ec1111);
     }
     
     
@@ -403,11 +463,13 @@ public class DcoDe
     //TCanvas ec7 = new TCanvas("call2",1200,1000);
 }
 
-public static void goodEventFilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras){
-  //System.out.println("we have entered the method");
+public static void goodEventFilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras, Bank calos){
   
-  if(ev.FilterParticles(particles,scint,hel,scintExtras)){
+  if(ev.FilterParticles(particles,scint,hel,scintExtras,calos)){
     hNC.fillBasicHisto(ev);
+    beforefid++;
+    
+    //Beforefiducial.fillBeforeFid(ev);
     if (ev.GetConf()==1){
       hNCFT.fillBasicHisto(ev);
     }else if (ev.GetConf()==2){
@@ -415,6 +477,8 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank hel
     }
     ndegamma++;
     if(ev.DVCScut()){
+      //Beforefiducial.fillAfterFid(ev);
+      afterfid++;
       ndvcs++;
       //if(vMMass.mass2()>-1 && vMMass.mass2()<1 && (vphoton.theta()*180./Math.PI)<5){
       //    MMom.fill(vMMom.p());
