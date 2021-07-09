@@ -18,7 +18,9 @@ import org.jlab.groot.ui.TCanvas;
 public class DvcsHisto {
 
 
-  
+  public H2F dedxCTOFvsP;
+  public H2F dedxCNDvsP;
+
   public H1F W; //invariant mass of e target -> e' X
   public H1F Q2;//Momentum transfer squared  of e-e'
   public H1F hadmom;
@@ -42,6 +44,8 @@ public class DvcsHisto {
   public H1F edgXmissingPy;// missing py of a complete DVCS final state e hadron gamma
   public H1F edgXmissingPz;// missing pz of a complete DVCS final state e hadron gamma
 
+  public H1F edXmissingE;
+
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
   public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
   public H1F egXmissingM;
@@ -54,6 +58,8 @@ public class DvcsHisto {
   public H2F ThvsP;//Theta vs mom for hadron
   public H2F elecThvsP;
   public H2F photThvsP;
+
+  public H2F tvsq2;
 
   //public H2F MMvsMpz;
   //public H2F MpxvsMpz;
@@ -122,6 +128,13 @@ public class DvcsHisto {
     XvsY_electron = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
     //XvsY_electron_before = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
     
+    dedxCTOFvsP = new H2F("dedx CTOF vs P", "dedx CTOF vs P", 100,0,2,100,0,30);
+    dedxCTOFvsP.setTitle("dE/dx CTOF vs P");
+
+    dedxCNDvsP = new H2F("dedx CND vs P", "dedx CND vs P", 100,0,2,100,0,30);
+    dedxCNDvsP.setTitle("dE/dx CND vs P");
+
+
     W= new H1F("W" ,100, 0, 10.0);
     W.setTitleX("W [GeV]");
     Q2 = new H1F("Q2",100, 0.1, 4.0);
@@ -131,9 +144,9 @@ public class DvcsHisto {
     WvsQ2 = new H2F("W vs Q2", "W vs Q2", 100,0,7,100,0,10);
     WvsQ2.setTitle("W [GeV]");
     WvsQ2.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj = new H2F("X_bj vs Q^2","X_bj vs Q^2",100,0,1,100,0,10);
+    Q2vsXbj = new H2F("X_b vs Q^2","X_b vs Q^2",100,0,1,100,0,10);
     Q2vsXbj.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj.setTitle("X_bj");
+    Q2vsXbj.setTitle("X_b");
 
     //Nick Add
     dedxDeutvsP = new H2F("dedxDeutvsP","dedxDeutvsP",100,0,2,100,0,50);
@@ -153,6 +166,8 @@ public class DvcsHisto {
 
     edgXmissingE = new H1F("edgXmissingE",100,0,10);
     edgXmissingE.setTitleX("eDγX Missing Energy [GeV]");
+    edXmissingE = new H1F ("edXmissingE",100,-5,5);
+    edXmissingE.setTitle("edXmissingE");
     edgXmissingM2 = new H1F("edgXmissingM2",100,-4,4);
     edgXmissingM2.setTitleX("eDγX Missing Mass^2 [GeV/c^2]^2");
     edgXmissingP = new H1F("edgXmissingP",100,0,4);
@@ -180,7 +195,9 @@ public class DvcsHisto {
     ThvsP = new H2F("Deuteron p vs #theta","Deuteron p vs #theta ",100,0,180,100,0,10.6);
     ThvsP.setTitleY("p [GeV/c]");
     ThvsP.setTitle("#theta [Degrees]");
-
+    tvsq2 = new H2F("t vs Q2", "t vs Q2",100,0,5,100,0,5);
+    tvsq2.setTitle("t vs Q2");
+    tvsq2.setTitleX("Q2");
     elecThvsPhi = new H2F("Electron #theta vs #phi","Electron #theta vs #phi",100,-180,180,100,0,100);
     elecThvsPhi.setTitleX("#phi [Degrees]");
     elecThvsPhi.setTitleY("#theta [Degrees]");
@@ -275,6 +292,8 @@ public class DvcsHisto {
   
 
   public void fillBasicHisto(DvcsEvent ev) {
+    dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
+    dedxCNDvsP.fill(ev.vhadron.p(),ev.dedxDeutCND);
 
     coneanglevspperp.fill(ev.coneangle(), ev.pPerp());
     XvsY_electron.fill(ev.elec_x,ev.elec_y);
@@ -284,6 +303,7 @@ public class DvcsHisto {
     hadmom.fill(ev.vhadron.p());
     WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
+    tvsq2.fill(ev.Q().mass2(),-1*ev.t().mass2());
 
     //missing quantities of a complete DVCS final state e hadron gamma
     edgXmissingE.fill(ev.X("ehg").e());
@@ -293,6 +313,7 @@ public class DvcsHisto {
     edgXmissingPy.fill(ev.X("ehg").py());
     edgXmissingPz.fill(ev.X("ehg").pz());
 
+    edXmissingE.fill(ev.X("eg").e());
     edXmissingM2.fill(ev.X("eh").mass2());
     egXmissingM2.fill(ev.X("eg").mass2());
     edXmissingM.fill(ev.X("eh").mass());
@@ -454,8 +475,9 @@ public class DvcsHisto {
 
   public void DrawMissingQuants(TCanvas ec4){
 
-    ec4.divide(3,4);
-    ec4.cd(0).draw(edgXmissingE);
+    ec4.divide(4,4);
+    //ec4.cd(0).draw(edgXmissingE);
+    ec4.cd(0).draw(edXmissingE);
     ec4.cd(1).draw(edgXmissingM2);
     ec4.cd(2).draw(edgXmissingP);
    
@@ -469,6 +491,8 @@ public class DvcsHisto {
     ec4.cd(8).draw(edgXmissingPy);
     ec4.cd(9).draw(edgXmissingPz);
     ec4.cd(10).draw(MissThetaHist);
+    ec4.cd(11).draw(DeltaPhiPlaneHist);
+    ec4.cd(12).draw(DeltaPhiPlaneMattHist);
     ec4.getCanvas().getScreenShot();
     System.out.println(this.outputdir+"/"+ec4.getTitle()+".png" );
     ec4.getCanvas().save(this.outputdir+"/"+ec4.getTitle()+".png");
@@ -494,9 +518,8 @@ public class DvcsHisto {
     //ec.getPad(1).getAxisZ().setLog(true);
     ec.cd(10).draw(PhiPlaneHist);
     ec.cd(11).draw(DPhiHist);
-    ec.cd(12).draw(DeltaPhiPlaneHist);
-    ec.cd(13).draw(DeltaPhiPlaneMattHist);
-
+    
+    ec.cd(12).draw(tvsq2);
     //ec.cd(25).draw(helicityrawhisto);
     ec.cd(14).draw(deltabeta);
     ec.cd(15).draw(chisqHad);
@@ -507,6 +530,9 @@ public class DvcsHisto {
     ec.cd(20).draw(VertexElectron);
     ec.cd(21).draw(VertexDuetron);
     ec.cd(22).draw(vertexElecVSvertexDeut);
+    ec.cd(23).draw(dedxCNDvsP);
+    ec.cd(24).draw(dedxCTOFvsP);
+
 
     //i removed this jsut because its not useful and i wanted to make plot 4/5
 //    ec.cd(14).draw(helicityhisto);
