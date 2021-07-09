@@ -39,6 +39,15 @@ public class Particle_ID_Histo {
     public H2F cnd_dedxvspkaon;
     public H1F cnd_chi2pidDeutBefore;
     public H1F cnd_chi2pidDeutAfter;
+
+    public H2F BetaVsMomentumLE3CND;
+    public H2F BetaVsMomentumBT3and7CND;
+    public H2F BetaVsMomentumGE7CND;
+
+    public H2F BetaVsMomentumLE3CTOF;
+    public H2F BetaVsMomentumBT3and7CTOF;
+    public H2F BetaVsMomentumGE7CTOF;
+
     private String outputdir=new String(".");
 
     public int numDeutsCTOF;
@@ -70,56 +79,105 @@ public class Particle_ID_Histo {
         cnd_chi2pidDeutAfter = new H1F("chi2pid Deut",100,-20,20);
         numDeutsCND = 0;
         numDeutsCTOF = 0;
+
+        BetaVsMomentumLE3CTOF = new H2F("BetaVsMomentum Chi Less 3 CTOF", "BetaVsMometum Chi Less 3 CTOF", 100,0,2.5,100,0,1.1);
+        BetaVsMomentumBT3and7CTOF = new H2F("BetaVsMomentum Chi bt 3,7 CTOF", "BetaVsMometum Chi bt 3,7 CTOF", 100,0,2.5,100,0,1.1);
+        BetaVsMomentumGE7CTOF = new H2F("BetaVsMomentum Chi Greater 7 CTOF", "BetaVsMometum Chi Greater 7 CTOF", 100,0,2.5,100,0,1.1);
+
+        BetaVsMomentumLE3CND = new H2F("BetaVsMomentum Chi Less 3 CND", "BetaVsMometum Chi Less 3 CND", 100,0,2.5,100,0,1.1);
+        BetaVsMomentumBT3and7CND = new H2F("BetaVsMomentum Chi bt 3,7 CND", "BetaVsMometum Chi bt 3,7 CND", 100,0,2.5,100,0,1.1);
+        BetaVsMomentumGE7CND = new H2F("BetaVsMomentum Chi Greater 7 CND", "BetaVsMometum Chi Greater 7 CND", 100,0,2.5,100,0,1.1);
+
+
+    }
+
+    public void fillBetaVsMomentumChi2Pid(PositiveEvent pos_ev){
+
+        if (Math.abs(pos_ev.chi2pidhad) < 3){
+            BetaVsMomentumLE3CND.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+            BetaVsMomentumLE3CTOF.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCTOF);
+        }else if (Math.abs(pos_ev.chi2pidhad) > 3 && Math.abs(pos_ev.chi2pidhad)<7){
+            BetaVsMomentumBT3and7CND.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+            BetaVsMomentumBT3and7CTOF.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCTOF);
+
+        }else{
+            BetaVsMomentumGE7CND.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+            BetaVsMomentumGE7CTOF.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCTOF);
+        }
     }
 
    
 
     public void fillDeutCTOF(PositiveEvent pos_ev){
-        
-        // if (pos_ev.dedxDeutCTOF>0 && pos_ev.chi2piddeutCTOF<3 && pos_ev.chi2piddeutCTOF>-3) {
-        //     ctof_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCTOF);
-        //     ctof_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
-        //     ctof_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCTOF);
-        //     ctof_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
-        //     ctof_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCTOF);
-        // }
-        ctof_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCTOF);
-        if (/*((pos_ev.vdeuteron.p() < 0.75 /*&& pos_ev.dedxDeutCTOF>64*pos_ev.vdeuteron.p()-6.4) || (pos_ev.vdeuteron.p() >= 0.75 && pos_ev.dedxDeutCTOF > (-4.8707* Math.pow(pos_ev.vdeuteron.p(),6) +23.095*Math.pow(pos_ev.vdeuteron.p(),5) + -12.201*Math.pow(pos_ev.vdeuteron.p(),4)-109.96*Math.pow(pos_ev.vdeuteron.p(), 3) +251.9*Math.pow(pos_ev.vdeuteron.p(),2)-212.96*pos_ev.vdeuteron.p()+68.095)))&&*/ pos_ev.dedxDeutCTOF>0 && !(pos_ev.dedxDeutCTOF<3.5&&pos_ev.vdeuteron.p()<0.5)){
+        if (pos_ev.dedxDeutCTOF>0 && pos_ev.chi2piddeutCTOF<3 && pos_ev.chi2piddeutCTOF>-3) {
             ctof_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCTOF);
             ctof_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
             ctof_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCTOF);
             ctof_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+            ctof_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCTOF);
+
+        }
+       
+
+        if (/**/ pos_ev.dedxDeutCTOF>0 && Math.abs(pos_ev.chi2piddeutCTOF) < 3 && pos_ev.vdeuteron.p() < 1.2 && pos_ev.dedxDeutCTOF > 4.7084 *Math.pow(pos_ev.vdeuteron.p(),-1.728) /*&& !(pos_ev.dedxDeutCTOF<3.5&&pos_ev.vdeuteron.p()<0.5)*/){
+            
             ctof_chi2pidDeutAfter.fill(pos_ev.chi2piddeutCTOF);
             numDeutsCTOF++;
         }
         
+
     }
     public void fillDeutCND(PositiveEvent pos_ev){
-        
-        if (pos_ev.dedxDeutCND>0 && pos_ev.chi2piddeutCND<3 && pos_ev.chi2piddeutCND>-3){
+        if (pos_ev.dedxDeutCND>0 && Math.abs(pos_ev.chi2piddeutCND) < 3 && pos_ev.vdeuteron.p() < 1.0 /*&& pos_ev.chi2piddeutCND<3 && pos_ev.chi2piddeutCND>-3*/){
             cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
             cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
             cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
             cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
-            cnd_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCND);
+                    cnd_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCND);
+
             numDeutsCND++;
         }
-        cnd_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCND);
-        // if ((pos_ev.vdeuteron.p() >= 0.4 && pos_ev.dedxDeutCND > (-39.148*Math.pow(pos_ev.vdeuteron.p(),6) +302.12 *Math.pow(pos_ev.vdeuteron.p(),5) -926.66 * Math.pow(pos_ev.vdeuteron.p(),4) + 1420.5 * Math.pow(pos_ev.vdeuteron.p(),3)-1107.9*Math.pow(pos_ev.vdeuteron.p(),2) +381*pos_ev.vdeuteron.p()-27.727)) || (pos_ev.vdeuteron.p() < 0.4 && pos_ev.dedxDeutCND > (160*pos_ev.vdeuteron.p() -48))){
-        //     cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
-        //     cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
-        //     cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
-        //     cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+       // cnd_chi2pidDeutBefore.fill(pos_ev.chi2piddeutCND);
+        // if ((pos_ev.vdeuteron.p() >= 0.4 && pos_ev.vdeuteron.p() <= 1.0 && pos_ev.dedxDeutCND > (-39.148*Math.pow(pos_ev.vdeuteron.p(),6) +302.12 *Math.pow(pos_ev.vdeuteron.p(),5) -926.66 * Math.pow(pos_ev.vdeuteron.p(),4) + 1420.5 * Math.pow(pos_ev.vdeuteron.p(),3)-1107.9*Math.pow(pos_ev.vdeuteron.p(),2) +381*pos_ev.vdeuteron.p()-27.727)) || (pos_ev.vdeuteron.p() < 0.4 && pos_ev.dedxDeutCND > (160*pos_ev.vdeuteron.p() -48))){
+        //     // cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
+        //     // cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+        //     // cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+        //     // cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
         //     cnd_chi2pidDeutAfter.fill(pos_ev.chi2piddeutCND);
         //     numDeutsCND++;
         // }
+        // if ((pos_ev.vdeuteron.p() >= 0.4 && pos_ev.vdeuteron.p() <= 1.0 && pos_ev.dedxDeutCND > (57.192*Math.pow(pos_ev.vdeuteron.p(),6) -444.42 *Math.pow(pos_ev.vdeuteron.p(),5) +1391.3 * Math.pow(pos_ev.vdeuteron.p(),4) -2241.3 * Math.pow(pos_ev.vdeuteron.p(),3)+1963.1*Math.pow(pos_ev.vdeuteron.p(),2) -897.79*pos_ev.vdeuteron.p() + 176.05)) || (pos_ev.vdeuteron.p() < 0.4 && pos_ev.dedxDeutCND > (160*pos_ev.vdeuteron.p() -48))){
+        //     // cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
+        //     // cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+        //     // cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+        //     // cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+        //     cnd_chi2pidDeutAfter.fill(pos_ev.chi2piddeutCND);
+        //     numDeutsCND++;
+        // }
+
+        // if ((pos_ev.vdeuteron.p() >= 0.4 && pos_ev.vdeuteron.p() <= 1.0 && pos_ev.dedxDeutCND > (94.511*Math.pow(pos_ev.vdeuteron.p(),6) -712.61 *Math.pow(pos_ev.vdeuteron.p(),5) +2165.8 * Math.pow(pos_ev.vdeuteron.p(),4) + -3382.8 * Math.pow(pos_ev.vdeuteron.p(),3) +2859.4*Math.pow(pos_ev.vdeuteron.p(),2) -1249*pos_ev.vdeuteron.p()+229.21)) /*|| (pos_ev.vdeuteron.p() < 0.4 && pos_ev.dedxDeutCND > (160*pos_ev.vdeuteron.p() -48))*/){
+        //     // cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
+        //     // cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+        //     // cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+        //     // cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+        //     cnd_chi2pidDeutAfter.fill(pos_ev.chi2piddeutCND);
+        //     numDeutsCND++;
+        // }
+        if ((pos_ev.vdeuteron.p() >= 0.4 && pos_ev.vdeuteron.p() <= 1.0 && Math.abs(pos_ev.chi2piddeutCND) < 3 && pos_ev.dedxDeutCND > (0*Math.pow(pos_ev.vdeuteron.p(),6) -0 *Math.pow(pos_ev.vdeuteron.p(),5) -1043.8* Math.pow(pos_ev.vdeuteron.p(),4) + 3132.3 * Math.pow(pos_ev.vdeuteron.p(),3) -3398.9*Math.pow(pos_ev.vdeuteron.p(),2) +1549*pos_ev.vdeuteron.p()-233.59)) /*|| (pos_ev.vdeuteron.p() < 0.4 && pos_ev.dedxDeutCND > (160*pos_ev.vdeuteron.p() -48))*/){
+            // cnd_dedxvspdeut.fill(pos_ev.vdeuteron.p(),pos_ev.dedxDeutCND);
+            // cnd_dedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+            // cnd_betavsPdeut.fill(pos_ev.vdeuteron.p(),pos_ev.betadeutCND);
+            // cnd_betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+            cnd_chi2pidDeutAfter.fill(pos_ev.chi2piddeutCND);
+            numDeutsCND++;
+        }
         
     }
 
 
     public void fillProtCTOF(PositiveEvent pos_ev){
         
-        if (pos_ev.dedxProtCTOF>0){
+        if (pos_ev.dedxProtCTOF>0 && Math.abs(pos_ev.chi2pidprotCTOF) < 3 && pos_ev.vdeuteron.p() < 1.0){
             ctof_dedxvspprot.fill(pos_ev.vproton.p(),pos_ev.dedxProtCTOF);
             ctof_dedxvspprot.setTitle("dE/dx vs Momentum Proton");
             ctof_betavsPprot.fill(pos_ev.vproton.p(),pos_ev.betaprotCTOF);
@@ -128,8 +186,8 @@ public class Particle_ID_Histo {
 
     }
     public void fillProtCND(PositiveEvent pos_ev){
-        
-        if (pos_ev.dedxProtCND>0){
+       // System.out.println(pos_ev.chi2pidprotCND);
+        if (pos_ev.dedxProtCND>0 && Math.abs(pos_ev.chi2pidprotCND) < 3  && pos_ev.vproton.p() < 1.0){
             cnd_dedxvspprot.fill(pos_ev.vproton.p(),pos_ev.dedxProtCND);
             cnd_dedxvspprot.setTitle("dE/dx vs Momentum Proton");
             cnd_betavsPprot.fill(pos_ev.vproton.p(),pos_ev.betaprotCND);
@@ -179,6 +237,18 @@ public class Particle_ID_Histo {
         }
     }
 
+
+    public void drawChi_betaVsMomentum(TCanvas ecP){
+        ecP.divide(3,2);
+        ecP.cd(0).draw(BetaVsMomentumLE3CND);
+        ecP.cd(1).draw(BetaVsMomentumBT3and7CND);
+        ecP.cd(2).draw(BetaVsMomentumGE7CND);
+        ecP.cd(3).draw(BetaVsMomentumLE3CTOF);
+        ecP.cd(4).draw(BetaVsMomentumBT3and7CTOF);
+        ecP.cd(5).draw(BetaVsMomentumGE7CTOF);
+        ecP.getCanvas().save(this.outputdir+"/"+ecP.getTitle()+".png");
+    }
+
     public void drawPositivesCTOF(TCanvas ecP){
         ecP.divide(3,4);
         ecP.cd(0).draw(ctof_betavsPdeut);
@@ -191,6 +261,7 @@ public class Particle_ID_Histo {
         ecP.cd(7).draw(ctof_dedxvspkaon);
         ecP.cd(8).draw(ctof_chi2pidDeutBefore);
         ecP.cd(9).draw(ctof_chi2pidDeutAfter);
+        ecP.getCanvas().save(this.outputdir+"/"+ecP.getTitle()+".png");
 
     }
     public void drawPositivesCND(TCanvas ecP){
@@ -205,6 +276,8 @@ public class Particle_ID_Histo {
         ecP.cd(7).draw(cnd_dedxvspkaon);
         ecP.cd(8).draw(cnd_chi2pidDeutBefore);
         ecP.cd(9).draw(cnd_chi2pidDeutAfter);
+                ecP.getCanvas().save(this.outputdir+"/"+ecP.getTitle()+".png");
+
 
     }
     public void setOutputDir(String otherdir){
