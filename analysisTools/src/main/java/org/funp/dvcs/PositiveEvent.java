@@ -68,6 +68,8 @@ public class PositiveEvent{
     double MPION = 0.139570;
     double MKAON = 0.4977;
     double MPROT = 0.93828;
+
+    double chi2pidhad=-10;
     
 
     public static boolean found_in_CND = false;
@@ -104,7 +106,7 @@ public class PositiveEvent{
         found_in_CND = false;
 
         found_in_CTOF = false;
-        //chi2pidhad=particles.getFloat("chi2pid",npart);
+        chi2pidhad=particles.getFloat("chi2pid",npart);
         //vertexDeuteron = particles.getFloat("vz", npart);
         if(scintMap.get(npart)!=null){
             for (int iscint : scintMap.get(npart)) {
@@ -260,8 +262,8 @@ public class PositiveEvent{
         betaprotCND = -10;
         dedxProtCND = -10;
         dedxProtCTOF = -10;
-        double chi2pidprotCND=-10; 
-        double chi2pidprotCTOF=-10; 
+        chi2pidprotCND=-10; 
+        chi2pidprotCTOF=-10; 
         int detected_in = -1;
         found_in_CND = false;
         found_in_CTOF = false;
