@@ -25,6 +25,7 @@ public class particleID {
     public static PositiveEvent pos_ev ;
     public static Particle_ID_Histo histo_CTOF;
     public static Particle_ID_Histo histo_CND;
+    public static Particle_ID_Histo histo_Chi2Pid_BvsP;
     
     public static HashMap<Integer, List<Double>> runMap;
     public static double el_en_max;
@@ -33,7 +34,6 @@ public class particleID {
     public static void main( String[] args ) throws FileNotFoundException, IOException {
    
         processInput inputParam=new processInput(args);
-
         event = new Event();
         pos_ev    = new PositiveEvent();
         histo_CTOF     = new Particle_ID_Histo();
@@ -42,6 +42,9 @@ public class particleID {
         histo_CND     = new Particle_ID_Histo();
         histo_CND.setOutputDir(inputParam.getOutputDir());
         runMap = runUtil.createMapGagikStyle();
+
+        histo_Chi2Pid_BvsP = new Particle_ID_Histo();
+        histo_Chi2Pid_BvsP.setOutputDir(inputParam.getOutputDir());
         int index = 0;
         el_en_max=0;
 
@@ -129,6 +132,10 @@ public class particleID {
     histo_CND.drawPositivesCND(ec5);
     System.out.println("Num deut evetns:" +pos_ev.getDeutEvents());
 
+    TCanvas ec6 = new TCanvas("Chi2Pid Related to Beta vs Momentum",1500,1500);
+    histo_Chi2Pid_BvsP.drawChi_betaVsMomentum(ec6);
+
+
     System.out.println("The number of deut in CTOF before cuts:"+ pos_ev.num_deut_CTOF);
     System.out.println("The number of deut in CTOF after cuts :"+ histo_CTOF.numDeutsCTOF);
     System.out.println("The number of deut in CND before cuts :"+ pos_ev.num_deut_CND);
@@ -205,6 +212,7 @@ public class particleID {
                         // if(pos_ev.setDeut(particles,scint,scintExtras,npart)){
                         //     histo_CTOF.fillDeut(pos_ev);
                         // } 
+
                         pos_ev.setDeut(particles,scint,scintExtras,npart);
                         if (pos_ev.found_in_CTOF){
 
@@ -224,6 +232,7 @@ public class particleID {
                         if (pos_ev.found_in_CND){
                             histo_CND.fillPionCND(pos_ev);
                         }
+                        histo_Chi2Pid_BvsP.fillBetaVsMomentumChi2Pid(pos_ev);
                         
                     }
                     else if(Math.abs(pid)==321){
