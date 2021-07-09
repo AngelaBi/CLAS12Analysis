@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class DcoDe
 {
 
@@ -46,7 +47,9 @@ public class DcoDe
 
     static DvcsHisto Beforefiducial;
 
-
+    static DvcsHisto BinnedHAC;
+    static DvcsHisto BinnedHACFT;
+    static DvcsHisto BinnedHACFD;
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
@@ -62,13 +65,17 @@ public class DcoDe
     static int afterfid;
     //static List<List<String>> records ;
     static HashMap<Integer, List<Double>> runMap;
+    static TDirectory dir;
+    
+
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
     
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
-    
+    dir = new TDirectory();
+    dir.mkdir("/test");
 
     //double beamenergy;
       beforefid = 0;
@@ -100,6 +107,16 @@ public class DcoDe
       hACFT.setOutputDir(inputParam.getOutputDir());
       hACFD     = new DvcsHisto();//All cuts conf 2
       hACFD.setOutputDir(inputParam.getOutputDir());
+
+      BinnedHAC = new DvcsHisto();
+      BinnedHAC.setOutputDir(inputParam.getOutputDir());
+
+      BinnedHACFT = new DvcsHisto();
+      BinnedHACFT.setOutputDir(inputParam.getOutputDir());
+
+      BinnedHACFD = new DvcsHisto();
+      BinnedHACFD.setOutputDir(inputParam.getOutputDir());
+
 
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
@@ -150,10 +167,9 @@ public class DcoDe
         //this loops over the events
         while(reader.hasNext()==true){
           Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
-          Bank  run       = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
+          Bank  runEvent       = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
           Bank  scint     = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
           Bank  scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
-          Bank  hel       = new Bank(reader.getSchemaFactory().getSchema("HEL::online"));
           Bank  calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
           //runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
 
@@ -162,9 +178,10 @@ public class DcoDe
           event.read(particles);
           event.read(scint);
           event.read(scintExtras);
-          event.read(hel);
+          //event.read(hel);
           event.read(runconfig);
           event.read(calos);
+          event.read(runEvent);
           //System.out.println(" Current event number " + runconfig.getInt("event",0));
          
         //goodEventFilterParticles(particles,scint,hel,scintExtras);
@@ -172,21 +189,21 @@ public class DcoDe
           
           if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
             
-              goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
+              goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
   
           } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
               if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
-                  goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
+                  goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
   
               }
           } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
             if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
-                goodEventFilterParticles(particles,scint,hel,scintExtras,calos);
+                goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
   
             }
           } else{
             if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
-                goodEventFilterParticles(particles,scint,hel ,scintExtras,calos);
+                goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
         
             }
           }
@@ -284,6 +301,10 @@ public class DcoDe
       hAC.DrawParticleComparison(ecAC);
     }
 
+    if (showNOCUT_missing_quants_ALL){
+      TCanvas ec114 = new TCanvas("Excl after No cuts",1500,1500);
+      hNC.DrawMissingQuants(ec114);
+    }
 
     if (showDVCS_missing_quants_ALL){
         TCanvas ec4 = new TCanvas("Excl after DVCS cuts",1500,1500);
@@ -420,10 +441,20 @@ public class DcoDe
     }
     
 
+    TCanvas ecA111 = new TCanvas("Asymmetry Binned Q2",1200,1200);
+    BinnedHAC.drawAsym(ecA111);
+
+    TCanvas ecA1111 = new TCanvas("Asymmetry FT Binned Q2",1200,1200);
+    BinnedHACFT.drawAsym(ecA1111);
+
+    TCanvas ecA11111 = new TCanvas("Asymmetry FD Binned Q2",1200,1200);
+    BinnedHACFD.drawAsym(ecA11111);
 
     //How to plot the FT and FD Asymmetries
     
-
+    // dir.cd("/test");
+    // dir.addDataSet(ecA111);
+    // dir.writeFile("myfile.hipo");
     
 
     /*TCanvas ecP = new TCanvas("Plotdvcscuts",1800,1200);
@@ -463,9 +494,9 @@ public class DcoDe
     //TCanvas ec7 = new TCanvas("call2",1200,1000);
 }
 
-public static void goodEventFilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras, Bank calos){
+public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,int runNumber){
   
-  if(ev.FilterParticles(particles,scint,hel,scintExtras,calos)){
+  if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
     hNC.fillBasicHisto(ev);
     beforefid++;
     
@@ -490,16 +521,25 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank hel
         hDCFD.fillBasicHisto(ev);
       }
       //Math.abs(ev.X("eh").mass2())<3  && ev.X("ehg").e()<1 (Math.toDegrees(ev.vphoton.theta())<5) &&  Math.abs(ev.X("ehg").e())<2 && (Math.toDegrees(ev.vphoton.theta())<5)   Math.abs(ev.deltaPhiPlane2())<20 (ev.beta()-ev.BetaCalc())>-0.3  &&  Math.abs(ev.deltaPhiPlane())<1 &&  && (ev.beta()-ev.BetaCalc())>-0.3
-      if( ev.Exclusivitycut()) {
+      if( ev.Exclusivitycut(runNumber)) {
         //&& (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
         hAC.fillBasicHisto(ev);
+        if (-ev.Q().mass2()>1.5){
+            BinnedHAC.fillBasicHisto(ev);
+          }
         if (ev.GetConf()==1){
           hACFT.fillBasicHisto(ev);
           FTCounter++;
+          if (-ev.Q().mass2()>1.5){
+              BinnedHACFT.fillBasicHisto(ev);
+          }
         }
         else if (ev.GetConf()==2){
           hACFD.fillBasicHisto(ev);
           FDCounter++;
+          if (-ev.Q().mass2()>1.5){
+            BinnedHACFD.fillBasicHisto(ev);
+          }
         }
         counter++;
       }
