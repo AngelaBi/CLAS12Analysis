@@ -71,7 +71,7 @@ public class DcoDe
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
-    
+    int counter11 = 0;
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
     dir = new TDirectory();
@@ -141,6 +141,7 @@ public class DcoDe
 
     for (int i=0; i<inputParam.getNfiles(); i++) {
       HipoReader reader = new HipoReader();
+      reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -186,27 +187,30 @@ public class DcoDe
          
         //goodEventFilterParticles(particles,scint,hel,scintExtras);
                 
-          
-          if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
-            
-              goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-  
-          } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
-              if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
+          if (event.getEventTag()==11){//0 is every event, 10 is dvcs and 11 is Excl cut on coneangle
+              counter11++;
+              if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
+                
                   goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-  
+      
+              } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
+                  if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
+                      goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+      
+                  }
+              } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
+                if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
+                    goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+      
+                }
+              } else{
+                if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
+                    goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
+            
+                }
               }
-          } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
-            if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
-                goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-  
-            }
-          } else{
-            if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
-                goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
-        
-            }
           }
+          
       
         }
         reader.close();
@@ -235,6 +239,7 @@ public class DcoDe
     System.out.println("total events after excl cuts in FD: " + FDCounter);
     System.out.println("number before fid"+ev.beforeFidCut);
     System.out.println("number after fid" + afterfid);
+    System.out.println("number of 11 = " + counter11);
 
    
     //TCanvas ec = new TCanvas("Before cuts",1200,1000);
@@ -499,7 +504,9 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
   if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
     hNC.fillBasicHisto(ev);
     beforefid++;
-    
+    // if (ev.X("eh").mass2() > (-20.0/6.0* ev.coneangle()+10)){
+    //   System.out.println(event.getEventTag());
+    // }
     //Beforefiducial.fillBeforeFid(ev);
     if (ev.GetConf()==1){
       hNCFT.fillBasicHisto(ev);
