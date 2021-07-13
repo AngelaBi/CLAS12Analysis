@@ -32,7 +32,7 @@ public class readBanks
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
-    reader.open("/DATA/pass1/dst_edeut_6302_trimmed.hipo");  // open a file
+    reader.open("/DATA_DISK/pass1/dst_edeut_6302_trimmed.hipo");  // open a file
    HashMap<Integer, Double> hmap=createrunmap();
 
     if(hmap.get(6310)!=null){
@@ -73,9 +73,10 @@ public class readBanks
     // scint.show();
     // scintExtra.show();
     event.read(calos);
-    System.out.println("This is calorimeter bank");
+    scint.show();
+    System.out.println("This is scintextra bank");
+    scintExtra.show();
 
-    calos.show();
     
     
     
