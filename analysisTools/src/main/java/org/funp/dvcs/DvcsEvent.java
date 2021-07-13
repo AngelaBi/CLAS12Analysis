@@ -639,6 +639,9 @@ public byte detectorHad;
       if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654 *Math.pow(vhadron.p(),-1.851)){
         dedxCut = false;
       }
+      if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
+        dedxCut = false;
+      }
       if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628 *Math.pow(vhadron.p(),-2.398)){
         dedxCut = false;
       }
