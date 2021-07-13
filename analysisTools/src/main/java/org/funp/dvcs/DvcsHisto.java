@@ -270,7 +270,7 @@ public class DvcsHisto {
     ctofdedxvspprot=new H2F("CTOF energy vs p",100,0,2,100,0,100);
     ctofdedxvsppion=new H2F("CTOF energy vs p",100,0,2,100,0,100);
     ctofdedxvspkaon=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    chisqHad=new H1F("Chi2Pid",100,-5,5);
+    chisqHad=new H1F("Chi2Pid",100,-25,25);
     chisqHad.setTitle("ChiSquared PID");
 
     chi2vsdeltabeta=new H2F("#chi^2_PID vs #Delta#beta_d","#chi^2_PID vs #Delta#beta_d",100,-30,30,100,-0.6,0.6);
@@ -303,7 +303,7 @@ public class DvcsHisto {
     hadmom.fill(ev.vhadron.p());
     WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
-    tvsq2.fill(ev.Q().mass2(),-1*ev.t().mass2());
+    tvsq2.fill( -1*ev.Q().mass2(),-1*ev.t().mass2());
 
     //missing quantities of a complete DVCS final state e hadron gamma
     edgXmissingE.fill(ev.X("ehg").e());
