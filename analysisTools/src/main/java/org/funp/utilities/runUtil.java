@@ -15,7 +15,9 @@ public class runUtil {
     public static HashMap<Integer, List<Double>> createMapGagikStyle() throws FileNotFoundException, IOException {
       int index = 0;
       HashMap<Integer, List<Double>> runMap = new HashMap<Integer, List<Double>>();
-		  try (BufferedReader br = new BufferedReader(new FileReader("/home/nickrichardson/local/src/clas12analysis/analysisTools/src/main/java/org/funp/utilities/All2019Runs.csv"))) {
+      String homeDir = System.getenv("HOME");
+      String directory = homeDir + "/local/src/clas12analysis/analysisTools/src/main/java/org/funp/utilities/";
+		  try (BufferedReader br = new BufferedReader(new FileReader(directory+"All2019Runs.csv"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
             ArrayList<Double> helperList = new ArrayList<Double>();
