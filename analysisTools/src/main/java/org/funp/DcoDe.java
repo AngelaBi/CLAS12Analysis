@@ -143,7 +143,7 @@ public class DcoDe
     for (int i=0; i<inputParam.getNfiles(); i++) {
       goodEvent=0;
       HipoReader reader = new HipoReader();
-      //if(!inputParam.getMCmode()) reader.setTags(9,10,11);
+      if(!inputParam.getMCmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -178,7 +178,7 @@ public class DcoDe
           Bank  scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
           Bank  calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
           //runconfig       = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
-
+          goodEvent=0;
 
           reader.nextEvent(event);
           event.read(particles);
@@ -191,17 +191,24 @@ public class DcoDe
           //System.out.println(" Current event number " + runconfig.getInt("event",0));
          
           //goodEventFilterParticles(particles,scint,hel,scintExtras);
+          boolean allEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0); 
+          boolean beginningEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) != 0.0);
+          boolean endEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0);
+          boolean neitherEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) != 0.0);
+          
+            
+          
+
+          
           if( 
             inputParam.getMCmode() || 
-            //(event.getEventTag()==11 && (
-            (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0) ||  //all events are good 
-            ((runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0) &&
-            (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) //start from beginning and go until event number
-            ||
-            ((runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0) &&
-            (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)))//start from event and go to end 
-            //)          
-            //)
+            (event.getEventTag()==11 && 
+            (allEventsGood ||  /*//all events are good */ 
+            (beginningEventsGood && (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) || 
+            (endEventsGood && (runconfig.getInt("event",0) > runMap.get(runNumber).get(0))) ||
+            (neitherEventsGood && runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0))
+            )          
+            )
             )
             {
               goodEvent=1;
