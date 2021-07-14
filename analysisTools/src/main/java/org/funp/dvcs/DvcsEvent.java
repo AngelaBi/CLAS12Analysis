@@ -612,7 +612,9 @@ public byte detectorHad;
   }
 
   public boolean TagEventsExclusivityCut(){
-    return this.X("eh").mass2() < (-20.0/6.0* this.coneangle()+10) ;
+    boolean keeptop= (this.X("eh").mass2() < (-20.0/6.0* this.coneangle()+10) )|| (this.X("eh").mass2() <1) ;
+    boolean keepbottom = this.X("eh").mass2() > -2;
+    return keeptop && keepbottom;
   }
 
   public boolean DVCScut(){
