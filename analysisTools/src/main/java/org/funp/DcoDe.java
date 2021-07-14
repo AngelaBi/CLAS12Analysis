@@ -67,10 +67,11 @@ public class DcoDe
     static HashMap<Integer, List<Double>> runMap;
     static TDirectory dir;
     
-
+   
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
+    int goodEvent;
     int counter11 = 0;
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
@@ -140,8 +141,9 @@ public class DcoDe
     runMap = runUtil.createMapGagikStyle();
 
     for (int i=0; i<inputParam.getNfiles(); i++) {
+      goodEvent=0;
       HipoReader reader = new HipoReader();
-      reader.setTags(9,10,11);
+      //if(!inputParam.getMCmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -156,11 +158,14 @@ public class DcoDe
       int runNumberIndex = -1;
       boolean runFound = false;
       int runNumber=runconfig.getInt("run",0);
-      
-     
-      if (runMap.get(runNumber)!=null){
+      if (runMap.get(runNumber)!=null || inputParam.getMCmode()){//This if will keep runs in the map or MC
+        //BEam energy from the file or set by hand for the MC        
+        //right now the beam energy for the MC is hardcoded
+        if(runMap.get(runNumber)!=null )
+          ev.BeamEnergy = runMap.get(runNumber).get(2);
+        else if (inputParam.getMCmode())
+          ev.BeamEnergy =10.3; 
 
-        ev.BeamEnergy = runMap.get(runNumber).get(2);
         System.out.println("Beam energy found is "+ev.BeamEnergy);
         ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy*ev.BeamEnergy-0.0005*0.0005), ev.BeamEnergy);
   
@@ -185,27 +190,53 @@ public class DcoDe
           event.read(runEvent);
           //System.out.println(" Current event number " + runconfig.getInt("event",0));
          
-        //goodEventFilterParticles(particles,scint,hel,scintExtras);
+          //goodEventFilterParticles(particles,scint,hel,scintExtras);
+          if( 
+            inputParam.getMCmode() || 
+            //(event.getEventTag()==11 && (
+            (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0) ||  //all events are good 
+            ((runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0) &&
+            (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) //start from beginning and go until event number
+            ||
+            ((runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0) &&
+            (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)))//start from event and go to end 
+            //)          
+            //)
+            )
+            {
+              goodEvent=1;
+            }
+          if(goodEvent==1)
+            goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber); 
+          
+          
+
+
+
+
+          // if(inputParam.getMCmode()){
+          //   //System.out.println("MC mode");
+          //   goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber); 
+          // }      
+          // else if (event.getEventTag()==11){//0 is every event, 10 is dvcs and 11 is Excl cut on coneangle
+          //     counter11++;
+          //     if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
                 
-          if (event.getEventTag()==11){//0 is every event, 10 is dvcs and 11 is Excl cut on coneangle
-              counter11++;
-              if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
-                
-                  goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+          //         goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
       
-              } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
-                  if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
-                      goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+          //     } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
+          //         if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
+          //             goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
       
-                  }
-              } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
-                if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
-                    goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+          //         }
+          //     } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
+          //       if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
+          //           goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
       
-                }
-              } else{
-                if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
-                    goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
+          //       }
+          //     } else{
+          //       if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
+          //           goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
             
                 }
               }
@@ -217,6 +248,7 @@ public class DcoDe
 
 
       }
+
       else{
             System.out.println("THIS RUN IS BEING SKIPPED \n\n\n\n\n");
       }      
