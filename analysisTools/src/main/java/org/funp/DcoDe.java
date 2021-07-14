@@ -191,11 +191,16 @@ public class DcoDe
           //System.out.println(" Current event number " + runconfig.getInt("event",0));
          
           //goodEventFilterParticles(particles,scint,hel,scintExtras);
-          boolean allEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0); 
-          boolean beginningEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) != 0.0);
-          boolean endEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0);
-          boolean neitherEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) != 0.0);
-          
+          boolean allEventsGood = false;
+          boolean beginningEventsGood = false;
+          boolean endEventsGood = false;
+          boolean neitherEventsGood = false; 
+          if (!inputParam.getMCmode()){
+          allEventsGood= (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0); 
+          beginningEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) != 0.0);
+          endEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0);
+          neitherEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) != 0.0);
+          }
             
           
 
