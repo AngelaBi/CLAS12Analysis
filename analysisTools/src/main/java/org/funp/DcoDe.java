@@ -208,39 +208,8 @@ public class DcoDe
             }
           if(goodEvent==1)
             goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber); 
-          
-          
-
-
-
-
-          // if(inputParam.getMCmode()){
-          //   //System.out.println("MC mode");
-          //   goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber); 
-          // }      
-          // else if (event.getEventTag()==11){//0 is every event, 10 is dvcs and 11 is Excl cut on coneangle
-          //     counter11++;
-          //     if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
-                
-          //         goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-      
-          //     } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
-          //         if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
-          //             goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-      
-          //         }
-          //     } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
-          //       if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
-          //           goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
-      
-          //       }
-          //     } else{
-          //       if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
-          //           goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
-            
-                }
-              }
-         }
+               
+        
           
       
         }
@@ -587,3 +556,31 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
 }//end of goodEventFilterParticle
 
 }
+
+
+          // if(inputParam.getMCmode()){
+          //   //System.out.println("MC mode");
+          //   goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber); 
+          // }      
+          // else if (event.getEventTag()==11){//0 is every event, 10 is dvcs and 11 is Excl cut on coneangle
+          //     counter11++;
+          //     if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
+                
+          //         goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+      
+          //     } else if (runMap.get(runNumber).get(0) ==0.0 && runMap.get(runNumber).get(1) != 0.0){//start from beginning and go until event number
+          //         if (runconfig.getInt("event",0)< runMap.get(runNumber).get(1)){
+          //             goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+      
+          //         }
+          //     } else if (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0){//start from event and go to end
+          //       if (runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){
+          //           goodEventFilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber);
+      
+          //       }
+          //     } else{
+          //       if (runconfig.getInt("event",0) < runMap.get(runNumber).get(1) && runconfig.getInt("event",0) > runMap.get(runNumber).get(0)){//event min and event max
+          //           goodEventFilterParticles(particles,scint,runEvent ,scintExtras,calos,runNumber);
+          //         }
+        //       }
+        //  }
