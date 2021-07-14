@@ -606,6 +606,15 @@ public byte detectorHad;
   //public double Mpz(){
   //   return this.X("ehg").pz();
   //}
+
+  public boolean TagEventsDVCScut(){
+    return -this.Q().mass2()>1 && this.W().mass()>2;
+  }
+
+  public boolean TagEventsExclusivityCut(){
+    return this.X("eh").mass2() < (-20.0/6.0* this.coneangle()+10) ;
+  }
+
   public boolean DVCScut(){
     //&& Math.toDegrees(this.vphoton.theta())<5
     
