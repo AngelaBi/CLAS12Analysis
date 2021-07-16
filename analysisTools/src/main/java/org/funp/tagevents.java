@@ -67,12 +67,7 @@ public class tagevents
 
       
       
-       writer = new HipoWriterSorted();
-      String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
-      writer.getSchemaFactory().copy(reader.getSchemaFactory());
-      writer.open(outfilename);
-	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
-      System.out.println(outfilename);
+       
       
 
 
@@ -80,6 +75,12 @@ public class tagevents
 
       //map beam energies
       if(runMap.get(runNumber)!=null){
+        writer = new HipoWriterSorted();
+      String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
+      writer.getSchemaFactory().copy(reader.getSchemaFactory());
+      writer.open(outfilename);
+	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
+      System.out.println(outfilename);
         ev.BeamEnergy = runMap.get(runNumber).get(2);
         System.out.println("Beam energy found is "+ev.BeamEnergy);
         ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy*ev.BeamEnergy-0.0005*0.0005), ev.BeamEnergy);
