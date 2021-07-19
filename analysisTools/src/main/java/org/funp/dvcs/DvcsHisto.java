@@ -12,12 +12,13 @@ import org.jlab.jnp.physics.*;
 import org.jlab.jnp.reader.*;
 
 import org.jlab.groot.ui.TCanvas;
+import org.jlab.groot.data.TDirectory;
 
 //import org.funp.dvcs.DvcsEvent;;
 
 public class DvcsHisto {
 
-
+  
   public H2F dedxCTOFvsP;
   public H2F dedxCNDvsP;
 
@@ -471,6 +472,7 @@ public class DvcsHisto {
 
   public void DrawParticleComparison(TCanvas ecPP){
     ecPP.divide(2,4);
+    
     ecPP.cd(0).draw(elecThvsPhi);
     ecPP.cd(1).draw(elecThvsP);
     ecPP.cd(2).draw(photThvsPhi);
@@ -481,12 +483,22 @@ public class DvcsHisto {
     ecPP.getCanvas().getScreenShot();
     System.out.println(this.outputdir+"/"+ecPP.getTitle()+".png" );
     ecPP.getCanvas().save(this.outputdir+"/"+ecPP.getTitle()+".png");
+    
+
+    
 
   }
 
   public void DrawMissingQuants(TCanvas ec4){
 
     ec4.divide(4,4);
+    String homeDir = System.getenv("HOME");
+    TDirectory dir = new TDirectory();
+    String directory = "/test";
+    dir.mkdir(directory);
+    dir.cd(directory);
+    dir.addDataSet(edXmissingE);
+    dir.writeFile("myfile.hipo");
     //ec4.cd(0).draw(edgXmissingE);
     ec4.cd(0).draw(edXmissingE);
     ec4.cd(1).draw(edgXmissingM2);

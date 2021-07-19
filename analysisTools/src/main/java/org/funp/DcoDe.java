@@ -65,7 +65,6 @@ public class DcoDe
     static int afterfid;
     //static List<List<String>> records ;
     static HashMap<Integer, List<Double>> runMap;
-    static TDirectory dir;
     
    
 
@@ -75,8 +74,7 @@ public class DcoDe
     int counter11 = 0;
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
-    dir = new TDirectory();
-    dir.mkdir("/test");
+    
 
     //double beamenergy;
       beforefid = 0;
@@ -143,7 +141,7 @@ public class DcoDe
     for (int i=0; i<inputParam.getNfiles(); i++) {
       goodEvent=0;
       HipoReader reader = new HipoReader();
-      if(!inputParam.getMCmode()) reader.setTags(9,10,11);
+     // if(!inputParam.getMCmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file

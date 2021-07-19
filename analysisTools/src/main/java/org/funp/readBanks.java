@@ -10,17 +10,18 @@ import org.jlab.groot.graphics.*;
 //---- imports for PHYSICS library
 import org.jlab.jnp.physics.*;
 import org.jlab.jnp.reader.*;
-
+import org.funp.utilities.*;
 import java.util.*;
 import java.io.*;
-
+import java.io.FileReader;
+import java.io.IOException;
 /**
 * testing LorentzVector
 *
 */
 public class readBanks
 {
-  public static void main( String[] args )
+  public static void main( String[] args )  throws FileNotFoundException, IOException
   {
      int pindexPhoton = -1;
     float elec_w = -1;
@@ -32,11 +33,11 @@ public class readBanks
     //reader.open("/Users/biselli/Data/clas12/rgB/v8hipo4/out_6489_2xx.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0v16/dst_inc_006596.hipo"); // open a file
     //reader.open("/Users/biselli/Data/clas12/rgB/pass0justin/dst_edeut_006467_trimmed.hipo"); // open a file
-    reader.open("/DATA_DISK/pass1/dst_edeut_6302_trimmed.hipo");  // open a file
-   HashMap<Integer, Double> hmap=createrunmap();
+    reader.open("/DATA_DISK/TaggedSpring2019/dst_edeut_6216_trimmed.hipo");  // open a file
+   HashMap<Integer, List<Double>> hmap = runUtil.createMapGagikStyle();
 
-    if(hmap.get(6310)!=null){
-      beamenergy=hmap.get(6310);
+    if(hmap.get(6216)!=null){
+      beamenergy=hmap.get(6216).get(2);
       System.out.println(beamenergy);
     }
     else {
