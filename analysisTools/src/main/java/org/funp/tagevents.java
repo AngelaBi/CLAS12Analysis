@@ -91,7 +91,7 @@ static int ndegamma;
 	      event.read(scint);
         event.read(scintExtras);
         event.read(runEvent);
-
+	event.read(runconfig);
         totalcounter++;
         if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
                 
@@ -113,6 +113,7 @@ static int ndegamma;
             
                 }
               }
+
         
       //writer.addEvent(event,event.getEventTag());
       //System.out.println("my tag is " + event.getEventTag());
@@ -141,9 +142,10 @@ static int ndegamma;
 }
 
 public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,int runNumber){
-    if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
+System.out.println("good event Found");   
+ if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
           //if(((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))){
-            
+           System.out.println("hello"); 
             if (ev.TagEventsDVCScut() && ev.TagEventsExclusivityCut()){
                 event.setEventTag(11);
             }else if (ev.TagEventsDVCScut() && !ev.TagEventsExclusivityCut()){
