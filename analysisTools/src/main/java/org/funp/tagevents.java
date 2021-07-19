@@ -142,10 +142,10 @@ static int ndegamma;
 }
 
 public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,int runNumber){
-System.out.println("good event Found");   
+//System.out.println("good event Found");   
  if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
           //if(((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))){
-           System.out.println("hello"); 
+           //System.out.println("hello"); 
             if (ev.TagEventsDVCScut() && ev.TagEventsExclusivityCut()){
                 event.setEventTag(11);
             }else if (ev.TagEventsDVCScut() && !ev.TagEventsExclusivityCut()){
