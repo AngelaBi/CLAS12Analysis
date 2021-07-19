@@ -29,7 +29,7 @@ public class tagevents
 
   public static void main( String[] args ) throws FileNotFoundException, IOException
   {
-      runMap = runUtil.createMapGagikStyle();
+    runMap = runUtil.createMapGagikStyle();
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
 
@@ -64,14 +64,6 @@ public class tagevents
       int runNumber=runconfig.getInt("run",0);
       //String filenumber = new String(filename.substring(inputParam.getFileName(i).length()-10,inputParam.getFileName(i).length()-5));
 
-
-      
-      
-       
-      
-
-
-    
 
       //map beam energies
       if(runMap.get(runNumber)!=null){
@@ -160,6 +152,7 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
                 event.setEventTag(9);
             }
             writer.addEvent(event,event.getEventTag());
+            ndegamma++;
          
       }
 }
