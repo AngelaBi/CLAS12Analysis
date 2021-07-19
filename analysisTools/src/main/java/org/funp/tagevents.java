@@ -23,7 +23,7 @@ public class tagevents
     static Event     event;
     static DvcsEvent ev;
     static HipoWriterSorted writer;
-
+static int ndegamma;
 
     static HashMap<Integer, List<Double>> runMap; 
 
@@ -37,7 +37,7 @@ public class tagevents
     //int nphot=0;
     //int nelec=0;
     int totalcounter=0;
-    int ndegamma=0;
+   ndegamma=0;
     //int dvcscounter=0;
 
     event = new Event();
