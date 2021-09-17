@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.jlab.groot.data.TDirectory;
 
 
 public class DcoDe
@@ -50,6 +51,8 @@ public class DcoDe
     static DvcsHisto BinnedHAC;
     static DvcsHisto BinnedHACFT;
     static DvcsHisto BinnedHACFD;
+
+    static TDirectory dir;
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
@@ -90,7 +93,7 @@ public class DcoDe
       hNCFT.setOutputDir(inputParam.getOutputDir());
       hNCFD     = new DvcsHisto();//No cuts
       hNCFD.setOutputDir(inputParam.getOutputDir());
-
+      dir = new TDirectory();
       //DVCS CUTS
       hDC     = new DvcsHisto();//DVCS cuts
       hDC.setOutputDir(inputParam.getOutputDir());
@@ -141,7 +144,7 @@ public class DcoDe
     for (int i=0; i<inputParam.getNfiles(); i++) {
       goodEvent=0;
       HipoReader reader = new HipoReader();
-     // if(!inputParam.getMCmode()) reader.setTags(9,10,11);
+      if(!inputParam.getMCmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -259,12 +262,12 @@ public class DcoDe
     //hDC.DrawBasic( ec2);
 
     boolean showNOCUT_kinematics_ALL = true;
-    boolean showNOCUT_kinematics_FT = false;
-    boolean showNOCUT_kinematics_FD = false;
+    boolean showNOCUT_kinematics_FT = true;
+    boolean showNOCUT_kinematics_FD = true;
 
     boolean showNOCUT_missing_quants_ALL=true;
-    boolean showNOCUT_missing_quants_FT=false;
-    boolean showNOCUT_missing_quants_FD=false;
+    boolean showNOCUT_missing_quants_FT=true;
+    boolean showNOCUT_missing_quants_FD=true;
 
     boolean showDVCS_kinematics_All = true;
     boolean showDVCS_kinematics_FT = true;
@@ -282,7 +285,7 @@ public class DcoDe
     boolean showExcl_missing_quants_FT = true;
     boolean showExcl_missing_quants_FD = true;
 
-    boolean showParticleComparison_NO_CUTS = false;
+    boolean showParticleComparison_NO_CUTS = true;
     boolean showParticleComparison_DVCS_CUTS = false;
     boolean showParticleComparison_Excl_CUTS = false;
 
@@ -305,139 +308,141 @@ public class DcoDe
     boolean showAsymm_FD = true;
 
     if (showParticleComparison_NO_CUTS){
-      TCanvas ecNC = new TCanvas("Particle Comparsion No Cuts",1500,1500);
-      hNC.DrawParticleComparison(ecNC);
+     // TCanvas ecNC = new TCanvas("Particle Comparsion No Cuts",1500,1500);
+      hNC.DrawParticleComparison(dir, "Particle Comparsion No Cuts");
+      
     }
     if (showParticleComparison_DVCS_CUTS){
-      TCanvas ecDC = new TCanvas("Particle Comparsion DVCS Cuts",1500,1500);
-      hDC.DrawParticleComparison(ecDC);
+      //TCanvas ecDC = new TCanvas("Particle Comparsion DVCS Cuts",1500,1500);
+      hDC.DrawParticleComparison(dir , "Particle Comparsion DVCS Cuts");
     }
     if (showParticleComparison_NO_CUTS){
-      TCanvas ecAC = new TCanvas("Particle Comparsion Excl Cuts",1500,1500);
-      hAC.DrawParticleComparison(ecAC);
+     // TCanvas ecAC = new TCanvas("Particle Comparsion Excl Cuts",1500,1500);
+      hAC.DrawParticleComparison(dir,"Particle Comparsion Excl Cuts" );
     }
 
     if (showNOCUT_missing_quants_ALL){
-      TCanvas ec114 = new TCanvas("Excl after No cuts",1500,1500);
-      hNC.DrawMissingQuants(ec114);
+      //TCanvas ec114 = new TCanvas("Excl after No cuts",1500,1500);
+      hNC.DrawMissingQuants(dir,"Excl after No cuts");
     }
 
     if (showDVCS_missing_quants_ALL){
-        TCanvas ec4 = new TCanvas("Excl after DVCS cuts",1500,1500);
-        hDC.DrawMissingQuants(ec4);
+        //TCanvas ec4 = new TCanvas("Excl after DVCS cuts",1500,1500);
+        hDC.DrawMissingQuants(dir,"Excl after DVCS cuts");
     }
     
     if (showDVCS_missing_quants_FT){
-        TCanvas ec40 = new TCanvas("Excl after DVCS cuts FT",1500,1500);
-        hDCFT.DrawMissingQuants(ec40);
+        //TCanvas ec40 = new TCanvas("Excl after DVCS cuts FT",1500,1500);
+        hDCFT.DrawMissingQuants(dir,"Excl after DVCS cuts FT");
     }
     if (showDVCS_missing_quants_FD){
-        TCanvas ec401 = new TCanvas("Excl after DVCS cuts FD",1500,1500);
-        hDCFD.DrawMissingQuants(ec401);
+        //TCanvas ec401 = new TCanvas("Excl after DVCS cuts FD",1500,1500);
+        hDCFD.DrawMissingQuants(dir,"Excl after DVCS cuts FD");
     }
 
     if (showExcl_missing_quants_ALL){
-        TCanvas ec5 = new TCanvas("Excl after DVCS and exc cuts",1500,1500);
-        hAC.DrawMissingQuants(ec5);
+        //TCanvas ec5 = new TCanvas("Excl after DVCS and exc cuts",1500,1500);
+        hAC.DrawMissingQuants(dir,"Excl after DVCS and exc cuts");
     }
 
-    if (showExcl_missing_quants_FT){
-      TCanvas ec555 = new TCanvas("Excl after DVCS and exc cuts FT",1500,1500);
-      hACFT.DrawMissingQuants(ec555);
-    }
+    
      if (showExcl_missing_quants_FD){
-      TCanvas ec5551 = new TCanvas("Excl after DVCS and exc cuts FDs",1500,1500);
-      hACFD.DrawMissingQuants(ec5551);
+      //TCanvas ec5551 = new TCanvas("Excl after DVCS and exc cuts FD",1500,1500);
+      hACFD.DrawMissingQuants( dir, "Excl after DVCS and exc cuts FD");
+    }
+    if (showExcl_missing_quants_FT){
+      //TCanvas ec555 = new TCanvas("Excl after DVCS and exc cuts FT",1500,1500);
+      hACFT.DrawMissingQuants( dir,"Excl after DVCS and exc cuts FT");
     }
     
     if (showNOCUT_kinematics_ALL){
-      TCanvas ec6 = new TCanvas("No Cuts All Kinematics",1200,1000);
-      hNC.DrawKinematics(ec6);
+      //TCanvas ec6 = new TCanvas("No Cuts All Kinematics",1200,1000);
+      hNC.DrawKinematics(dir, " Kinmeatics NO CUT All");
     }
 
     if (showNOCUT_kinematics_FT){
-      TCanvas ec66 = new TCanvas("No Cuts FT Kinematics",1200,1000);
-      hNCFT.DrawKinematics(ec66);
+     // TCanvas ec66 = new TCanvas("No Cuts FT Kinematics",1200,1000);
+      hNCFT.DrawKinematics(dir,"Kinematics No Cut FT");
     }
     
     if (showNOCUT_kinematics_FD){
-        TCanvas ec666 = new TCanvas("No Cuts FD Kinematics",1200,1000);
-        hNCFD.DrawKinematics(ec666);
+       // TCanvas ec666 = new TCanvas("No Cuts FD Kinematics",1200,1000);
+        hNCFD.DrawKinematics(dir,  "Kinematics No cut FD");
     }
     
     if (showDVCS_kinematics_All){
-      TCanvas ec7 = new TCanvas("DVCS Cuts All Kinematics",1200,1000);
-      hDC.DrawKinematics(ec7);
+      //TCanvas ec7 = new TCanvas("DVCS Cuts All Kinematics",1200,1000);
+      hDC.DrawKinematics( dir,"Kinematics DVCS Cut All");
     }
 
     if (showDVCS_kinematics_FT){
-      TCanvas ec77 = new TCanvas("DVCS Cuts FT Kinematics",1200,1000);
-      hDCFT.DrawKinematics(ec77);
+     // TCanvas ec77 = new TCanvas("DVCS Cuts FT Kinematics",1200,1000);
+      hDCFT.DrawKinematics( dir, "Kinematics DVCS Cut FT");
     }
 
     if (showDVCS_kinematics_FD){
-      TCanvas ec777 = new TCanvas("DVCS Cuts FD Kinematics",1200,1000);
-      hDCFD.DrawKinematics(ec777);
+     // TCanvas ec777 = new TCanvas("DVCS Cuts FD Kinematics",1200,1000);
+      hDCFD.DrawKinematics(dir, "Kinematics DVCS Cut FD");
     }
 
    if (showExcl_kinematicss_ALL){
-      TCanvas ec8 = new TCanvas("DVCS and Excl Cuts All Kinematics",1200,1000);
-      hAC.DrawKinematics(ec8);
+     // TCanvas ec8 = new TCanvas("DVCS and Excl Cuts All Kinematics",1200,1000);
+      hAC.DrawKinematics(dir, "Kinenamtics Excl Cuts All");
    }
 
    if (showExcl_kinematics_FT){
-    TCanvas ec88 = new TCanvas("DVCS and Excl Cuts FT Kinematics",1200,1000);
-    hACFT.DrawKinematics(ec88);//changed this line
+    //TCanvas ec88 = new TCanvas("DVCS and Excl Cuts FT Kinematics",1200,1000);
+    hACFT.DrawKinematics( dir, "Kinematics Excl Cuts FT");//changed this line
    }
 
    if (showExcl_kinematics_FD){
-    TCanvas ec89 = new TCanvas("DVCS and Excl Cuts FD Kinematics",1200,1000);
-    hACFD.DrawKinematics(ec89);//changed this line
+    //TCanvas ec89 = new TCanvas("DVCS and Excl Cuts FD Kinematics",1200,1000);
+    hACFD.DrawKinematics( dir, "Kinematics Excl Cuts FD");//changed this line
    }
     
     if (showConeAngle_NO_CUTS_All){
-      TCanvas ec9 = new TCanvas("AllNoCuts ConeAngle All",1200,1000);
-      hNC.DrawConeAngle(ec9);
+      //TCanvas ec9 = new TCanvas("AllNoCuts ConeAngle All",1200,1000);
+      hNC.DrawConeAngle(dir,"AllNoCuts ConeAngle All");
     }
 
     if (showConeAngle_DVCS_CUTS_All){
-      TCanvas ec10 = new TCanvas("AllDVCSCuts ConeAngle All",1200,1000);
-      hDC.DrawConeAngle(ec10);
+     // TCanvas ec10 = new TCanvas("AllDVCSCuts ConeAngle All",1200,1000);
+      hDC.DrawConeAngle(dir, "AllDVCSCuts ConeAngle All");
     }
 
     if (showConeAngle_Excl_CUTS_All){
-      TCanvas ec11 = new TCanvas("AllDVCSexcCuts ConeAngle All",1200,1000);
-      hAC.DrawConeAngle(ec11);
+      //TCanvas ec11 = new TCanvas("AllDVCSexcCuts ConeAngle All",1200,1000);
+      hAC.DrawConeAngle(dir,"AllDVCSexcCuts ConeAngle All" );
     }
 
     if (showConeAngle_NO_CUTS_FT){
-      TCanvas ec91 = new TCanvas("AllNoCuts ConeAngle FT",1200,1000);
-      hNCFT.DrawConeAngle(ec91);
+      //TCanvas ec91 = new TCanvas("AllNoCuts ConeAngle FT",1200,1000);
+      hNCFT.DrawConeAngle( dir ,"AllNoCuts ConeAngle FT" );
     }
 
     if (showConeAngle_DVCS_CUTS_FT){
-      TCanvas ec101 = new TCanvas("AllDVCSCuts ConeAngle FT",1200,1000);
-      hDCFT.DrawConeAngle(ec101);
+     // TCanvas ec101 = new TCanvas("AllDVCSCuts ConeAngle FT",1200,1000);
+      hDCFT.DrawConeAngle( dir,"AllDVCSCuts ConeAngle FT" );
     }
 
     if (showConeAngle_Excl_CUTS_FT){
-      TCanvas ec111 = new TCanvas("AllDVCSexcCuts ConeAngle FT",1200,1000);
-      hACFT.DrawConeAngle(ec111);
+     // TCanvas ec111 = new TCanvas("AllDVCSexcCuts ConeAngle FT",1200,1000);
+      hACFT.DrawConeAngle( dir ,"AllDVCSexcCuts ConeAngle FT" );
     }
 
     if (showConeAngle_NO_CUTS_FD){
-      TCanvas ec911 = new TCanvas("AllNoCuts ConeAngle FD",1200,1000);
-      hNCFD.DrawConeAngle(ec911);
+      //TCanvas ec911 = new TCanvas("AllNoCuts ConeAngle FD",1200,1000);
+      hNCFD.DrawConeAngle( dir ,"AllNoCuts ConeAngle FD" );
     }
 
     if (showConeAngle_DVCS_CUTS_FD){
-      TCanvas ec1011 = new TCanvas("AllDVCSCuts ConeAngle FD",1200,1000);
-      hDCFD.DrawConeAngle(ec1011);
+      //TCanvas ec1011 = new TCanvas("AllDVCSCuts ConeAngle FD",1200,1000);
+      hDCFD.DrawConeAngle(dir , "AllDVCSCuts ConeAngle FD");
     }
 
     if (showConeAngle_Excl_CUTS_FD){
-      TCanvas ec1111 = new TCanvas("AllDVCSexcCuts ConeAngle FD",1200,1000);
-      hACFD.DrawConeAngle(ec1111);
+      //TCanvas ec1111 = new TCanvas("AllDVCSexcCuts ConeAngle FD",1200,1000);
+      hACFD.DrawConeAngle( dir, "AllDVCSexcCuts ConeAngle FD");
     }
     
     
