@@ -649,7 +649,7 @@ public class DvcsHisto {
     dir.addDataSet(coneanglevsedXM2);
     dir.addDataSet(coneanglevsegXM2);
     dir.addDataSet(betavsP);
-
+    dir.writeFile("NickRichardson.hipo");
     // ec.divide(2,2);
     // ec.cd(0).draw(coneanglevspperp);
     // ec.cd(1).draw(coneanglevsedXM2);
