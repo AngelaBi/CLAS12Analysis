@@ -17,7 +17,7 @@ public class runUtil {
       HashMap<Integer, List<Double>> runMap = new HashMap<Integer, List<Double>>();
       String homeDir = System.getenv("HOME");
       String directory = homeDir + "/local/src/clas12analysis/analysisTools/src/main/java/org/funp/utilities/";
-		  try (BufferedReader br = new BufferedReader(new FileReader(directory+"All2019Runs.csv"))) {
+		  try (BufferedReader br = new BufferedReader(new FileReader(directory+"AllRGBRuns.csv"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
             ArrayList<Double> helperList = new ArrayList<Double>();
