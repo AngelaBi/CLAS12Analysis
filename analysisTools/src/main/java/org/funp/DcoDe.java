@@ -165,7 +165,7 @@ public class DcoDe
         if(runMap.get(runNumber)!=null )
           ev.BeamEnergy = runMap.get(runNumber).get(2);
         else if (inputParam.getMCmode())
-          ev.BeamEnergy =10.3; 
+          ev.BeamEnergy =10.6; 
 
         System.out.println("Beam energy found is "+ev.BeamEnergy);
         ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy*ev.BeamEnergy-0.0005*0.0005), ev.BeamEnergy);
@@ -208,7 +208,8 @@ public class DcoDe
           
           if( 
             inputParam.getMCmode() || 
-            (event.getEventTag()==11 && 
+             ((event.getEventTag()==11 || event.getEventTag()==10 || event.getEventTag()==9) && 
+            //((event.getEventTag()==11 ) && 
             (allEventsGood ||  /*//all events are good */ 
             (beginningEventsGood && (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) || 
             (endEventsGood && (runconfig.getInt("event",0) > runMap.get(runNumber).get(0))) ||
@@ -448,28 +449,28 @@ public class DcoDe
     
     if (showAsymm_All){
       TCanvas ecA = new TCanvas("Asymmetry",1200,1200);
-      hAC.drawAsym(ecA);
+      hAC.drawAsym(dir, "Asymmetry");
     }
 
     if (showAsymm_FT){
       TCanvas ecAsymFT = new TCanvas("Asymmetry FT",1200,1200);
-      hACFT.drawAsym(ecAsymFT);
+      hACFT.drawAsym(dir, "Asymmetry FT");
     }
 
     if (showAsymm_FD){
       TCanvas ecAsymFD = new TCanvas("Asymmetry FD",1200,1200);
-      hACFD.drawAsym(ecAsymFD);
+      hACFD.drawAsym(dir, "Asymmetry FD");
     }
     
 
-    TCanvas ecA111 = new TCanvas("Asymmetry Binned Q2",1200,1200);
-    BinnedHAC.drawAsym(ecA111);
+    // TCanvas ecA111 = new TCanvas("Asymmetry Binned Q2",1200,1200);
+    // BinnedHAC.drawAsym(dir, "Asymmetry Binned Q2");
 
-    TCanvas ecA1111 = new TCanvas("Asymmetry FT Binned Q2",1200,1200);
-    BinnedHACFT.drawAsym(ecA1111);
+    // TCanvas ecA1111 = new TCanvas("Asymmetry FT Binned Q2",1200,1200);
+    // BinnedHACFT.drawAsym(ecA1111);
 
-    TCanvas ecA11111 = new TCanvas("Asymmetry FD Binned Q2",1200,1200);
-    BinnedHACFD.drawAsym(ecA11111);
+    // TCanvas ecA11111 = new TCanvas("Asymmetry FD Binned Q2",1200,1200);
+    // BinnedHACFD.drawAsym(ecA11111);
 
     //How to plot the FT and FD Asymmetries
     
