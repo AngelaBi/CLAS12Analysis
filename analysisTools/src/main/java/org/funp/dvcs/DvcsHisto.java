@@ -244,7 +244,7 @@ public class DvcsHisto {
     DPhiHist.setTitle("DPhi");
     DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-10,10);
     DeltaPhiPlaneHist.setTitleX("Delta Phi Plane");
-    DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane",100,-100,100);
+    DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane2",100,-100,100);
     DeltaPhiPlaneMattHist.setTitleX("Delta Phi Plane Hattawy");
 
      ConeAngleBtElectronPhotonFD = new H1F("Cone Angle Bt Electron and Photon", 100,0,80);
@@ -433,7 +433,7 @@ public class DvcsHisto {
   //   ecP.cd(3).draw(betavsPkaon);
   // }
 
-  public H1F buildAsym(){
+  public H1F buildAsym(TDirectory dir, String directory){
   H1F num;
   H1F denom;
   H1F Asym;
@@ -445,26 +445,42 @@ public class DvcsHisto {
   denom.add(this.Phiplus);
   denom.add(this.Phiminus);
   denom.normalize(0.8);
+
   Asym = Asym.divide(num,denom);
   Asym.setTitleX("#phi [deg.]");
   Asym.setTitleY("A_LU(#phi)");
+  String hipodirectory = "/"+directory;
+  dir.mkdir(hipodirectory);
+  dir.cd(hipodirectory);
+    
+  dir.addDataSet(num);
+  dir.addDataSet(denom);
+  dir.addDataSet(Asym);
+  dir.addDataSet(Phiplus);
+  dir.addDataSet(Phiminus);
+  dir.writeFile(this.outputdir + "/NickRichardson.hipo");
+  
   return Asym;
  }
-  public void drawPlot(TCanvas ecP){
-    //ecP.getPad().getAxisZ().setLog(true);
-    this.drawAsym(ecP);
-  }
-  public void drawAsym(TCanvas ecA){
-  ecA.getPad().setAxisRange(0, 360, -0.6, 0.6);
-	ecA.draw((this.buildAsym()),"E");
+  // public void drawPlot(TCanvas ecP){
+  //   //ecP.getPad().getAxisZ().setLog(true);
+  //   this.drawAsym(ecP);
+  // }
+  public void drawAsym( TDirectory dir, String directory){
+  // ecA.getPad().setAxisRange(0, 360, -0.6, 0.6);
+	// ecA.draw((this.buildAsym(dir, directory)),"E");
 
-  F1D Asymfunc = new F1D("Asymfunc","[A]*sin([B]x)+[C]",0,360);
+  F1D Asymfunc = new F1D("Asymfunc","[A]*sin([B]x)+[C]",0,360); //possibly try without c constant /*+[C]*/
   Asymfunc.setParameter(0,0.2);
   Asymfunc.setParameter(1,0.01);
   Asymfunc.setParameter(2,-0.2);
-  DataFitter.fit(Asymfunc,this.buildAsym(),"");
-  ecA.draw(Asymfunc,"same");
-  ecA.getCanvas().save(this.outputdir+"/"+ecA.getTitle()+".png");
+  DataFitter.fit(Asymfunc,this.buildAsym(dir, directory),"");
+  // ecA.draw(Asymfunc,"same");
+  // ecA.getCanvas().save(this.outputdir+"/"+ecA.getTitle()+".png");
+  
+
+  
+
 }
 
   
@@ -486,7 +502,7 @@ public class DvcsHisto {
     dir.addDataSet(ThvsPhi);
     dir.addDataSet(ThvsP);
     dir.addDataSet(dedxDeutvsP);
-    dir.writeFile("NickRichardson.hipo");
+    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     // ecPP.divide(2,4);
     
     // ecPP.cd(0).draw(elecThvsPhi);
@@ -522,7 +538,7 @@ public class DvcsHisto {
     dir.addDataSet(edgXmissingPz);
     dir.addDataSet(MissThetaHist);
     dir.addDataSet(egXmissingM2);
-    dir.writeFile("NickRichardson.hipo");
+    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     
     // //ec4.cd(0).draw(edgXmissingE);
     // ec4.cd(0).draw(edXmissingE);
@@ -580,7 +596,7 @@ public class DvcsHisto {
     dir.addDataSet(VertexDuetron);
     dir.addDataSet(dedxCNDvsP);
     dir.addDataSet(dedxCTOFvsP);
-    dir.writeFile("NickRichardson.hipo");
+    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     // ec.divide(5,5);
     // ec.cd(0).draw(WvsQ2);
     // ec.cd(1).draw(Q2vsXbj);
@@ -649,7 +665,7 @@ public class DvcsHisto {
     dir.addDataSet(coneanglevsedXM2);
     dir.addDataSet(coneanglevsegXM2);
     dir.addDataSet(betavsP);
-    dir.writeFile("NickRichardson.hipo");
+    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     // ec.divide(2,2);
     // ec.cd(0).draw(coneanglevspperp);
     // ec.cd(1).draw(coneanglevsedXM2);
