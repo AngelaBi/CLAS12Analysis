@@ -676,7 +676,7 @@ public byte detectorHad;
       && Math.abs(this.chi2pid()) < 3.5
       && this.X("eh").mass() < 0.7
       && vertexCut
-      && dedxCut
+      //&& dedxCut
       && -1*this.t().mass2()  < 1.4
       /*&& getDedxDeut()> (-30*vhadron.p() +30)*/);
     }
@@ -696,7 +696,7 @@ public byte detectorHad;
       && Math.abs(this.chi2pid()) < 3.5
       && this.X("eh").mass() < 0.7
       && vertexCut
-      && dedxCut
+      //&& dedxCut
       && -1*this.t().mass2() < 1.4
      /* && getDedxDeut()> (-30*vhadron.p()+30)*/);
     } 
