@@ -27,6 +27,7 @@ public class DvcsHisto {
   public H1F hadmom;
   public H2F WvsQ2;
   public H2F Q2vsXbj;
+  public H2F tvsxb;
 //Nick Add
   public H1F VertexElectron;
   public H1F VertexDuetron;
@@ -60,7 +61,7 @@ public class DvcsHisto {
   public H2F elecThvsP;
   public H2F photThvsP;
 
-  public H2F tvsq2;
+  public H2F q2vst;
 
   //public H2F MMvsMpz;
   //public H2F MpxvsMpz;
@@ -146,16 +147,18 @@ public class DvcsHisto {
     hadmom = new H1F("Hadron Momentum",100,0,10.0);
     hadmom.setTitleX("Deteron momentum [GeV/c]");
     WvsQ2 = new H2F("W vs Q2", "W vs Q2", 100,0,7,100,0,10);
-    WvsQ2.setTitle("W [GeV]");
-    WvsQ2.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj = new H2F("X_b vs Q^2","X_b vs Q^2",100,0,1,100,0,10);
+    WvsQ2.setTitleY("W [GeV]");
+    WvsQ2.setTitle("Q^2 [GeV/c^2]");
+    Q2vsXbj = new H2F("Q^2 vs X_b","Q^2 vs X_b",100,0,1,100,0,10);
     Q2vsXbj.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj.setTitle("X_b");
-
+    Q2vsXbj.setTitleX("X_b");
+    
     //Nick Add
     dedxDeutvsP = new H2F("dedxDeutvsP","dedxDeutvsP",100,0,2,100,0,50);
     coneanglevspperp = new H2F("Cone Angle vs Pperp", "Cone Angle vs Pperp", 100,0,10,100,0,1);
     coneanglevspperp.setTitle("Cone Angle vs Pperp");
+    coneanglevspperp.setTitleX("Pperp");
+    coneanglevspperp.setTitleY("Cone Angle");
     VertexElectron = new H1F("Vertex Electron", 100,-10.0,10.0);
     VertexElectron.setTitleX("Vertex Electron");
     VertexDuetron = new H1F("Vertex Dueteron", 100,-10.0,10.0);
@@ -204,10 +207,11 @@ public class DvcsHisto {
     ThvsPhi.setTitleY("#theta [Degrees]");
     ThvsP = new H2F("Deuteron p vs #theta","Deuteron p vs #theta ",100,0,180,100,0,10.6);
     ThvsP.setTitleY("p [GeV/c]");
-    ThvsP.setTitle("#theta [Degrees]");
-    tvsq2 = new H2F("t vs Q2", "t vs Q2",100,0,5,100,0,5);
-    tvsq2.setTitle("t vs Q2");
-    tvsq2.setTitleX("Q2");
+    ThvsP.setTitleX("#theta [Degrees]");
+    q2vst = new H2F("Q2 vs t", "Q2 vs t",100,0,5,100,0,5);
+    q2vst.setTitle("Q2 vs t");
+    q2vst.setTitleY("Q2");
+    q2vst.setTitleX("t");
     elecThvsPhi = new H2F("Electron #theta vs #phi","Electron #theta vs #phi",100,-180,180,100,0,100);
     elecThvsPhi.setTitleX("#phi [Degrees]");
     elecThvsPhi.setTitleY("#theta [Degrees]");
@@ -307,7 +311,7 @@ public class DvcsHisto {
     dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
     dedxCNDvsP.fill(ev.vhadron.p(),ev.dedxDeutCND);
   
-    coneanglevspperp.fill(ev.coneangle(), ev.pPerp());
+    coneanglevspperp.fill(ev.pPerp(), ev.coneangle());
     XvsY_electron.fill(ev.elec_x,ev.elec_y);
    // XvsY_electron_after.fill(ev.elec_x,ev.elec_y);
     W.fill(ev.W().mass());
@@ -315,7 +319,7 @@ public class DvcsHisto {
     hadmom.fill(ev.vhadron.p());
     WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
-    tvsq2.fill( -1*ev.Q().mass2(),-1*ev.t().mass2());
+    q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
 
     //missing quantities of a complete DVCS final state e hadron gamma
     edgXmissingE.fill(ev.X("ehg").e());
@@ -585,7 +589,7 @@ public class DvcsHisto {
     dir.addDataSet(ConeAngleBtElectronPhotonFD);
     dir.addDataSet(PhiPlaneHist);
     dir.addDataSet(DPhiHist);
-    dir.addDataSet(tvsq2);
+    dir.addDataSet(q2vst);
     dir.addDataSet(phivshelicityMinus);
     dir.addDataSet(chisqHad);
     dir.addDataSet(thisto);
@@ -613,7 +617,7 @@ public class DvcsHisto {
     // //ec.getPad(1).getAxisZ().setLog(true);
     // ec.cd(10).draw(PhiPlaneHist);
     // ec.cd(11).draw(DPhiHist);
-    // ec.cd(12).draw(tvsq2);
+    // ec.cd(12).draw(q2vst);
     // //ec.cd(25).draw(helicityrawhisto);
     // ec.cd(13).draw(thisto);
     // ec.cd(14).draw(phivshelicityMinus);
