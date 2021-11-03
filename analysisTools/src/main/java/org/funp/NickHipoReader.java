@@ -267,7 +267,7 @@ processInput inputParam=new processInput(args);
   public static void Draw_Kinematics(TCanvas ec4, String dir){
 
     H2F WvsQ2 = (H2F) dir2.getObject(dir + "/", "W vs Q2");
-    H2F Q2vsXbj = (H2F) dir2.getObject(dir + "/", "X_b vs Q^2");
+    H2F Q2vsXbj = (H2F) dir2.getObject(dir + "/", "Q^2 vs X_b");
     
     H2F betacalcvsP = (H2F) dir2.getObject(dir + "/", "BetaCalc vs P");
     H2F chi2vsdeltabeta = (H2F) dir2.getObject(dir + "/", "#Delta#beta_d vs #chi^2_PID");
@@ -280,7 +280,7 @@ processInput inputParam=new processInput(args);
     H1F PhiPlaneHist = (H1F) dir2.getObject(dir + "/", "PhiPlaneHist");
     H1F DPhiHist = (H1F) dir2.getObject(dir + "/", "DPhiHist");
     
-    H2F tvsq2 = (H2F) dir2.getObject(dir + "/", "t vs Q2");
+    H2F tvsq2 = (H2F) dir2.getObject(dir + "/", "Q2 vs t");
     H2F phivshelicityMinus = (H2F) dir2.getObject(dir + "/", "phi vs helicity");
     H1F chisqHad = (H1F) dir2.getObject(dir + "/", "Chi2Pid");
     H1F thisto = (H1F) dir2.getObject(dir + "/", "-t");
