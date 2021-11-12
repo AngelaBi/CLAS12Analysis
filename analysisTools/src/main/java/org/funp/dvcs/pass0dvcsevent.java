@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class DvcsEvent {
+public class pass0dvcsevent {
   double MNUC=1.875612;
   double MPION = 0.139570;
   double MKAON = 0.4977;
@@ -124,11 +124,11 @@ public byte detectorHad;
     return conf;
   }
 
-  public DvcsEvent() {
+  public pass0dvcsevent() {
     // This constructor no parameter.
     //System.out.println("setting the default DVCS event for hadron :" + MNUC );
   }
-  public DvcsEvent(double mass) {
+  public pass0dvcsevent(double mass) {
     // This constructor no parameter.
     MNUC=mass;
     System.out.println("setting the default DVCS event for hadron :" + MNUC );
@@ -164,7 +164,7 @@ public byte detectorHad;
           elec_v = calos.getFloat("lv",icalo);
           elec_x = calos.getFloat("x",icalo);
           elec_y = calos.getFloat("y",icalo);
-          beforeFidCut++;
+         // beforeFidCut++;
          
 
          
@@ -237,7 +237,8 @@ public byte detectorHad;
     0.0);
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
-
+    // photon_v = -10;
+    // photon_w = -10;
       if(caloMap.get(ng)!=null){
         for (int icalo : caloMap.get(ng)) {
           //System.out.println(scintMap.get(nh));
@@ -251,7 +252,7 @@ public byte detectorHad;
             photon_v = calos.getFloat("lv",icalo);
             photon_x = calos.getFloat("x",icalo);
             photon_y = calos.getFloat("y",icalo);
-            beforeFidCut++;
+           // beforeFidCut++;
           
 
           
@@ -262,7 +263,7 @@ public byte detectorHad;
 
   }
 
-  public void setHadron(Bank particles, Bank scint, Bank scintExtras, int nh) {
+  public void setHadron(Bank particles, Bank scint, int nh) {
     tmpdeut++;
     dedxDeutCND=-10;
     dedxDeutCTOF = -10;
@@ -284,12 +285,10 @@ public byte detectorHad;
         //System.out.println(detector);
         if(detectorHad==4){
           ctofenergyhad = scint.getFloat("energy",iscint);
-          dedxDeutCTOF = scintExtras.getFloat("dedx", iscint);
           tmpdeutctof++;
           inCTOF = true;
         }
         if(detectorHad==3) {
-          dedxDeutCND = scintExtras.getFloat("dedx", iscint);
           inCND = true;
 
           tmpdeutcnd++;
@@ -345,15 +344,16 @@ public byte detectorHad;
   public  void pidStudies(Bank particles, Bank scint){
 
   }
-  public  boolean FilterParticles(Bank particles, Bank scint, Bank hel, Bank scintExtras,Bank calos, int runNumber) {
+  public  boolean FilterParticles(Bank particles, Bank scint, Bank hel, Bank calos, int runNumber) {
     LorentzVector  vtmp = new LorentzVector();
     FoundEvent= false;
     this.el_en_max=0;
     this.ph_en_max=0;
     this.d_en_max=0;
     ArrayList<Integer> photonsNumber =  new ArrayList<Integer>();
+    photonsNumber.clear();
     Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
-
+    int status = 0;
     nelec=0;
     nphot=0;
     ndeut=0;
@@ -372,7 +372,7 @@ public byte detectorHad;
         vertexDeuteron = -100;
         vertexElectron = -100;
         int pid = particles.getInt("pid", npart);
-        int status = particles.getInt("status", npart);
+        status = particles.getInt("status", npart);
         float beta = particles.getFloat("beta", npart);
 
 
@@ -424,12 +424,11 @@ public byte detectorHad;
                   //System.out.println(detector);
                   if(detector==4){
                     ctofen = scint.getFloat("energy",iscint);
-                    dedxDeutCTOF = scintExtras.getFloat("dedx",iscint);
                   }
 
                 }
               }
-              if (beta>0.16 && ctofen>5  && dedxDeutCTOF>1){
+              if (beta>0.16 && ctofen>5){
                 ndeut++;
                 vtmp.setPxPyPzM(particles.getFloat("px",npart),
                 particles.getFloat("py",npart),
@@ -453,9 +452,38 @@ public byte detectorHad;
     
 
       //
+      //System.out.println(ndeut+" "+nelec+" "+nphot);
       if( ndeut>=1 && nelec>=1 && nphot>=1){
         this.setElectron(particles,calos,ne);
-        this.setHadron(particles,scint, scintExtras, nd);
+        this.setHadron(particles,scint,  nd);
+        
+        double mass2MissingHadron = 1000.0;
+        int ng = -1;
+
+        // for (int i = 0; i< photonsNumber.size(); i++){
+        //     LorentzVector  tmp1 = new LorentzVector();
+        //     tmp1.copy(vBeam);
+        //     tmp1.add(vTarget).sub(velectron);
+        //     vphoton.setPxPyPzM( particles.getFloat("px",photonsNumber.get(i)),
+        //     particles.getFloat("py",photonsNumber.get(i)),
+        //     particles.getFloat("pz",photonsNumber.get(i)),
+        //     0.0);
+        //     tmp1.sub(vphoton);
+        //     // System.out.println(photonsNumber.size());
+        //     // System.out.println(tmp1.mass2()- (1.87* 1.87));
+        //     if (Math.abs(tmp1.mass2() - (1.87* 1.87)) < mass2MissingHadron){ //Math.abs(tmp1.mass2() - (MNUC*MNUC))
+        //       mass2MissingHadron = Math.abs(tmp1.mass2() - (1.87*1.87));// Math.abs(tmp1.mass2() - MNUC**2);
+        //       ng = photonsNumber.get(i);
+              
+        //     }
+
+
+
+        // }
+        // status = particles.getInt("status", ng);
+        // if(Math.abs(status)<=2000)conf=1;
+        // else if(Math.abs(status)>2000 && Math.abs(status)<4000)conf=2;
+      
         this.setPhoton(particles,calos,ng/*photonsNumber*/);
 
         this.setHelicity(hel,runNumber);
@@ -626,20 +654,21 @@ public byte detectorHad;
       fiducialCutElectron = true;
     }
 
-    boolean fiducialCutPhoton = false;
-    //System.out.println(elec_sector);
-    if ((photon_sector==1 && photon_v >9.7824 && photon_v < 402.06 && photon_w>0.47359 && photon_w<393.895)|| (photon_sector ==  2 && photon_v>8.62768 && photon_v<402.389 && photon_w>8.57818 && photon_w<402.064)|| (photon_sector ==  3 && photon_v>9.23112 && photon_v<403.875 && photon_w>8.23956 && photon_w<403.622)||(photon_sector ==  4 && photon_v>19.2814 && photon_v<403.021 && photon_w>8.26354 && photon_w<392.355)|| (photon_sector ==  5 && photon_v>8.73336 && photon_v<402.915 && photon_w>9.28017 && photon_w<403.634)||(photon_sector ==  6 && photon_v>9.12088 && photon_v<403.581 && photon_w>8.13996 && photon_w<403.886)){
-      fiducialCutPhoton = true;
-    }
-    //return fiducialCutElectron;
+    // boolean fiducialCutPhoton = false;
+    // //System.out.println(elec_sector);
+    // if ((photon_sector==1 && photon_v >9.7824 && photon_v < 402.06 && photon_w>0.47359 && photon_w<393.895)|| (photon_sector ==  2 && photon_v>8.62768 && photon_v<402.389 && photon_w>8.57818 && photon_w<402.064)|| (photon_sector ==  3 && photon_v>9.23112 && photon_v<403.875 && photon_w>8.23956 && photon_w<403.622)||(photon_sector ==  4 && photon_v>19.2814 && photon_v<403.021 && photon_w>8.26354 && photon_w<392.355)|| (photon_sector ==  5 && photon_v>8.73336 && photon_v<402.915 && photon_w>9.28017 && photon_w<403.634)||(photon_sector ==  6 && photon_v>9.12088 && photon_v<403.581 && photon_w>8.13996 && photon_w<403.886)){
+    //   fiducialCutPhoton = true;
+    // }
+    // return fiducialCutElectron;
     boolean cut=
     (-this.Q().mass2()>1 
     && this.W().mass()>2  
     && this.vhadron.p()<2  
-    && this.vphoton.e()>1
+    && this.vphoton.e()>2 //changed from 1
     && this.angleBetweenElectronPhoton()>8
-    && fiducialCutPhoton
-    && fiducialCutElectron);
+    // && fiducialCutPhoton
+     && fiducialCutElectron
+    );
     return cut;
   }
   public boolean Exclusivitycut(int runNumber){

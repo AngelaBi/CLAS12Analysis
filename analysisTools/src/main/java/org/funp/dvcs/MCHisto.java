@@ -164,7 +164,7 @@ thisto.fill(-1*ev.t().mass2());
     MomentumZ_deut.fill(ev.vhadron.pz());
 
 
-      edgXmissingE.fill(ev.X("ehg").e());
+    edgXmissingE.fill(ev.X("ehg").e());
     edgXmissingM2.fill(ev.X("ehg").mass2());
     edgXmissingP.fill(ev.X("ehg").p());
     edgXmissingPx.fill(ev.X("ehg").px());
