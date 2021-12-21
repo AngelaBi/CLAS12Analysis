@@ -18,7 +18,7 @@ import org.jlab.groot.data.TDirectory;
 
 public class DvcsHisto {
 
-  
+  public H1F Xbj;
   public H2F dedxCTOFvsP;
   public H2F dedxCNDvsP;
 
@@ -139,16 +139,18 @@ public class DvcsHisto {
     dedxCNDvsP = new H2F("dedx CND vs P", "dedx CND vs P", 100,0,2,100,0,30);
     dedxCNDvsP.setTitle("dE/dx CND vs P");
 
-
+    Xbj=new H1F("X_b",100,0,1.0);
+    Xbj.setTitle("X_b");
     W= new H1F("W" ,100, 0, 10.0);
     W.setTitleX("W [GeV]");
     Q2 = new H1F("Q2",100, 0.1, 4.0);
     Q2.setTitleX("Q^2 [GeV/c^2]^2");
     hadmom = new H1F("Hadron Momentum",100,0,10.0);
     hadmom.setTitleX("Deteron momentum [GeV/c]");
-    WvsQ2 = new H2F("W vs Q2", "W vs Q2", 100,0,7,100,0,10);
-    WvsQ2.setTitleY("W [GeV]");
-    WvsQ2.setTitle("Q^2 [GeV/c^2]");
+    WvsQ2 = new H2F("Q2 vs W", "Q2 vs W", 100,0,7,100,0,10);
+    WvsQ2.setTitle("Q2 vs W");
+    WvsQ2.setTitleX("W [GeV]");
+    WvsQ2.setTitleY("Q^2 [GeV/c^2]");
     Q2vsXbj = new H2F("Q^2 vs X_b","Q^2 vs X_b",100,0,1,100,0,10);
     Q2vsXbj.setTitleY("Q^2 [GeV/c^2]");
     Q2vsXbj.setTitleX("X_b");
@@ -320,7 +322,7 @@ public class DvcsHisto {
     WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
-
+    Xbj.fill(ev.Xb());
     //missing quantities of a complete DVCS final state e hadron gamma
     edgXmissingE.fill(ev.X("ehg").e());
     edgXmissingM2.fill(ev.X("ehg").mass2());
@@ -574,7 +576,7 @@ public class DvcsHisto {
     String hipodirectory = "/"+directory;
     dir.mkdir(hipodirectory);
     dir.cd(hipodirectory);
-
+    dir.addDataSet(Xbj);
     dir.addDataSet(WvsQ2);
     dir.addDataSet(Q2vsXbj);
     dir.addDataSet(betacalcvsP);
@@ -582,7 +584,7 @@ public class DvcsHisto {
     dir.addDataSet(W);
     dir.addDataSet(hgTh);
     dir.addDataSet(hgEn);
-    dir.addDataSet(WvsQ2);
+   
 
     dir.addDataSet(Q2);
     dir.addDataSet(ConeAngleHist);
