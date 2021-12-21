@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.jlab.groot.data.TDirectory;
-
+import java.io.File;
+import java.io.PrintWriter;
 
 public class DcoDe
 {
@@ -52,6 +53,18 @@ public class DcoDe
     static DvcsHisto BinnedHACFT;
     static DvcsHisto BinnedHACFD;
 
+    static DvcsHisto BinnedQ2_1;
+    static DvcsHisto BinnedQ2_2;
+    static DvcsHisto BinnedQ2_3;
+    static DvcsHisto BinnedXb_1;
+    static DvcsHisto BinnedXb_2;
+    static DvcsHisto BinnedXb_3;
+    static DvcsHisto Binnedt_1;
+    static DvcsHisto Binnedt_2;
+    static DvcsHisto Binnedt_3;
+
+  
+
     static TDirectory dir;
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
@@ -63,16 +76,42 @@ public class DcoDe
     static int counter;
     static int FDCounter;
     static  int FTCounter;
-    
+
+    static int Q2_1;
+    static int Q2_2;
+    static int Q2_3;
+
+    static int Xb_1;
+    static int Xb_2;
+    static int Xb_3;
+
+    static int t_1;
+    static int t_2;
+    static int t_3;
+
     static int beforefid;
     static int afterfid;
     //static List<List<String>> records ;
     static HashMap<Integer, List<Double>> runMap;
     
+    static StringBuilder builder;
    
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
+    
+
+    // PrintWriter pw = null;
+    // try{
+    //   pw = new PrintWriter(new File("Data.csv"));
+    // }catch (FileNotFoundException e){
+    //   e.printStackTrace();
+    // }
+
+    // builder = new StringBuilder();
+    // String columnNames = "dedx,momentum,particle" ;
+    // builder.append(columnNames+"\n");
+
     int goodEvent;
     int counter11 = 0;
     processInput inputParam=new processInput(args);
@@ -82,10 +121,21 @@ public class DcoDe
     //double beamenergy;
       beforefid = 0;
       afterfid = 0;
+      Q2_1=0;
+      Q2_2=0;
+      Q2_3=0;
+
+      Xb_1=0;
+      Xb_2=0;
+      Xb_3=0;
+
+      t_1=0;
+      t_2=0;
+      t_3=0;
 
       event = new Event();
       ev    = new DvcsEvent();
-
+      ev.makecsv();
       //NO CUTS 
       hNC     = new DvcsHisto();//No cuts
       hNC.setOutputDir(inputParam.getOutputDir());
@@ -118,6 +168,33 @@ public class DcoDe
 
       BinnedHACFD = new DvcsHisto();
       BinnedHACFD.setOutputDir(inputParam.getOutputDir());
+
+      BinnedQ2_1 = new DvcsHisto();
+      BinnedQ2_1.setOutputDir(inputParam.getOutputDir());
+
+      BinnedQ2_2 = new DvcsHisto();
+      BinnedQ2_2.setOutputDir(inputParam.getOutputDir());
+
+      BinnedQ2_3 = new DvcsHisto();
+      BinnedQ2_3.setOutputDir(inputParam.getOutputDir());
+
+      BinnedXb_1 = new DvcsHisto();
+      BinnedXb_1.setOutputDir(inputParam.getOutputDir());
+     
+      BinnedXb_2 = new DvcsHisto();
+      BinnedXb_2.setOutputDir(inputParam.getOutputDir());
+
+      BinnedXb_3 = new DvcsHisto();
+      BinnedXb_3.setOutputDir(inputParam.getOutputDir());
+
+      Binnedt_1 = new DvcsHisto();
+      Binnedt_1.setOutputDir(inputParam.getOutputDir());
+
+      Binnedt_2 = new DvcsHisto();
+      Binnedt_2.setOutputDir(inputParam.getOutputDir());
+
+      Binnedt_3 = new DvcsHisto();
+      Binnedt_3.setOutputDir(inputParam.getOutputDir());
 
 
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
@@ -256,6 +333,10 @@ public class DcoDe
     System.out.println("number after fid" + afterfid);
     System.out.println("number of 11 = " + counter11);
 
+    System.out.println("The bin split for Q2: Bin 1: " + Q2_1 + " Bin 2: " + Q2_2+ " Bin 3: "+ Q2_3);
+    System.out.println("The bin split for Xb: Bin 1: " + Xb_1 + " Bin 2: " + Xb_2+ " Bin 3: "+ Xb_3);
+    System.out.println("The bin split for t: Bin 1: " + t_1 + " Bin 2: " + t_2+ " Bin 3: "+ t_3);
+
    
     //TCanvas ec = new TCanvas("Before cuts",1200,1000);
     //hNC.DrawBasic( ec);
@@ -325,6 +406,8 @@ public class DcoDe
     if (showNOCUT_missing_quants_ALL){
       //TCanvas ec114 = new TCanvas("Excl after No cuts",1500,1500);
       hNC.DrawMissingQuants(dir,"Excl after No cuts");
+      hNCFT.DrawMissingQuants(dir,"Excl after No cuts FT");
+      hNCFD.DrawMissingQuants(dir,"Excl after No cuts FD");
     }
 
     if (showDVCS_missing_quants_ALL){
@@ -461,6 +544,33 @@ public class DcoDe
       TCanvas ecAsymFD = new TCanvas("Asymmetry FD",1200,1200);
       hACFD.drawAsym(dir, "Asymmetry FD");
     }
+
+    TCanvas Q2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
+    BinnedQ2_1.drawAsym(dir, "Asymmetry Q2_1");
+
+    TCanvas Q2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
+    BinnedQ2_2.drawAsym(dir, "Asymmetry Q2_2");
+
+    TCanvas Q2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
+    BinnedQ2_3.drawAsym(dir, "Asymmetry Q2_3");
+
+    TCanvas Xb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
+    BinnedXb_1.drawAsym(dir, "Asymmetry Xb_1");
+
+    TCanvas Xb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
+    BinnedXb_2.drawAsym(dir, "Asymmetry Xb_2");
+
+    TCanvas Xb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
+    BinnedXb_3.drawAsym(dir, "Asymmetry Xb_3");
+
+    TCanvas t_1 = new TCanvas("Asymmetry t_1",1200,1200);
+    Binnedt_1.drawAsym(dir, "Asymmetry t_1");
+
+    TCanvas t_2 = new TCanvas("Asymmetry t_2",1200,1200);
+    Binnedt_2.drawAsym(dir, "Asymmetry t_2");
+
+    TCanvas t_3 = new TCanvas("Asymmetry t_3",1200,1200);
+    Binnedt_3.drawAsym(dir, "Asymmetry t_3");
     
 
     // TCanvas ecA111 = new TCanvas("Asymmetry Binned Q2",1200,1200);
@@ -514,6 +624,10 @@ public class DcoDe
 
 
     //TCanvas ec7 = new TCanvas("call2",1200,1000);
+
+
+    ev.pw.write(ev.builder.toString());
+    ev.pw.close();
 }
 
 public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,int runNumber){
@@ -554,9 +668,49 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
         if (ev.GetConf()==1){
           hACFT.fillBasicHisto(ev);
           FTCounter++;
-          if (-ev.Q().mass2()>1.5){
-              BinnedHACFT.fillBasicHisto(ev);
+          // if (-ev.Q().mass2()>1.5){
+          //     BinnedHACFT.fillBasicHisto(ev);
+          // }
+          if (-ev.Q().mass2()<=1.75){
+            BinnedQ2_1.fillBasicHisto(ev);
+            Q2_1++;
           }
+          else if (-ev.Q().mass2()>1.75&&-ev.Q().mass2()<=2.5 ){
+            BinnedQ2_2.fillBasicHisto(ev);
+            Q2_2++;
+          }else{
+            BinnedQ2_3.fillBasicHisto(ev);
+            Q2_3++;
+          }
+
+          if (-1*ev.t().mass2()<=0.39){
+            Binnedt_1.fillBasicHisto(ev);
+            t_1++;
+          }
+          else if (-1*ev.t().mass2()>0.39&&-1*ev.t().mass2()<=0.57 ){
+            Binnedt_2.fillBasicHisto(ev);
+            t_2++;
+          }else{
+            Binnedt_3.fillBasicHisto(ev);
+            t_3++;
+          }
+
+          if (ev.Xb()<=0.128){
+            BinnedXb_1.fillBasicHisto(ev);
+            Xb_1++;
+          }
+          else if (ev.Xb()>0.128&& ev.Xb()<=.182){
+            BinnedXb_2.fillBasicHisto(ev);
+            Xb_2++;
+          }else{
+            BinnedXb_3.fillBasicHisto(ev);
+            Xb_3++;
+          }
+
+
+
+
+
         }
         else if (ev.GetConf()==2){
           hACFD.fillBasicHisto(ev);
