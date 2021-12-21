@@ -22,7 +22,7 @@ public class processInput {
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
 	private boolean MCmode=false;
-
+	private boolean pass0=false;
 	public processInput(String[] args) {
 
 		this.args = args;
@@ -32,6 +32,7 @@ public class processInput {
 		options.addOption("f", "file", true, "Set input file with data files list .");
 		options.addOption("o", "output dir", true, "Set output file dir .");
 		options.addOption("MC", "Montecarlo files", false, "Enable MC mode");
+		options.addOption("pass0", "Pass0 Files", false, "Pass0");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -60,6 +61,10 @@ public class processInput {
 			if (cmd.hasOption("MC")){
 				System.out.println("setting MC mode");
 				MCmode=true;
+			}
+			if (cmd.hasOption("pass0")){
+				System.out.println("This is pass 0 run");
+				pass0 = true;
 			}
 			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
@@ -151,6 +156,10 @@ public class processInput {
 	}
 	public boolean getMCmode(){
 		return this.MCmode;
+	}
+
+	public boolean getPass0(){
+		return this.pass0;
 	}
 	public String getFileName(int i){
 		//String tmp=new String();
