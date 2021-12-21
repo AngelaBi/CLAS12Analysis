@@ -333,9 +333,9 @@ public byte detectorHad;
 }
   public void setHelicity(Bank hel, int runNumber){
     helicity = hel.getInt("helicity", 0);
-    if (runNumber<6700 && runNumber != 6378){
-      helicity*=-1;
-    }
+    // if (runNumber<6700 && runNumber != 6378){
+    //   helicity*=-1;
+    // }
   
     helicityraw = hel.getInt("helicityRaw", 0);
     if(helicity>0) helicityplus++;
@@ -409,6 +409,16 @@ public byte detectorHad;
             else if(status>=2000 && status<4000)conf=2;
 
           }
+
+          // nphot++;
+          // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+          // particles.getFloat("py",npart),
+          // particles.getFloat("pz",npart),
+          // 0.0000);
+          // if(vtmp.e()>this.ph_en_max){
+          //   ng=npart;
+          //   this.ph_en_max=vtmp.e();
+          // }
         }
         //status 4000 is FD
         //else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
@@ -460,29 +470,29 @@ public byte detectorHad;
         double mass2MissingHadron = 1000.0;
         int ng = -1;
 
-        // for (int i = 0; i< photonsNumber.size(); i++){
-        //     LorentzVector  tmp1 = new LorentzVector();
-        //     tmp1.copy(vBeam);
-        //     tmp1.add(vTarget).sub(velectron);
-        //     vphoton.setPxPyPzM( particles.getFloat("px",photonsNumber.get(i)),
-        //     particles.getFloat("py",photonsNumber.get(i)),
-        //     particles.getFloat("pz",photonsNumber.get(i)),
-        //     0.0);
-        //     tmp1.sub(vphoton);
-        //     // System.out.println(photonsNumber.size());
-        //     // System.out.println(tmp1.mass2()- (1.87* 1.87));
-        //     if (Math.abs(tmp1.mass2() - (1.87* 1.87)) < mass2MissingHadron){ //Math.abs(tmp1.mass2() - (MNUC*MNUC))
-        //       mass2MissingHadron = Math.abs(tmp1.mass2() - (1.87*1.87));// Math.abs(tmp1.mass2() - MNUC**2);
-        //       ng = photonsNumber.get(i);
+        for (int i = 0; i< photonsNumber.size(); i++){
+            LorentzVector  tmp1 = new LorentzVector();
+            tmp1.copy(vBeam);
+            tmp1.add(vTarget).sub(velectron);
+            vphoton.setPxPyPzM( particles.getFloat("px",photonsNumber.get(i)),
+            particles.getFloat("py",photonsNumber.get(i)),
+            particles.getFloat("pz",photonsNumber.get(i)),
+            0.0);
+            tmp1.sub(vphoton);
+            // System.out.println(photonsNumber.size());
+            // System.out.println(tmp1.mass2()- (1.87* 1.87));
+            if (Math.abs(tmp1.mass2() - (1.87* 1.87)) < mass2MissingHadron){ //Math.abs(tmp1.mass2() - (MNUC*MNUC))
+              mass2MissingHadron = Math.abs(tmp1.mass2() - (1.87*1.87));// Math.abs(tmp1.mass2() - MNUC**2);
+              ng = photonsNumber.get(i);
               
-        //     }
+            }
 
 
 
-        // }
-        // status = particles.getInt("status", ng);
-        // if(Math.abs(status)<=2000)conf=1;
-        // else if(Math.abs(status)>2000 && Math.abs(status)<4000)conf=2;
+        }
+        status = particles.getInt("status", ng);
+        if(Math.abs(status)<=2000)conf=1;
+        else if(Math.abs(status)>2000 && Math.abs(status)<4000)conf=2;
       
         this.setPhoton(particles,calos,ng/*photonsNumber*/);
 
@@ -653,7 +663,6 @@ public byte detectorHad;
     if ((elec_sector==1 && elec_v >9.7824 && elec_v < 402.06 && elec_w>0.47359 && elec_w<393.895)|| (elec_sector ==  2 && elec_v>8.62768 && elec_v<402.389 && elec_w>8.57818 && elec_w<402.064)|| (elec_sector ==  3 && elec_v>9.23112 && elec_v<403.875 && elec_w>8.23956 && elec_w<403.622)||(elec_sector ==  4 && elec_v>19.2814 && elec_v<403.021 && elec_w>8.26354 && elec_w<392.355)|| (elec_sector ==  5 && elec_v>8.73336 && elec_v<402.915 && elec_w>9.28017 && elec_w<403.634)||(elec_sector ==  6 && elec_v>9.12088 && elec_v<403.581 && elec_w>8.13996 && elec_w<403.886)){
       fiducialCutElectron = true;
     }
-
     // boolean fiducialCutPhoton = false;
     // //System.out.println(elec_sector);
     // if ((photon_sector==1 && photon_v >9.7824 && photon_v < 402.06 && photon_w>0.47359 && photon_w<393.895)|| (photon_sector ==  2 && photon_v>8.62768 && photon_v<402.389 && photon_w>8.57818 && photon_w<402.064)|| (photon_sector ==  3 && photon_v>9.23112 && photon_v<403.875 && photon_w>8.23956 && photon_w<403.622)||(photon_sector ==  4 && photon_v>19.2814 && photon_v<403.021 && photon_w>8.26354 && photon_w<392.355)|| (photon_sector ==  5 && photon_v>8.73336 && photon_v<402.915 && photon_w>9.28017 && photon_w<403.634)||(photon_sector ==  6 && photon_v>9.12088 && photon_v<403.581 && photon_w>8.13996 && photon_w<403.886)){
@@ -673,18 +682,9 @@ public byte detectorHad;
   }
   public boolean Exclusivitycut(int runNumber){
     boolean cut=false;
-    boolean dedxCut = true;
     boolean vertexCut = false;
 
-      if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654 *Math.pow(vhadron.p(),-1.851)){
-        dedxCut = false;
-      }
-      if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
-        dedxCut = false;
-      }
-      if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628 *Math.pow(vhadron.p(),-2.398)){
-        dedxCut = false;
-      }
+      
       
       if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron) && vertexElectron < (1.5 + vertexDeuteron)){
         vertexCut = true;
