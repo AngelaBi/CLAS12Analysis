@@ -70,8 +70,8 @@ processInput inputParam=new processInput(args);
     boolean showDVCS_missing_quants_FD = false;
 
     boolean showExcl_kinematicss_ALL = false;
-    boolean showExcl_kinematics_FT = false;
-    boolean showExcl_kinematics_FD = false;
+    boolean showExcl_kinematics_FT = true;
+    boolean showExcl_kinematics_FD = true;
 
     boolean showExcl_missing_quants_ALL = false;
     boolean showExcl_missing_quants_FT = true;
@@ -98,6 +98,34 @@ processInput inputParam=new processInput(args);
     boolean showAsymm_All = true;
     boolean showAsymm_FT = true;
     boolean showAsymm_FD = true;
+
+    TCanvas BinnedQ2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
+    draw_asymmetry(BinnedQ2_1, "Asymmetry Q2_1");
+
+    TCanvas BinnedQ2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
+    draw_asymmetry(BinnedQ2_2, "Asymmetry Q2_2");
+
+    TCanvas BinnedQ2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
+    draw_asymmetry(BinnedQ2_3, "Asymmetry Q2_3");
+
+    TCanvas BinnedXb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
+    draw_asymmetry(BinnedXb_1, "Asymmetry Xb_1");
+
+    TCanvas BinnedXb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
+    draw_asymmetry(BinnedXb_2, "Asymmetry Xb_2");
+
+    TCanvas BinnedXb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
+    draw_asymmetry(BinnedXb_3, "Asymmetry Xb_3");
+
+    TCanvas Binnedt_1 = new TCanvas("Asymmetry t_1",1200,1200);
+    draw_asymmetry(Binnedt_1, "Asymmetry t_1");
+
+    TCanvas Binnedt_2 = new TCanvas("Asymmetry t_2",1200,1200);
+    draw_asymmetry(Binnedt_2, "Asymmetry t_2");
+
+    TCanvas Binnedt_3 = new TCanvas("Asymmetry t_3",1200,1200);
+    draw_asymmetry(Binnedt_3, "Asymmetry t_3");
+
 
     if (showParticleComparison_NO_CUTS){
      TCanvas ecNC = new TCanvas("Particle Comparsion No Cuts",1500,1500);
@@ -149,7 +177,7 @@ processInput inputParam=new processInput(args);
     
     if (showNOCUT_kinematics_ALL){
       TCanvas ec6 = new TCanvas("No Cuts All Kinematics",1200,1000);
-      Draw_Kinematics(ec6, " Kinmeatics NO CUT All");
+      Draw_Kinematics(ec6, "Kinmeatics NO CUT All");
     }
 
     if (showNOCUT_kinematics_FT){
@@ -266,9 +294,9 @@ processInput inputParam=new processInput(args);
 
   public static void Draw_Kinematics(TCanvas ec4, String dir){
 
-    H2F WvsQ2 = (H2F) dir2.getObject(dir + "/", "W vs Q2");
+    H2F WvsQ2 = (H2F) dir2.getObject(dir + "/", "Q2 vs W");
     H2F Q2vsXbj = (H2F) dir2.getObject(dir + "/", "Q^2 vs X_b");
-    
+    H1F X_b = (H1F) dir2.getObject(dir + "/", "X_b");
     H2F betacalcvsP = (H2F) dir2.getObject(dir + "/", "BetaCalc vs P");
     H2F chi2vsdeltabeta = (H2F) dir2.getObject(dir + "/", "#Delta#beta_d vs #chi^2_PID");
     H1F W = (H1F) dir2.getObject(dir + "/", "W");
@@ -315,6 +343,7 @@ processInput inputParam=new processInput(args);
     ec4.cd(20).draw(dedxCTOFvsP);
     ec4.cd(21).draw(betacalchisto);
     ec4.cd(22).draw(betahadhisto);
+    ec4.cd(23).draw(X_b);
    
    
     
@@ -396,13 +425,16 @@ processInput inputParam=new processInput(args);
     }
 
     public static void draw_asymmetry(TCanvas ecA, String dir){
-        ecA.getPad().setAxisRange(0, 360, -0.6, 0.6);
+        ecA.getPad().setAxisRange(0, 360, -0.8, 0.8);
         ecA.draw((buildAsym(ecA,dir)),"E");
 
-        F1D Asymfunc = new F1D("Asymfunc","[A]*sin([B]x)+[C]",0,360);
+        F1D Asymfunc = new F1D("Asymfunc","[A]*sin(x * 2 * 3.14 /360)  ",0,360);
+        // Asymfunc.setParameter(0,0.1);
+        // Asymfunc.setParameter(1,0.01);
+        // Asymfunc.setParameter(2,-0.1);
         Asymfunc.setParameter(0,0.1);
-        Asymfunc.setParameter(1,0.01);
-        Asymfunc.setParameter(2,-0.1);
+        //Asymfunc.setParameter(1,0.01);
+        // Asymfunc.setParameter(2,-0.01);
         DataFitter.fit(Asymfunc,buildAsym(ecA, dir),"");
         ecA.draw(Asymfunc,"same");
     }
