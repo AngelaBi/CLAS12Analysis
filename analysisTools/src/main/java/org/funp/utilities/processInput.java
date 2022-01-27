@@ -22,6 +22,7 @@ public class processInput {
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
 	private boolean MCmode=false;
+	private boolean nTmode=false;
 	private static boolean MLmode=false;
 	private boolean pass0=false;
 	public processInput(String[] args) {
@@ -31,10 +32,11 @@ public class processInput {
 		options.addOption("h", "help", false, "show help.");
 		//options.addOption("l", "input dir", true, "Set DATA files location .");
 		options.addOption("f", "file", true, "Set input file with data files list .");
-		options.addOption("o", "output dir", true, "Set output file dir .");
-		options.addOption("MC", "Montecarlo files", false, "Enable MC mode");
-		options.addOption("pass0", "Pass0 Files", false, "Pass0");
-		options.addOption("ML", "Create ML Files", false, "ML");
+		options.addOption("o", "outputdir", true, "Set output file dir .");
+		options.addOption("MC", "Montecarlofiles", false, "Enable MC mode");
+		options.addOption("pass0", "Pass0Files", false, "Pass0");
+		options.addOption("ML", "CreateMLfiles", false, "Create ML files");
+		options.addOption("nT", "noTags", false, "Enable analysis on files without tags");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -63,6 +65,10 @@ public class processInput {
 			if (cmd.hasOption("MC")){
 				System.out.println("setting MC mode");
 				MCmode=true;
+			}
+			if (cmd.hasOption("nT")){
+				System.out.println("setting no tags mode");
+				nTmode=true;
 			}
 			if (cmd.hasOption("ML")){
 				System.out.println("setting up for ML DataFile Creation");
@@ -164,6 +170,9 @@ public class processInput {
 		return this.MCmode;
 	}
 
+	public boolean getnTmode(){
+		return this.nTmode;
+	}
 	public static boolean getMLmode(){
 		return MLmode;
 	}

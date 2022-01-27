@@ -99,7 +99,7 @@ public class DcoDe
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
-    ev.setArgs(args);
+    
 
     // PrintWriter pw = null;
     // try{
@@ -135,7 +135,8 @@ public class DcoDe
 
       event = new Event();
       ev    = new DvcsEvent();
-      ev.makecsv();
+      ev.setArgs(args);
+      if(ev.isML) ev.makecsv();
       //NO CUTS 
       hNC     = new DvcsHisto();//No cuts
       hNC.setOutputDir(inputParam.getOutputDir());
@@ -221,7 +222,7 @@ public class DcoDe
     for (int i=0; i<inputParam.getNfiles(); i++) {
       goodEvent=0;
       HipoReader reader = new HipoReader();
-      if(!inputParam.getMCmode()) reader.setTags(9,10,11);
+      if(!inputParam.getMCmode() && !inputParam.getnTmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -284,8 +285,9 @@ public class DcoDe
 
           
           if( 
-            inputParam.getMCmode() || 
-             ((event.getEventTag()==11 || event.getEventTag()==10 || event.getEventTag()==9) && 
+            (inputParam.getMCmode() || 
+             ((event.getEventTag()==11 || event.getEventTag()==10 || event.getEventTag()==9) 
+             || inputParam.getnTmode() )&& 
             //((event.getEventTag()==11 ) && 
             (allEventsGood ||  /*//all events are good */ 
             (beginningEventsGood && (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) || 
