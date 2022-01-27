@@ -10,7 +10,7 @@ import org.jlab.jnp.hipo4.data.*;
 //import org.jlab.jnp.physics.*;
 //import org.jlab.jnp.reader.*;
 
-import org.funp.dvcs.*;
+import org.funp.dvcs.*; 
 import org.funp.utilities.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,11 +26,16 @@ public class tagevents
 static int ndegamma;
 
     static HashMap<Integer, List<Double>> runMap; 
-
+  static StringBuilder builder;
   public static void main( String[] args ) throws FileNotFoundException, IOException
   {
+
+    event = new Event();
+    ev    = new DvcsEvent();
     runMap = runUtil.createMapGagikStyle();
     processInput inputParam=new processInput(args);
+    ev.setArgs(args);
+    ev.isML(processInput.getMLmode());
     //runUtil runInfo=new runUtil();
 
     //int ndeut=0;
@@ -40,8 +45,7 @@ static int ndegamma;
    ndegamma=0;
     //int dvcscounter=0;
 
-    event = new Event();
-    ev    = new DvcsEvent();
+ 
 
 
     //HashMap<Integer, Double> hmap=createrunmap();

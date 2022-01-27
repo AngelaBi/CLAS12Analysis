@@ -13,11 +13,11 @@ import java.util.Comparator;
 //import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import org.funp.utilities.*;
 import java.lang.Math;
 //import org.jlab.io.base.DataEvent;
 //import org.jlab.io.base.DataBank;
-
+//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
 
 import java.util.Map;
 import java.util.HashMap;
@@ -32,6 +32,24 @@ import java.io.FileNotFoundException;
 public class DvcsEvent {
   public PrintWriter pw = null;
   public StringBuilder builder;
+  public String [] args;
+  public static boolean isML = false;
+  public  void setArgs(String [] argss){
+        args = argss;
+        for(int i = 0; i < argss.length;i++){
+              System.out.println(argss[i]);
+        }
+        
+  }
+
+   public static void isML(boolean var){
+        isML = var;
+        
+  }
+  
+
+
+  processInput inputParam=new processInput(args);
   public void makecsv(){
     
     try{
@@ -340,6 +358,10 @@ public byte detectorProt;
         // }
       }
     }
+
+
+    // this iswhat i commneted out on jan 26
+    if(isML){
               builder.append(dedxDeutCTOF + ",");
               builder.append(dedxDeutCND + ",");
               builder.append(betahad+ ",");
@@ -347,6 +369,8 @@ public byte detectorProt;
               builder.append(vhadron.p() + ",");
               builder.append(chi2pidhad + ",");
               builder.append("1\n");
+    }
+              
   }
   public void setPositives(Bank particles, Bank scint, int np){
     if (this.FoundDeuteron==true){

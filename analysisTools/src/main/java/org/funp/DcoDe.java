@@ -99,7 +99,7 @@ public class DcoDe
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
-    
+    ev.setArgs(args);
 
     // PrintWriter pw = null;
     // try{
