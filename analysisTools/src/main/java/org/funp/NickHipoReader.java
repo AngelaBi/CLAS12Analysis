@@ -51,7 +51,8 @@ public class NickHipoReader{
   {
 processInput inputParam=new processInput(args);
     dir2 = new TDirectory();
-    dir2.readFile("NickRichardson.hipo");
+    //dir2.readFile("NickRichardson.hipo");
+    dir2.readFile("Aplots.hipo");
 
     boolean showNOCUT_kinematics_ALL = false;
     boolean showNOCUT_kinematics_FT = false;
