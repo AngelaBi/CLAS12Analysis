@@ -51,8 +51,8 @@ public class NickHipoReader{
   {
 processInput inputParam=new processInput(args);
     dir2 = new TDirectory();
-    //dir2.readFile("NickRichardson.hipo");
-    dir2.readFile("Bplots.hipo");
+    dir2.readFile("NickRichardson.hipo");
+    //dir2.readFile("Bplots.hipo");
 
     boolean showNOCUT_kinematics_ALL = false;
     boolean showNOCUT_kinematics_FT = false;
@@ -99,33 +99,32 @@ processInput inputParam=new processInput(args);
     boolean showAsymm_All = true;
     boolean showAsymm_FT = true;
     boolean showAsymm_FD = true;
+    // TCanvas BinnedQ2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
+    // draw_asymmetry(BinnedQ2_1, "Asymmetry Q2_1");
 
-    TCanvas BinnedQ2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
-    draw_asymmetry(BinnedQ2_1, "Asymmetry Q2_1");
+    // TCanvas BinnedQ2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
+    // draw_asymmetry(BinnedQ2_2, "Asymmetry Q2_2");
 
-    TCanvas BinnedQ2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
-    draw_asymmetry(BinnedQ2_2, "Asymmetry Q2_2");
+    // TCanvas BinnedQ2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
+    // draw_asymmetry(BinnedQ2_3, "Asymmetry Q2_3");
 
-    TCanvas BinnedQ2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
-    draw_asymmetry(BinnedQ2_3, "Asymmetry Q2_3");
+    // TCanvas BinnedXb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
+    // draw_asymmetry(BinnedXb_1, "Asymmetry Xb_1");
 
-    TCanvas BinnedXb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
-    draw_asymmetry(BinnedXb_1, "Asymmetry Xb_1");
+    // TCanvas BinnedXb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
+    // draw_asymmetry(BinnedXb_2, "Asymmetry Xb_2");
 
-    TCanvas BinnedXb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
-    draw_asymmetry(BinnedXb_2, "Asymmetry Xb_2");
+    // TCanvas BinnedXb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
+    // draw_asymmetry(BinnedXb_3, "Asymmetry Xb_3");
 
-    TCanvas BinnedXb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
-    draw_asymmetry(BinnedXb_3, "Asymmetry Xb_3");
+    // TCanvas Binnedt_1 = new TCanvas("Asymmetry t_1",1200,1200);
+    // draw_asymmetry(Binnedt_1, "Asymmetry t_1");
 
-    TCanvas Binnedt_1 = new TCanvas("Asymmetry t_1",1200,1200);
-    draw_asymmetry(Binnedt_1, "Asymmetry t_1");
+    // TCanvas Binnedt_2 = new TCanvas("Asymmetry t_2",1200,1200);
+    // draw_asymmetry(Binnedt_2, "Asymmetry t_2");
 
-    TCanvas Binnedt_2 = new TCanvas("Asymmetry t_2",1200,1200);
-    draw_asymmetry(Binnedt_2, "Asymmetry t_2");
-
-    TCanvas Binnedt_3 = new TCanvas("Asymmetry t_3",1200,1200);
-    draw_asymmetry(Binnedt_3, "Asymmetry t_3");
+    // TCanvas Binnedt_3 = new TCanvas("Asymmetry t_3",1200,1200);
+    // draw_asymmetry(Binnedt_3, "Asymmetry t_3");
 
 
     if (showParticleComparison_NO_CUTS){

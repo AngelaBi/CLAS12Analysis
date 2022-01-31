@@ -136,6 +136,7 @@ public class DcoDe
       event = new Event();
       ev    = new DvcsEvent();
       ev.setArgs(args);
+      ev.isML(processInput.getMLmode());
       if(ev.isML) ev.makecsv();
       //NO CUTS 
       hNC     = new DvcsHisto();//No cuts
@@ -533,103 +534,61 @@ public class DcoDe
     
     
     if (showAsymm_All){
-      TCanvas ecA = new TCanvas("Asymmetry",1200,1200);
+      //TCanvas ecA = new TCanvas("Asymmetry",1200,1200);
       hAC.drawAsym(dir, "Asymmetry");
     }
 
     if (showAsymm_FT){
-      TCanvas ecAsymFT = new TCanvas("Asymmetry FT",1200,1200);
+      //TCanvas ecAsymFT = new TCanvas("Asymmetry FT",1200,1200);
       hACFT.drawAsym(dir, "Asymmetry FT");
     }
 
     if (showAsymm_FD){
-      TCanvas ecAsymFD = new TCanvas("Asymmetry FD",1200,1200);
+     // TCanvas ecAsymFD = new TCanvas("Asymmetry FD",1200,1200);
       hACFD.drawAsym(dir, "Asymmetry FD");
     }
 
-    TCanvas Q2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
-    BinnedQ2_1.drawAsym(dir, "Asymmetry Q2_1");
+    // TCanvas Q2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
+    // BinnedQ2_1.drawAsym(dir, "Asymmetry Q2_1");
 
-    TCanvas Q2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
-    BinnedQ2_2.drawAsym(dir, "Asymmetry Q2_2");
+    // TCanvas Q2_2 = new TCanvas("Asymmetry Q2_2",1200,1200);
+    // BinnedQ2_2.drawAsym(dir, "Asymmetry Q2_2");
 
-    TCanvas Q2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
-    BinnedQ2_3.drawAsym(dir, "Asymmetry Q2_3");
+    // TCanvas Q2_3 = new TCanvas("Asymmetry Q2_3",1200,1200);
+    // BinnedQ2_3.drawAsym(dir, "Asymmetry Q2_3");
 
-    TCanvas Xb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
-    BinnedXb_1.drawAsym(dir, "Asymmetry Xb_1");
+    // TCanvas Xb_1 = new TCanvas("Asymmetry Xb_1",1200,1200);
+    // BinnedXb_1.drawAsym(dir, "Asymmetry Xb_1");
 
-    TCanvas Xb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
-    BinnedXb_2.drawAsym(dir, "Asymmetry Xb_2");
+    // TCanvas Xb_2 = new TCanvas("Asymmetry Xb_2",1200,1200);
+    // BinnedXb_2.drawAsym(dir, "Asymmetry Xb_2");
 
-    TCanvas Xb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
-    BinnedXb_3.drawAsym(dir, "Asymmetry Xb_3");
+    // TCanvas Xb_3 = new TCanvas("Asymmetry Xb_3",1200,1200);
+    // BinnedXb_3.drawAsym(dir, "Asymmetry Xb_3");
 
-    TCanvas t_1 = new TCanvas("Asymmetry t_1",1200,1200);
-    Binnedt_1.drawAsym(dir, "Asymmetry t_1");
+    // TCanvas t_1 = new TCanvas("Asymmetry t_1",1200,1200);
+    // Binnedt_1.drawAsym(dir, "Asymmetry t_1");
 
-    TCanvas t_2 = new TCanvas("Asymmetry t_2",1200,1200);
-    Binnedt_2.drawAsym(dir, "Asymmetry t_2");
+    // TCanvas t_2 = new TCanvas("Asymmetry t_2",1200,1200);
+    // Binnedt_2.drawAsym(dir, "Asymmetry t_2");
 
-    TCanvas t_3 = new TCanvas("Asymmetry t_3",1200,1200);
-    Binnedt_3.drawAsym(dir, "Asymmetry t_3");
+    // TCanvas t_3 = new TCanvas("Asymmetry t_3",1200,1200);
+    // Binnedt_3.drawAsym(dir, "Asymmetry t_3");
     
 
-    // TCanvas ecA111 = new TCanvas("Asymmetry Binned Q2",1200,1200);
-    // BinnedHAC.drawAsym(dir, "Asymmetry Binned Q2");
-
-    // TCanvas ecA1111 = new TCanvas("Asymmetry FT Binned Q2",1200,1200);
-    // BinnedHACFT.drawAsym(ecA1111);
-
-    // TCanvas ecA11111 = new TCanvas("Asymmetry FD Binned Q2",1200,1200);
-    // BinnedHACFD.drawAsym(ecA11111);
-
-    //How to plot the FT and FD Asymmetries
-    
-    // dir.cd("/test");
-    // dir.addDataSet(ecA111);
-    // dir.writeFile("myfile.hipo");
     
 
-    /*TCanvas ecP = new TCanvas("Plotdvcscuts",1800,1200);
-    ecP.divide(2,1);
-    ecP.cd(0);
-    hDC.drawPlot1(ecP);
-    ecP.cd(1);
-    hAC.drawPlot1(ecP);
-    ecP.cd(2);
-    hDC.drawPlot3(ecP);
-    ecP.cd(3);
-    hDC.drawPlot4(ecP);
-    ecP.cd(4);
-    hDC.drawPlot5(ecP);
-    //ecP.cd(5);
-    //hDC.drawPlot6(ecP);
+   
 
 
 
 
-    TCanvas ecP2 = new TCanvas("Plotallcuts",900,9000);
-    ecP2.divide(1,2);
-    ecP2.cd(0);
-    hAC.drawPlot1(ecP2);
-    ecP2.cd(1);
-    hAC.drawPlot2(ecP2);
 
-
-
-    TCanvas ecP3 = new TCanvas("Plotexclcuts",1200,1200);
-    //hNC.drawPlot1(ecP);
-    hAC.drawPlot(ecP3);*/
-
-
-
-
-    //TCanvas ec7 = new TCanvas("call2",1200,1000);
-
-
-    ev.pw.write(ev.builder.toString());
-    ev.pw.close();
+    if (ev.isML){
+      ev.pw.write(ev.builder.toString());
+      ev.pw.close();
+    }
+    
 }
 
 public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,int runNumber){

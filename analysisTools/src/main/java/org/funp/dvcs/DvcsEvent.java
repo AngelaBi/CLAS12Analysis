@@ -54,7 +54,7 @@ public class DvcsEvent {
   public void makecsv(){
     
     try{
-      pw = new PrintWriter(new File("RealData.csv"));
+      pw = new PrintWriter(new File("ThisIsATest.csv"));
     }catch (FileNotFoundException e){
       e.printStackTrace();
     }
