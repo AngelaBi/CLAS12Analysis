@@ -6,8 +6,8 @@ import org.jlab.jnp.hipo4.data.*;
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
 //---- imports for PHYSICS library
-import org.jlab.jnp.physics.*;
-import org.jlab.jnp.reader.*;
+import org.jlab.clas.physics.*;
+//import org.jlab.jnp.reader.*;
 
 import java.util.Comparator;
 //import java.util.Scanner;
@@ -202,7 +202,8 @@ return goodEvent;
    public  LorentzVector W(){
     LorentzVector  tmp = new LorentzVector();
     tmp.copy(vBeam);
-    tmp.add(vTarget).sub(velectron);
+    tmp.add(vTarget);
+    tmp.sub(velectron);
     return tmp;
 
   }
@@ -231,7 +232,8 @@ return goodEvent;
     // tmp.sub(velectron);
     Vector3 norm_Had_VPho = (vhadron.vect().cross(Q().vect()));
     Vector3 norm_Had_Pho = (vhadron.vect().cross(vphoton.vect()));
-    deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
+    //deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
+    deltaphi = norm_Had_Pho.theta(norm_Had_VPho);
     if(norm_Had_VPho.dot(vphoton.vect()) < 0 ) deltaphi = -1*deltaphi;
     return deltaphi;
   }
@@ -239,7 +241,8 @@ return goodEvent;
     double deltaphiplane;
     Vector3 norm_Had_VPho = (vhadron.vect().cross(this.Q().vect()));
     Vector3 norm_VPho_Pho = (this.Q().vect().cross(vphoton.vect()));
-    deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
+    //deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
+    deltaphiplane = norm_Had_VPho.theta(norm_VPho_Pho);
     if(norm_Had_VPho.dot(vphoton.vect()) < 0 ) deltaphiplane = -1*deltaphiplane;
     return deltaphiplane;
   }

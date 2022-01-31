@@ -6,8 +6,8 @@ import org.jlab.jnp.hipo4.data.*;
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
 //---- imports for PHYSICS library
-import org.jlab.jnp.physics.*;
-import org.jlab.jnp.reader.*;
+import org.jlab.clas.physics.*;
+//import org.jlab.jnp.reader.*;
 
 import java.util.Comparator;
 //import java.util.Scanner;
@@ -473,7 +473,8 @@ public byte detectorHad;
         for (int i = 0; i< photonsNumber.size(); i++){
             LorentzVector  tmp1 = new LorentzVector();
             tmp1.copy(vBeam);
-            tmp1.add(vTarget).sub(velectron);
+            tmp1.add(vTarget);
+            tmp1.sub(velectron);
             vphoton.setPxPyPzM( particles.getFloat("px",photonsNumber.get(i)),
             particles.getFloat("py",photonsNumber.get(i)),
             particles.getFloat("pz",photonsNumber.get(i)),
@@ -581,7 +582,8 @@ public byte detectorHad;
   public LorentzVector W(){
     LorentzVector  tmp = new LorentzVector();
     tmp.copy(vBeam);
-    tmp.add(vTarget).sub(velectron);
+    tmp.add(vTarget);
+    tmp.sub(velectron);
     return tmp;
 
   }
@@ -745,7 +747,8 @@ public byte detectorHad;
     double Phi;
     Vector3 leptonicPlane=vBeam.vect().cross(velectron.vect());
     Vector3 hadronicPlane=vhadron.vect().cross(vphoton.vect());
-    Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
+    //Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
+    Phi = leptonicPlane.theta(hadronicPlane);
     // Vector3 leptonicPlane = new Vector3();
     //     leptonicPlane.copy(vBeam.vect().cross(velectron.vect()));
     // Vector3 hadronicPlane = new Vector3();
@@ -764,7 +767,8 @@ if(leptonicPlane.dot(vphoton.vect()) < 0){
     // tmp.sub(velectron);
     Vector3 norm_Had_VPho = (vhadron.vect().cross(Q().vect()));
     Vector3 norm_Had_Pho = (vhadron.vect().cross(vphoton.vect()));
-    deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
+    //deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
+    deltaphi = norm_Had_Pho.theta(norm_Had_VPho);
     if(norm_Had_VPho.dot(vphoton.vect()) < 0 ) deltaphi = -1*deltaphi;
     return deltaphi;
   }
@@ -772,26 +776,27 @@ if(leptonicPlane.dot(vphoton.vect()) < 0){
     double deltaphiplane;
     Vector3 norm_Had_VPho = (vhadron.vect().cross(this.Q().vect()));
     Vector3 norm_VPho_Pho = (this.Q().vect().cross(vphoton.vect()));
-    deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
+    //deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
+    deltaphiplane = norm_Had_VPho.theta(norm_VPho_Pho);
     if(norm_Had_VPho.dot(vphoton.vect()) < 0 ) deltaphiplane = -1*deltaphiplane;
     return deltaphiplane;
   }
   public double coneangle(){
     LorentzVector temp = new LorentzVector();
     temp.copy(this.X("eh"));
-    return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+    return Math.toDegrees(this.vphoton.vect().theta(temp.vect()));
   }
 
   public double angleBetweenElectronPhoton(){
 
-    return Math.toDegrees(this.vphoton.vect().angle(velectron.vect()));
+    return this.vphoton.vect().theta(velectron.vect());
 
   }
   public double DTheta(){
     //     LorentzVector temp = new LorentzVector();
     //     temp.copy(this.X("eh"));
     // return Math.toDegrees(vphoton.vect().angle(temp.vect()));
-    return Math.toDegrees(vphoton.vect().angle(this.X("eh").vect()));
+    return vphoton.vect().theta(this.X("eh").vect());
   }
   //this function returns the missing vector for a given list of possible particles in a dvcs events
   //could be ehg or eg eh

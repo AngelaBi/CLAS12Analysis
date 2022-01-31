@@ -8,8 +8,8 @@ import org.jlab.groot.graphics.*;
 import org.jlab.groot.fitter.*;
 import org.jlab.groot.math.*;
 //---- imports for PHYSICS library
-import org.jlab.jnp.physics.*;
-import org.jlab.jnp.reader.*;
+import org.jlab.clas.physics.*;
+//import org.jlab.jnp.reader.*;
 
 import org.jlab.groot.ui.TCanvas;
 import org.jlab.groot.data.TDirectory;

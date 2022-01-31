@@ -8,8 +8,8 @@ import org.jlab.jnp.hipo4.data.*;
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
 //---- imports for PHYSICS library
-import org.jlab.jnp.physics.*;
-import org.jlab.jnp.reader.*;
+import org.jlab.clas.physics.*;
+//import org.jlab.jnp.reader.*;
 import org.funp.utilities.*;
 import java.util.*;
 import java.io.*;

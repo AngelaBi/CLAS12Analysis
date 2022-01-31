@@ -21,10 +21,10 @@
   </properties>
 
 <repositories>
-     <repository>
+     <!-- <repository>
        <id>jhep-maven</id>
        <url>https://clasweb.jlab.org/jhep/maven</url>
-     </repository>
+     </repository> -->
      <repository>
        <id>clas12-maven</id>
        <url>https://clasweb.jlab.org/clas12maven</url>
@@ -32,8 +32,20 @@
    </repositories>
 
 
-
   <dependencies>
+<dependency>
+            <groupId>org.jlab.coat</groupId>
+            <artifactId>coat-libs</artifactId>
+            <version>7.0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jlab.jnp</groupId>
+            <artifactId>jnp-utils</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -41,11 +53,11 @@
       <scope>test</scope>
     </dependency>
    
-<dependency>
+<!-- <dependency>
        <groupId>org.jlab.jnp</groupId>
        <artifactId>jnp-physics</artifactId>
        <version>2.0-SNAPSHOT</version>
-     </dependency>
+     </dependency> -->
     <dependency>
        <groupId>org.jlab</groupId>
        <artifactId>groot</artifactId>
