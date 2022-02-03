@@ -33,7 +33,6 @@ public class DvcsHisto {
   public H1F VertexDuetron;
   public H2F vertexElecVSvertexDeut;
 
-
   public H2F dedxDeutvsP;
   //Missing quantities
   //public H1F MMass;// missing mass of a complete DVCS final state e hadron gamma
@@ -109,7 +108,7 @@ public class DvcsHisto {
 
   public H1F chisqHad;
 
-  public H2F chi2vsdeltabeta;
+  public H2F deltabetavschi2;
 
   public H1F helicityhisto;
   public H1F helicityrawhisto;
@@ -130,6 +129,7 @@ public class DvcsHisto {
 
   public DvcsHisto() {
      //dir = new TDirectory();
+    
     XvsY_electron = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
     //XvsY_electron_before = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
     
@@ -289,9 +289,9 @@ public class DvcsHisto {
     chisqHad=new H1F("Chi2Pid",100,-25,25);
     chisqHad.setTitle("ChiSquared PID");
 
-    chi2vsdeltabeta=new H2F("#Delta#beta_d vs #chi^2_PID","#Delta#beta_d vs #chi^2_PID",100,-30,30,100,-0.6,0.6);
-    chi2vsdeltabeta.setTitleX("#chi^2_PID");
-    chi2vsdeltabeta.setTitleY("#Delta#beta_d");
+    deltabetavschi2=new H2F("#Delta#beta_d vs #chi^2_PID","#Delta#beta_d vs #chi^2_PID",100,-30,30,100,-0.6,0.6);
+    deltabetavschi2.setTitleX("#chi^2_PID");
+    deltabetavschi2.setTitleY("#Delta#beta_d");
 
     helicityhisto=new H1F("Helicity",9,-4,4);
     helicityhisto.setTitleX("Beam Helicity");
@@ -375,12 +375,16 @@ public class DvcsHisto {
     vertexElecVSvertexDeut.fill(ev.getVertexElectron(),ev.getVertexDeuteron());
     dedxDeutvsP.fill(ev.vhadron.p(),ev.getDedxDeut());
     chisqHad.fill(ev.chi2pid());
-    chi2vsdeltabeta.fill(ev.chi2pid(),ev.beta()-ev.BetaCalc());
+    deltabetavschi2.fill(ev.chi2pid(),ev.beta()-ev.BetaCalc());
+    
 
     helicityhisto.fill(ev.helicity);
     helicityrawhisto.fill(ev.helicityraw);
     thisto.fill(-1*ev.t().mass2());
     pPerphisto.fill(ev.pPerp());
+
+
+    
 
     if(ev.helicity==1){
       Phiplus.fill(ev.PhiPlane());
@@ -580,7 +584,7 @@ public class DvcsHisto {
     dir.addDataSet(WvsQ2);
     dir.addDataSet(Q2vsXbj);
     dir.addDataSet(betacalcvsP);
-    dir.addDataSet(chi2vsdeltabeta);
+    dir.addDataSet(deltabetavschi2);
     dir.addDataSet(W);
     dir.addDataSet(hgTh);
     dir.addDataSet(hgEn);
