@@ -453,7 +453,7 @@ public byte detectorProt;
         //status 2000-2999 is FD
         //if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
 
-        if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
+        if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<4000){
           nelec++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
@@ -866,7 +866,7 @@ public byte detectorProt;
       //(this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when i do tag evetns
       (this.X("eh").mass2() < (-1.5* this.coneangle()+2) 
       && this.X("eh").mass2() >-2  
-      && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
+      //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
       && this.X("ehg").e()<2 
       && this.pPerp()<0.5
@@ -875,7 +875,7 @@ public byte detectorProt;
       && this.X("eh").mass() < 0.7
       && vertexCut
       //&& dedxCut
-      && -1*this.t().mass2()  < 1.4
+      //&& -1*this.t().mass2()  < 1.4
       /*&& getDedxDeut()> (-30*vhadron.p() +30)*/);
     }
     else if (conf==2){
@@ -884,7 +884,7 @@ public byte detectorProt;
       cut=
        (this.X("eh").mass2() < (-1* this.coneangle()+2) 
       && this.X("eh").mass2()>-2 
-      && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
+      //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /*&& ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
       && this.X("ehg").mass2()>-0.75 
       && this.X("ehg").e()<3 
@@ -895,7 +895,7 @@ public byte detectorProt;
       && this.X("eh").mass() < 0.7
       && vertexCut
       //&& dedxCut
-      && -1*this.t().mass2() < 1.4
+      //&& -1*this.t().mass2() < 1.4
      /* && getDedxDeut()> (-30*vhadron.p()+30)*/);
     } 
     return cut;
