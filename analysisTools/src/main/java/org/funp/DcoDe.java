@@ -623,7 +623,7 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
       if( ev.Exclusivitycut(runNumber)) {
         //&& (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
         hAC.fillBasicHisto(ev);
-        if (-ev.Q().mass2()>1.5){
+        if (-ev.Q().mass2()>1.5){//??????????
             BinnedHAC.fillBasicHisto(ev);
           }
         if (ev.GetConf()==1){
@@ -677,7 +677,7 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
           hACFD.fillBasicHisto(ev);
           FDCounter++;
           if (-ev.Q().mass2()>1.5){
-            BinnedHACFD.fillBasicHisto(ev);
+            BinnedHACFD.fillBasicHisto(ev);//?????????
           }
         }
         counter++;
