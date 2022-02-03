@@ -19,8 +19,6 @@ import org.jlab.groot.data.TDirectory;
 public class DvcsHisto {
 
   public H1F Xbj;
-  public H2F dedxCTOFvsP;
-  public H2F dedxCNDvsP;
 
   public H1F W; //invariant mass of e target -> e' X
   public H1F Q2;//Momentum transfer squared  of e-e'
@@ -28,30 +26,15 @@ public class DvcsHisto {
   public H2F WvsQ2;
   public H2F Q2vsXbj;
   public H2F tvsxb;
+  public H2F q2vst;
 //Nick Add
   public H1F VertexElectron;
   public H1F VertexDuetron;
   public H2F vertexElecVSvertexDeut;
 
   public H2F dedxDeutvsP;
-  //Missing quantities
-  //public H1F MMass;// missing mass of a complete DVCS final state e hadron gamma
-  //public H1F MMom;// missing mom of a complete DVCS final state e hadron gamma
-
-  public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingM2 ; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingP ; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingPx;// missing px of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingPy;// missing py of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingPz;// missing pz of a complete DVCS final state e hadron gamma
-
-  public H1F edXmissingE;
-
-  public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
-  public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
-  public H1F egXmissingM;
-  public H1F edXmissingM;
-  public H2F egXmissingM2vsTh;
+  public H2F dedxCTOFvsP;
+  public H2F dedxCNDvsP;
 
   public H2F ThvsPhi;//Theta vs phi for hadron
   public H2F elecThvsPhi;
@@ -60,37 +43,84 @@ public class DvcsHisto {
   public H2F elecThvsP;
   public H2F photThvsP;
 
-  public H2F q2vst;
-
-  //public H2F MMvsMpz;
-  //public H2F MpxvsMpz;
-
   public H1F hgTh;//theta gamma
   public H1F hgEn;//Energy gamma
   //public H1F DAngleGammaHist ; //angle between gamma vector and missing hadron+e vector
-  public H1F ConeAngleHist;//angle between gamma vector and missing hadron+e vector
-  public H1F MissThetaHist;//theta missing hadron+e vector
   public H1F PhiPlaneHist ; //angle between electrons plane and hadron/gamma plane
   public H1F DPhiHist ;//phi gamma minus phi missing hadron+e vector
-  public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
-  public H1F DeltaPhiPlaneMattHist;//angle planes Q2/hadron and Q2/gamma
+
+
+  public H1F betahadhisto;
+  public H1F betacalchisto;
+  public H2F betavsP;
+  public H2F deltabetavschi2;
+  public H1F deltabeta;
 
   public H1F ConeAngleBtElectronPhotonFD;
+
+  public H2F phivshelicityPlus;
+  public H2F phivshelicityMinus;
+  public H1F helicityhisto;
+  public H1F helicityrawhisto;
+
+  public H2F XvsY_electron;
+  
+  public H1F chisqHad;
+  public H1F thisto;
+
+
+
+  public H1F Phiplus;
+  public H1F Phiminus;
+
+  
+
+
+  //Missing quantities
+  //public H1F MMass;// missing mass of a complete DVCS final state e hadron gamma
+  //public H1F MMom;// missing mom of a complete DVCS final state e hadron gamma
+
+  //Exclusivity plots - All these are in Missing quant folder
+  public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingM2 ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingP ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingPx;// missing px of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingPy;// missing py of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingPz;// missing pz of a complete DVCS final state e hadron gamma
+  public H1F pPerphisto;
+
+  public H1F edXmissingE;
+  public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
+  public H1F edXmissingM;
+  
+  public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
+  public H1F egXmissingM;
+  public H2F egXmissingM2vsTh;
+
+  public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
+  public H1F DeltaPhiPlaneMattHist;//angle planes Q2/hadron and Q2/gamma
+  public H1F MissThetaHist;//theta missing hadron+e vector
+  public H1F ConeAngleHist;//angle between gamma vector and missing hadron+e vector
 
   public H2F coneanglevsedgXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehgX
   public H2F coneanglevsedXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehX
   public H2F coneanglevspperp;
   public H2F coneanglevsegXM2;
-  public H1F betahadhisto;
-  public H1F betacalchisto;
-  public H2F betavsP;
+
+
+
+  //public H2F MMvsMpz;
+  //public H2F MpxvsMpz;
+
+ 
+
+
   public H2F betavsPdeut;
   public H2F betavsPprot;
   public H2F betavsPpion;
   public H2F betavsPkaon;
   public H2F betavsPplus;
   public H2F betacalcvsP;
-  public H1F deltabeta;
 
 
   public H2F ctofdedxvsp;
@@ -100,24 +130,9 @@ public class DvcsHisto {
   public H2F ctofdedxvsppion;
   public H2F ctofdedxvspkaon;
 
-  public H2F phivshelicityPlus;
-  public H2F phivshelicityMinus;
-  public H2F XvsY_electron;
   //public H2F XvsY_electron_after;
 
 
-  public H1F chisqHad;
-
-  public H2F deltabetavschi2;
-
-  public H1F helicityhisto;
-  public H1F helicityrawhisto;
-
-  public H1F Phiplus;
-  public H1F Phiminus;
-
-  public H1F thisto;
-  public H1F pPerphisto;
   //TDirectory dir = new TDirectory();
 
   private String outputdir=new String(".");
@@ -538,39 +553,34 @@ public class DvcsHisto {
     dir.mkdir(hipodirectory);
     dir.cd(hipodirectory);
     
-    dir.addDataSet(edXmissingE);
+    dir.addDataSet(edgXmissingE);
     dir.addDataSet(edgXmissingM2);
-    dir.addDataSet(egXmissingM);
-    dir.addDataSet(DeltaPhiPlaneHist);
-    dir.addDataSet(DeltaPhiPlaneMattHist);
+    dir.addDataSet(edgXmissingP);
     dir.addDataSet(edgXmissingPx);
     dir.addDataSet(edgXmissingPy);
     dir.addDataSet(edgXmissingPz);
-    dir.addDataSet(MissThetaHist);
+    dir.addDataSet(pPerphisto);
+    
+    dir.addDataSet(edXmissingE);
+    dir.addDataSet(edXmissingM2);
+    dir.addDataSet(edXmissingM);
+
     dir.addDataSet(egXmissingM2);
+    dir.addDataSet(egXmissingM);
+
+    dir.addDataSet(DeltaPhiPlaneHist);
+    dir.addDataSet(DeltaPhiPlaneMattHist);
+    dir.addDataSet(MissThetaHist);
+    dir.addDataSet(ConeAngleHist);
+
+    dir.addDataSet(coneanglevspperp);
+    dir.addDataSet(coneanglevsedXM2);
+    dir.addDataSet(coneanglevsegXM2);
+    dir.addDataSet(coneanglevsegXM2);
+
+
     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     
-    // //ec4.cd(0).draw(edgXmissingE);
-    // ec4.cd(0).draw(edXmissingE);
-    // ec4.cd(1).draw(edgXmissingM2);
-    // ec4.cd(2).draw(edgXmissingP);
-
-
-    // ec4.cd(3).draw(edXmissingM);
-    // ec4.cd(4).draw(edXmissingM2);
-    // ec4.cd(5).draw(egXmissingM);
-    
-    // ec4.cd(6).draw(DeltaPhiPlaneHist);
-    // ec4.cd(7).draw(DeltaPhiPlaneMattHist);
-    // ec4.cd(8).draw(edgXmissingPx);
-    // ec4.cd(9).draw(edgXmissingPy);
-    // ec4.cd(10).draw(edgXmissingPz);
-    // ec4.cd(11).draw(MissThetaHist);
-    // ec4.cd(12).draw(egXmissingM2);
-    // ec4.getCanvas().getScreenShot();
-    // System.out.println(this.outputdir+"/"+ec4.getTitle()+".png" );
-    // ec4.getCanvas().save(this.outputdir+"/"+ec4.getTitle()+".png");
-    //ec4.getScreenShot();
 
 
 
@@ -580,32 +590,55 @@ public class DvcsHisto {
     String hipodirectory = "/"+directory;
     dir.mkdir(hipodirectory);
     dir.cd(hipodirectory);
+    
     dir.addDataSet(Xbj);
+    dir.addDataSet(Q2);
+    dir.addDataSet(W);
+    dir.addDataSet(hadmom);
     dir.addDataSet(WvsQ2);
     dir.addDataSet(Q2vsXbj);
-    dir.addDataSet(betacalcvsP);
-    dir.addDataSet(deltabetavschi2);
-    dir.addDataSet(W);
-    dir.addDataSet(hgTh);
-    dir.addDataSet(hgEn);
-   
-
-    dir.addDataSet(Q2);
-    dir.addDataSet(ConeAngleHist);
-    dir.addDataSet(ConeAngleBtElectronPhotonFD);
-    dir.addDataSet(PhiPlaneHist);
-    dir.addDataSet(DPhiHist);
+    //dir.addDataSet(tvsxb);
     dir.addDataSet(q2vst);
-    dir.addDataSet(phivshelicityMinus);
-    dir.addDataSet(chisqHad);
-    dir.addDataSet(thisto);
-    dir.addDataSet(betacalchisto);
-    dir.addDataSet(betahadhisto);
-    dir.addDataSet(XvsY_electron);
+    
+
     dir.addDataSet(VertexElectron);
     dir.addDataSet(VertexDuetron);
-    dir.addDataSet(dedxCNDvsP);
+    dir.addDataSet(vertexElecVSvertexDeut);
+    dir.addDataSet(dedxDeutvsP);
     dir.addDataSet(dedxCTOFvsP);
+    dir.addDataSet(dedxCNDvsP);
+    
+
+    dir.addDataSet(ThvsPhi);
+    dir.addDataSet(elecThvsPhi);
+    dir.addDataSet(photThvsPhi);
+    dir.addDataSet(ThvsP);
+    dir.addDataSet(elecThvsP);
+    dir.addDataSet(photThvsP);
+
+    dir.addDataSet(hgTh);
+    dir.addDataSet(hgEn);
+    dir.addDataSet(PhiPlaneHist);
+    dir.addDataSet(DPhiHist);
+
+    dir.addDataSet(betahadhisto);
+    dir.addDataSet(betacalchisto);
+    dir.addDataSet(betacalcvsP);
+    dir.addDataSet(deltabetavschi2);
+    dir.addDataSet(deltabeta);
+   
+    dir.addDataSet(ConeAngleBtElectronPhotonFD);
+
+    //dir.addDataSet(phivshelicityPlus);
+    dir.addDataSet(phivshelicityMinus);
+    //dir.addDataSet(helicityhisto);
+    //dir.addDataSet(helicityrawhisto);
+
+    dir.addDataSet(XvsY_electron);
+
+    dir.addDataSet(chisqHad);
+    dir.addDataSet(thisto);
+    dir.addDataSet(ConeAngleHist);//Should be in missing
     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     // ec.divide(5,5);
     // ec.cd(0).draw(WvsQ2);
