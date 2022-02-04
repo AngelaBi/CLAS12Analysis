@@ -99,6 +99,8 @@ processInput inputParam=new processInput(args);
     boolean showAsymm_All = true;
     boolean showAsymm_FT = true;
     boolean showAsymm_FD = true;
+
+    boolean showExcCutsplots=true;
     // TCanvas BinnedQ2_1 = new TCanvas("Asymmetry Q2_1",1200,1200);
     // draw_asymmetry(BinnedQ2_1, "Asymmetry Q2_1");
 
@@ -159,6 +161,13 @@ processInput inputParam=new processInput(args);
         TCanvas ec401 = new TCanvas("Excl after DVCS cuts FD",1500,1500);
         Draw_Missing_Quants(ec401,"Excl after DVCS cuts FD");
     }
+if(showExcCutsplots){
+
+    TCanvas ec1000 = new TCanvas("Exclusivity cuts for selection of edg FT",1200,1000);
+    DrawCutsFT( ec1000, "Excl after DVCS cuts FT");//changed this line
+    //TCanvas ec1001 = new TCanvas("Exclusivity cuts for selection of edg FD",1200,1000);
+    //DrawCutsFD( ec1001, "Excl after DVCS cuts FD");//changed this line
+   }
 
     if (showExcl_missing_quants_ALL){
         TCanvas ec5 = new TCanvas("Excl after DVCS and exc cuts",1500,1500);
@@ -219,8 +228,7 @@ processInput inputParam=new processInput(args);
     TCanvas ec89 = new TCanvas("DVCS and Excl Cuts FD Kinematics",1200,1000);
     Draw_Kinematics( ec89, "Kinematics Excl Cuts FD");//changed this line
    }
-    
-  //   if (showConeAngle_NO_CUTS_All){
+     //   if (showConeAngle_NO_CUTS_All){
   //     //TCanvas ec9 = new TCanvas("AllNoCuts ConeAngle All",1200,1000);
   //     hNC.DrawConeAngle(dir,"AllNoCuts ConeAngle All");
   //   }
@@ -442,4 +450,59 @@ processInput inputParam=new processInput(args);
         DataFitter.fit(Asymfunc,buildAsym(ecA, dir),"");
         ecA.draw(Asymfunc,"same");
     }
+public static void DrawCutsFT(TCanvas ec4, String dir){
+  /*
+
+        *      (this.X("eh").mass2() < (-1.5* this.coneangle()+2) HIST EXISTS coneanglevsedXM2 HIPO
+        *       && this.X("eh").mass2() >-2   HIST EXISTS edXmissingM2. ??
+        *       && this.X("ehg").e()<2.       HIST EXISTS edgXmissingE
+        *       && this.pPerp()<0.5.           HIST EXISTS  pPerphisto
+        *       &&this.X("ehg").p()<1.5      HIST EXISTS edgXmissingP
+        *       && Math.abs(this.chi2pid()) < 3.5 TO REMOVE?
+        *       && this.X("eh").mass() < 0.7  HIST EXISTS edXmissingM
+        *       && vertexCut HISTS exist VertexElectron VertexDuetron
+
+
+  */
+  
+
+  H2F coneanglevsedXM2 =(H2F) dir2.getObject(dir+"/","coneanglevsedXM2");
+  H1F edXmissingM2=(H1F) dir2.getObject(dir+"/","edXmissingM2");
+  H1F edgXmissingE=(H1F) dir2.getObject(dir+"/","edgXmissingE");
+  H1F pPerphisto=(H1F) dir2.getObject(dir+"/","pPerp");
+  H1F edgXmissingP=(H1F) dir2.getObject(dir+"/","edgXmissingP");
+  H1F eDXmissingM=(H1F) dir2.getObject(dir+"/","eDXmissingM");
+  H1F Chi2Pid=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","Chi2Pid");
+  H1F VertexE=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","VertexElectron");
+  H1F VertexD=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","VertexDeuteron");
+  
+  DataLine line1 = new DataLine(-2,0.0,-2,edXmissingM2.getMax());
+line1.setLineColor(2);
+line1.setLineWidth(2);
+//ec.getScreenShot();
+  
+  DataLine line2 = new DataLine(2,0.0,2,edgXmissingE.getMax());
+line2.setLineColor(2);
+line2.setLineWidth(2);
+
+  ec4.divide(3,3);
+  ec4.cd(0).draw(coneanglevsedXM2);
+  ec4.cd(1).draw(edXmissingM2);
+ System.out.println(ec4.getHeight());
+ec4.cd(1).draw(line1);
+  ec4.cd(2).draw(edgXmissingE);
+ec4.cd(2).draw(line2);
+  ec4.cd(3).draw(pPerphisto);
+  ec4.cd(4).draw(edgXmissingP);
+  ec4.cd(5).draw(eDXmissingM);
+  ec4.cd(6).draw(Chi2Pid);
+  ec4.cd(7).draw(VertexE);
+  ec4.cd(8).draw(VertexD);
+
+
+
+ 
+}
+public static void DrawCutsFD(TCanvas ec4, String dir){
+}
 }
