@@ -176,9 +176,9 @@ public class DvcsHisto {
     coneanglevspperp.setTitle("Cone Angle vs Pperp");
     coneanglevspperp.setTitleX("Pperp");
     coneanglevspperp.setTitleY("Cone Angle");
-    VertexElectron = new H1F("Vertex Electron", 100,-10.0,10.0);
+    VertexElectron = new H1F("VertexElectron","Vertex Electron", 100,-10.0,10.0);
     VertexElectron.setTitleX("Vertex Electron");
-    VertexDuetron = new H1F("Vertex Dueteron", 100,-10.0,10.0);
+    VertexDuetron = new H1F("VertexDeuteron","Vertex Dueteron", 100,-10.0,10.0);
     VertexDuetron.setTitleX("Vertex Dueteron");
     vertexElecVSvertexDeut = new H2F ("Vertex Electron vs Vertex Deuteron","Vertex Electron vs Vertex Deuteron",100,-10,10,100,-10,10);
     vertexElecVSvertexDeut.setTitle("Vertex electron vs Vertex Deuteron");
@@ -268,15 +268,15 @@ public class DvcsHisto {
     DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane2",100,-100,100);
     DeltaPhiPlaneMattHist.setTitleX("Delta Phi Plane Hattawy");
 
-     ConeAngleBtElectronPhotonFD = new H1F("Cone Angle Bt Electron and Photon", 100,0,80);
-     ConeAngleBtElectronPhotonFD.setTitleX("Cone Angle Between Electron and Photon");
-    coneanglevsedgXM2 = new H2F("eDGammaX missing M2 vs Cone Angle","eDGammaX missing M2 vs Cone Angle",100,0,20,100,-1,0.5);
+    ConeAngleBtElectronPhotonFD = new H1F("Cone Angle Bt Electron and Photon", 100,0,80);
+    ConeAngleBtElectronPhotonFD.setTitleX("Cone Angle Between Electron and Photon");
+    coneanglevsedgXM2 = new H2F("coneanglevsedgXM2","eDGammaX missing M2 vs Cone Angle",100,0,20,100,-1,0.5);
     coneanglevsedgXM2.setTitleX("Cone Angle (deg.)");
     coneanglevsedgXM2.setTitleY("eDGammaX missing M2 (GeV)");
-    coneanglevsedXM2 = new H2F("(M_x)^2(ed#rarrowededX) vs #theta#_{#gamma,x} ","(M_x)^2(ed#rarrowededX) vs #theta#_{#gamma,x} ",100,0,20,100,-10,10);
+    coneanglevsedXM2 = new H2F("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_,_x",100,0,20,100,-10,10);
     coneanglevsedXM2.setTitleX("#theta#_{#gamma,x} [deg.]");
     coneanglevsedXM2.setTitleY("(M_x)^2(ed#rarrowed#X) [GeV/c^2]");
-    coneanglevsegXM2 = new H2F("egX missing M2 vs Cone Angle","egX missing M2 vs Cone Angle",100,0,20,100,0,20);
+    coneanglevsegXM2 = new H2F("coneanglevsegXM2","egX missing M2 vs Cone Angle",100,0,20,100,0,20);
     coneanglevsegXM2.setTitleX("Cone Angle (deg.)");
     coneanglevsegXM2.setTitleY("egX missing M2 (GeV)");
 
@@ -301,8 +301,8 @@ public class DvcsHisto {
     ctofdedxvspprot=new H2F("CTOF energy vs p",100,0,2,100,0,100);
     ctofdedxvsppion=new H2F("CTOF energy vs p",100,0,2,100,0,100);
     ctofdedxvspkaon=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    chisqHad=new H1F("Chi2Pid",100,-25,25);
-    chisqHad.setTitle("ChiSquared PID");
+    chisqHad=new H1F("Chi2Pid","#chi^2 PID hadron",100,-25,25);
+    //chisqHad.setTitle("ChiSquared PID");
 
     deltabetavschi2=new H2F("#Delta#beta_d vs #chi^2_PID","#Delta#beta_d vs #chi^2_PID",100,-30,30,100,-0.6,0.6);
     deltabetavschi2.setTitleX("#chi^2_PID");
