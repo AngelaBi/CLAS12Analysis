@@ -66,6 +66,7 @@ public class DcoDe
   
 
     static TDirectory dir;
+    static TDirectory rootdir;
     //DvcsHisto hft     = new DvcsHisto();//Forward Tagger
     //DvcsHisto hfd     = new DvcsHisto();//Forward Detector
   
@@ -146,6 +147,7 @@ public class DcoDe
       hNCFD     = new DvcsHisto();//No cuts
       hNCFD.setOutputDir(inputParam.getOutputDir());
       dir = new TDirectory();
+      rootdir = new TDirectory();
       //DVCS CUTS
       hDC     = new DvcsHisto();//DVCS cuts
       hDC.setOutputDir(inputParam.getOutputDir());
@@ -391,7 +393,15 @@ public class DcoDe
     boolean showAsymm_All = true;
     boolean showAsymm_FT = true;
     boolean showAsymm_FD = true;
-
+    hNC.writeHipooutput(rootdir,"NC");
+    hNCFD.writeHipooutput(rootdir,"NCFD");
+    hNCFT.writeHipooutput(rootdir,"NCFT");
+    hDC.writeHipooutput(rootdir,"DC");
+    hDCFD.writeHipooutput(rootdir,"DCFD");
+    hDCFT.writeHipooutput(rootdir,"DCFT");
+    hAC.writeHipooutput(rootdir,"AC");
+    hACFD.writeHipooutput(rootdir,"ACFD");
+    hACFT.writeHipooutput(rootdir,"ACFT");   
     if (showParticleComparison_NO_CUTS){
      // TCanvas ecNC = new TCanvas("Particle Comparsion No Cuts",1500,1500);
       hNC.DrawParticleComparison(dir, "Particle Comparsion No Cuts");
