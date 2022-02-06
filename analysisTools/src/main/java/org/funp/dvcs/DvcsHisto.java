@@ -1,12 +1,18 @@
 package org.funp.dvcs;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*;
+
+import de.erichseifert.vectorgraphics2d.intermediate.commands.SetHintCommand;
+
 import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
 import org.jlab.groot.fitter.*;
 import org.jlab.groot.math.*;
+
+import java.util.ArrayList;
+
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
@@ -19,7 +25,6 @@ import org.jlab.groot.data.TDirectory;
 public class DvcsHisto {
 
   public H1F Xbj;
-
   public H1F W; //invariant mass of e target -> e' X
   public H1F Q2;//Momentum transfer squared  of e-e'
   public H1F hadmom;
@@ -27,14 +32,9 @@ public class DvcsHisto {
   public H2F Q2vsXbj;
   public H2F tvsxb;
   public H2F q2vst;
-//Nick Add
   public H1F VertexElectron;
   public H1F VertexDuetron;
   public H2F vertexElecVSvertexDeut;
-
-  public H2F dedxDeutvsP;
-  public H2F dedxCTOFvsP;
-  public H2F dedxCNDvsP;
 
   public H2F ThvsPhi;//Theta vs phi for hadron
   public H2F elecThvsPhi;
@@ -45,16 +45,8 @@ public class DvcsHisto {
 
   public H1F hgTh;//theta gamma
   public H1F hgEn;//Energy gamma
-  //public H1F DAngleGammaHist ; //angle between gamma vector and missing hadron+e vector
   public H1F PhiPlaneHist ; //angle between electrons plane and hadron/gamma plane
   public H1F DPhiHist ;//phi gamma minus phi missing hadron+e vector
-
-
-  public H1F betahadhisto;
-  public H1F betacalchisto;
-  public H2F betavsP;
-  public H2F deltabetavschi2;
-  public H1F deltabeta;
 
   public H1F ConeAngleBtElectronPhotonFD;
 
@@ -68,17 +60,8 @@ public class DvcsHisto {
   public H1F chisqHad;
   public H1F thisto;
 
-
-
   public H1F Phiplus;
   public H1F Phiminus;
-
-  
-
-
-  //Missing quantities
-  //public H1F MMass;// missing mass of a complete DVCS final state e hadron gamma
-  //public H1F MMom;// missing mom of a complete DVCS final state e hadron gamma
 
   //Exclusivity plots - All these are in Missing quant folder
   public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
@@ -106,223 +89,177 @@ public class DvcsHisto {
   public H2F coneanglevsedXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehX
   public H2F coneanglevspperp;
   public H2F coneanglevsegXM2;
-
-
-
-  //public H2F MMvsMpz;
-  //public H2F MpxvsMpz;
-
- 
-
-
-  public H2F betavsPdeut;
-  public H2F betavsPprot;
-  public H2F betavsPpion;
-  public H2F betavsPkaon;
-  public H2F betavsPplus;
-  public H2F betacalcvsP;
-
-
+  //pid id histos 
+  public H2F betacalcvsP;//y
+  public H1F betahadhisto;//y
+  public H1F betacalchisto;//y
+  public H2F betavsP;//y
+  public H2F deltabetavschi2;//y
+  public H1F deltabeta;//y
   public H2F ctofdedxvsp;
-  public H2F ctofdedxvspplus;
-  public H2F ctofdedxvspdeut;
-  public H2F ctofdedxvspprot;
-  public H2F ctofdedxvsppion;
-  public H2F ctofdedxvspkaon;
+  public H2F dedxDeutvsP;
+  public H2F dedxCTOFvsP;
+  public H2F dedxCNDvsP;
 
-  //public H2F XvsY_electron_after;
-
-
-  //TDirectory dir = new TDirectory();
+  public H2F thgvsthe;
+  ArrayList<Object> kinehistos;
+  ArrayList<Object> exclhistos;
+  ArrayList<Object> pidhistos;
+  boolean readMode=false;
+  private TDirectory rootDirfile;
+  private String baseDir;//NC DC AC
+  private String Config;//FT,FT or nothing
 
   private String outputdir=new String(".");
+
   public void setOutputDir(String otherdir){
-    
     this.outputdir=otherdir;
     System.out.println("**** setting out dir for plots to" + this.outputdir);
-  }
+}
+public DvcsHisto(TDirectory rootdir, String basedir,String conf){
+  readMode=true;
+  rootDirfile=rootdir;
+  baseDir=basedir;
+  Config=conf;
+  SetHisto();
+  
+}
+  
 
   public DvcsHisto() {
-     //dir = new TDirectory();
-    
-    XvsY_electron = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
-    //XvsY_electron_before = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
-    
-    dedxCTOFvsP = new H2F("dedx CTOF vs P", "dedx CTOF vs P", 100,0,2,100,0,30);
-    dedxCTOFvsP.setTitle("dE/dx CTOF vs P");
-
-    dedxCNDvsP = new H2F("dedx CND vs P", "dedx CND vs P", 100,0,2,100,0,30);
-    dedxCNDvsP.setTitle("dE/dx CND vs P");
-
-    Xbj=new H1F("X_b",100,0,1.0);
-    Xbj.setTitle("X_b");
-    W= new H1F("W" ,100, 0, 10.0);
-    W.setTitleX("W [GeV]");
-    Q2 = new H1F("Q2",100, 0.1, 4.0);
-    Q2.setTitleX("Q^2 [GeV/c^2]^2");
-    hadmom = new H1F("Hadron Momentum",100,0,10.0);
-    hadmom.setTitleX("Deteron momentum [GeV/c]");
-    WvsQ2 = new H2F("Q2 vs W", "Q2 vs W", 100,0,7,100,0,10);
-    WvsQ2.setTitle("Q2 vs W");
-    WvsQ2.setTitleX("W [GeV]");
-    WvsQ2.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj = new H2F("Q^2 vs X_b","Q^2 vs X_b",100,0,1,100,0,10);
-    Q2vsXbj.setTitleY("Q^2 [GeV/c^2]");
-    Q2vsXbj.setTitleX("X_b");
-    
-    //Nick Add
-    dedxDeutvsP = new H2F("dedxDeutvsP","dedxDeutvsP",100,0,2,100,0,50);
-    coneanglevspperp = new H2F("Cone Angle vs Pperp", "Cone Angle vs Pperp", 100,0,10,100,0,1);
-    coneanglevspperp.setTitle("Cone Angle vs Pperp");
-    coneanglevspperp.setTitleX("Pperp");
-    coneanglevspperp.setTitleY("Cone Angle");
-    VertexElectron = new H1F("VertexElectron","Vertex Electron", 100,-10.0,10.0);
-    VertexElectron.setTitleX("Vertex Electron");
-    VertexDuetron = new H1F("VertexDeuteron","Vertex Dueteron", 100,-10.0,10.0);
-    VertexDuetron.setTitleX("Vertex Dueteron");
-    vertexElecVSvertexDeut = new H2F ("Vertex Electron vs Vertex Deuteron","Vertex Electron vs Vertex Deuteron",100,-10,10,100,-10,10);
-    vertexElecVSvertexDeut.setTitle("Vertex electron vs Vertex Deuteron");
-
-    phivshelicityPlus = new H2F("phi vs helicity", "phi vs helicity", 100,0,360,100,-4,4);
-    phivshelicityPlus.setTitle("helicity vs phi (Plus)");
-    phivshelicityMinus = new H2F("phi vs helicity", "phi vs helicity", 100,0,360,100,-4,4);
-    phivshelicityMinus.setTitle("helicity vs phi (Plus)");
-    //MMass = new H1F("MMass",100,-10,10);
-    //MMass.setTitleX("Missing Mass Squared");
-    //MMom = new H1F("MMom",100,0,10);
-    //MMom.setTitleX("Missing Momentum");
-
-
-    edgXmissingE = new H1F("edgXmissingE",100,0,10);
-    edgXmissingE.setTitleX("eDγX Missing Energy [GeV]");
-    edXmissingE = new H1F ("edXmissingE",100,-5,5);
-    edXmissingE.setTitleX("eDX Missing Energy [GeV]");
-    edgXmissingM2 = new H1F("edgXmissingM2",100,-4,4);
-    edgXmissingM2.setTitleX("eDγX Missing Mass^2 [GeV/c^2]^2");
-    edgXmissingP = new H1F("edgXmissingP",100,0,4);
-    edgXmissingP.setTitleX("eDγX Missing Momentum [GeV/c]");
-    edgXmissingPx = new H1F("MMomx",100,-1,1);
-    edgXmissingPx.setTitleX("Missing X Momentum");
-    edgXmissingPy = new H1F("MMomy",100,-1,1);
-    edgXmissingPy.setTitleX("Missing Y Momentum");
-    edgXmissingPz = new H1F("MMomz",100,-5,5);
-    edgXmissingPz.setTitleX("Missing Z Momentum [GeV/c]");
-
-    edXmissingM2 = new H1F("edXmissingM2",100,-10,10);
-    edXmissingM2.setTitleX("eDX Missing Mass^2 [GeV/c^2]^2");
-    egXmissingM2 = new H1F("egXmissingM2",100,-0,10);
-    egXmissingM2.setTitleX("eGammaX Missing Mass2");
-    edXmissingM = new H1F("eDXmissingM",100,-0,5);
-    edXmissingM.setTitleX("eDX Missing Mass");
-    egXmissingM = new H1F("egXmissingM",100,-0,5);
-    egXmissingM.setTitleX("M_x(ed#rarrowe#gammaX)");
-    egXmissingM2vsTh =new H2F("egXmissingM2vsTh",100,0,140,100,0,10);
-    egXmissingM2vsTh.setTitle("egXmissing M2 vs Th");
-    egXmissingM2vsTh.setTitleX("hadron theta");
-    ThvsPhi = new H2F("Deuteron #theta vs #phi","Deuteron #theta vs #phi",100,-180,180,100,0,180);
-    ThvsPhi.setTitleX("#phi [Degrees]");
-    ThvsPhi.setTitleY("#theta [Degrees]");
-    ThvsP = new H2F("Deuteron p vs #theta","Deuteron p vs #theta ",100,0,180,100,0,10.6);
-    ThvsP.setTitleY("p [GeV/c]");
-    ThvsP.setTitleX("#theta [Degrees]");
-    q2vst = new H2F("Q2 vs t", "Q2 vs t",100,0,5,100,0,5);
-    q2vst.setTitle("Q2 vs t");
-    q2vst.setTitleY("Q2");
-    q2vst.setTitleX("t");
-    elecThvsPhi = new H2F("Electron #theta vs #phi","Electron #theta vs #phi",100,-180,180,100,0,100);
-    elecThvsPhi.setTitleX("#phi [Degrees]");
-    elecThvsPhi.setTitleY("#theta [Degrees]");
-    elecThvsP = new H2F("Electron p vs #theta","Electron p vs #theta ",100,0,40,100,0,10.6);
-    elecThvsP.setTitle("p [GeV/c]");
-    elecThvsP.setTitleX("#theta [Degrees]");
-
-    photThvsPhi = new H2F("Photon #theta vs #phi","Photon #theta vs #phi",100,-180,180,100,0,40);
-    photThvsPhi.setTitleX("#phi [Degrees]");
-    photThvsPhi.setTitleY("#theta [Degrees]");
-    photThvsP = new H2F("Photon p vs #theta","Photon p vs #theta ",100,0,40,100,0,10.6);
-    photThvsP.setTitleY("p [GeV/c]");
-    photThvsP.setTitleX("#theta [Degrees]");
-
-    //MMvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
-    //MMvsMpz.setTitleX("Missing Mass");
-    //MMvsMpz.setTitleY("Missing Z Momentum");
-    //MpxvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
-    //MpxvsMpz.setTitleX("Missing X Momentum");
-    //MpxvsMpz.setTitleY("Missing Z Momentum");
-    hgTh = new H1F("hgTh",100,0,50);
-    hgTh.setTitleX("Photon Theta");
-    hgEn = new H1F("Photon energy",100,0,10);
-    hgEn.setTitleX("Photon Energy [GeV/c^2]");
-    //DAngleGammaHist = new H1F("DAngleGammaHist",100,-15,100);
-    //DAngleGammaHist.setTitle("Angle between gamma and missing eDX");
-    ConeAngleHist = new H1F("ConeAngleHist",100,-3,10);
-    ConeAngleHist.setTitleX("Angle between gamma and missing eDX");
-    MissThetaHist = new H1F("MissThetaHist",100,0,180);
-    MissThetaHist.setTitleX("Missing Photon Theta");
-    PhiPlaneHist = new H1F("PhiPlaneHist",100,0,360);
-    PhiPlaneHist.setTitleX("#phi, the angle between the Leptonic and Hadronic planes");
-    DPhiHist = new H1F("DPhiHist",100,-10,10);
-    DPhiHist.setTitle("DPhi");
-    DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-10,10);
-    DeltaPhiPlaneHist.setTitleX("Delta Phi Plane");
-    DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane2",100,-100,100);
-    DeltaPhiPlaneMattHist.setTitleX("Delta Phi Plane Hattawy");
-
-    ConeAngleBtElectronPhotonFD = new H1F("Cone Angle Bt Electron and Photon", 100,0,80);
-    ConeAngleBtElectronPhotonFD.setTitleX("Cone Angle Between Electron and Photon");
-    coneanglevsedgXM2 = new H2F("coneanglevsedgXM2","eDGammaX missing M2 vs Cone Angle",100,0,20,100,-1,0.5);
-    coneanglevsedgXM2.setTitleX("Cone Angle (deg.)");
-    coneanglevsedgXM2.setTitleY("eDGammaX missing M2 (GeV)");
-    coneanglevsedXM2 = new H2F("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_,_x",100,0,20,100,-10,10);
-    coneanglevsedXM2.setTitleX("#theta#_{#gamma,x} [deg.]");
-    coneanglevsedXM2.setTitleY("(M_x)^2(ed#rarrowed#X) [GeV/c^2]");
-    coneanglevsegXM2 = new H2F("coneanglevsegXM2","egX missing M2 vs Cone Angle",100,0,20,100,0,20);
-    coneanglevsegXM2.setTitleX("Cone Angle (deg.)");
-    coneanglevsegXM2.setTitleY("egX missing M2 (GeV)");
-
-    //pid histograms
-    betavsP = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betavsPplus = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betavsPdeut = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betavsPprot = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betavsPpion = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betavsPkaon = new H2F("Beta vs P","Beta vs P", 100,0,10.2,100,0,1.1);
-    betacalchisto = new H1F("#beta_calc","#beta_calc",100,0,1);
-    betacalchisto.setTitleX("#beta calculated from relativistic momentum");
-    betahadhisto = new H1F("#beta","#beta",100,0,1);
-    betacalchisto.setTitleX("Measured #beta");
-    betacalcvsP = new H2F("BetaCalc vs P","BetaCalc vs P", 100,0,10.2,100,0,1.1);
-    deltabeta = new H1F("Beta - BetaCalc",100,-0.6,0.2);
-    deltabeta.setTitleX("Beta - BetaCalc");
-
-    ctofdedxvsp=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    ctofdedxvspplus=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    ctofdedxvspdeut=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    ctofdedxvspprot=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    ctofdedxvsppion=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    ctofdedxvspkaon=new H2F("CTOF energy vs p",100,0,2,100,0,100);
-    chisqHad=new H1F("Chi2Pid","#chi^2 PID hadron",100,-25,25);
-    //chisqHad.setTitle("ChiSquared PID");
-
-    deltabetavschi2=new H2F("#Delta#beta_d vs #chi^2_PID","#Delta#beta_d vs #chi^2_PID",100,-30,30,100,-0.6,0.6);
-    deltabetavschi2.setTitleX("#chi^2_PID");
-    deltabetavschi2.setTitleY("#Delta#beta_d");
-
-    helicityhisto=new H1F("Helicity",9,-4,4);
-    helicityhisto.setTitleX("Beam Helicity");
-    helicityrawhisto=new H1F("Helicity Raw",9,-4,4);
-    helicityrawhisto.setTitleX("Helicity Raw");
-
-    Phiplus = new H1F("Phiplus",10,0,360);
-    Phiplus.setTitleX("Phi Plus");
-    Phiminus = new H1F("Phiminus",10,0,360);
-    Phiminus.setTitleX("Phi Minus");
-    thisto = new H1F("-t",100,0,5);
-    thisto.setTitleX("-t [GeV/c]^2");
-    pPerphisto = new H1F("pPerp","pPerp",100,0,3);
-    //System.out.println("creating histograms"  );
+    SetHisto();
   }
-  
+  public void SetHisto(){
+    kinehistos= new ArrayList<Object>();
+    exclhistos= new ArrayList<Object>();
+    pidhistos = new ArrayList<Object>();
+    Xbj=createHisto("Xbj","x_b_j", "", 100, 0., 1.,"Kine");
+    W=createHisto("W","W","W [GeV]",100,0,10,"Kine");
+    Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"Kine");
+    hadmom=createHisto("hadmom","Deuteron Momentum","p [GeV/c]",100,0,10.0,"Kine");
+    WvsQ2=createHisto("Q2vsW", "Q2 vs W", "W [GeV]","Q^2 [GeV/c^2]", 100,0,7,100,0,10,"Kine");
+    Q2vsXbj=createHisto("Q2vsXb","Q^2 vs X_b", "X_b", "Q^2 [GeV/c^2]", 100,0,1,100,0,10, "Kine");
+    q2vst=createHisto("Q2vst",  "Q2 vs t", "t", "Q2", 100,0,5,100,0,5, "Kine");
+    VertexElectron=createHisto("VertexElectron","Vertex Electron", "z",100,-10.0,10.0, "Kine");
+    VertexDuetron=createHisto("VertexDeuteron","Vertex Dueteron", "z",  100,-10.0,10.0, "Kine");
+    vertexElecVSvertexDeut=createHisto("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron", "", "", 100,-10,10,100,-10,10, "Kine");
+    
+    ThvsPhi=createHisto("Deuteronthvsphi","Deuteron #theta vs #phi", "#phi [Degrees", "#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
+    photThvsPhi=createHisto("Photonthvsphi","Photon #theta vs #phi", "#phi [Degrees]", "#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
+    elecThvsPhi=createHisto("Electronthvsphi","Electron #theta vs #phi", "#phi [Degrees]" ,"#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
+    ThvsP=createHisto("Deuteronpvsth", "Deuteron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
+    elecThvsP=createHisto("Electronpvstheta", "Electron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
+    photThvsP=createHisto("Photonpvstheta", "Photon p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
+    hgTh=createHisto("hgTh", "Photon Theta", "#theta_#gamma",100,0,50,"Kine");
+    hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,50,"Kine");
+    PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
+    DPhiHist=createHisto("DPhiHist", "DPhi", "", 100,-10,10, "Kine");
+    ConeAngleBtElectronPhotonFD=createHisto("ConeAngleBtElectronandPhoton", "Cone Angle Between Electron and Photon", "", 100,0,80, "Kine");
+    phivshelicityPlus=createHisto("phivshelicityP", "phi vs helicity plus", "", "", 100,0,360,100,-4,4, "Kine");
+    phivshelicityMinus=createHisto("phivshelicityM", "phi vs helicity minus", "", "", 100,0,360,100,-4,4, "Kine");
+    helicityhisto=createHisto("Helicity", "Beam Helicity", "", 9,-4,4, "Kine");
+    helicityrawhisto=createHisto("HelicityRaw", "Beam Raw Helicity", "", 9,-4,4, "Kine");
+    XvsY_electron=createHisto("XvsY", "X vs Y","","",100,-400,400,100,-400,400,"Kine");
+    chisqHad=createHisto("chisqHad","#chi^2 PID hadron","",100,-25,25,"Kine");
+    thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,5,"Kine");
+    Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Kine");
+    Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Kine");
+   
+    //START OF EXC POTS
+    //edgX
+    edgXmissingE =createHisto("edgXmissingE", "eD#gammaX Missing Energy", "E_e_D_#gamma_X [GeV]", 100,0,10, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "eD#gammaX Missing Mass^2", "M^2_x [GeV/c^2]^2", 100,-4,4, "Excl");
+    edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "p_x [GeV/c]", 100,0,4, "Excl");
+    edgXmissingPx=createHisto("MMomx", "Missing X Momentum", "", 100,-1,1, "Excl");
+    edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
+    edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
+    pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,3, "Excl");
+    //edX
+    edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-5,5, "Excl");
+    edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+    edXmissingM=createHisto("eDXmissingM", "eDX Missing Mass", "", 100,-0,5, "Excl");
+    //egX
+    egXmissingM2=createHisto("egXmissingM2","e#gammaX Missing Mass2","",100,-0,10, "Excl");//M_e_#gamma_X^2 [GeV/c^2]^2
+    egXmissingM=createHisto("egXmissingM","e#gammaX Mass","",100,-0,5, "Excl");//M_e_#gamma_X [GeV/c^2]
+    egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//e#gammaX MM^2 vs #theta
+    //Phi planes
+    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi Plane", "", 100,-10,10, "Excl");
+    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi Plane Hattawy", "", 100,-10,10, "Excl");
+    MissThetaHist=createHisto("MissThetaHist", "MissThetaHist", "", 100,0,180, "Excl");
+    //cone angles
+    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,-3,10, "Excl");
+    coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX missing M2 vs Cone Angle", "Cone Angle (deg.)", "eDGammaX missing M2 (GeV)", 100,0,20,100,-1,0.5, "Excl");
+    coneanglevsedXM2=createHisto("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_{#gamma,x} [deg.]","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,20,100,-10,10, "Excl");
+    coneanglevspperp=createHisto("ConeAnglevsPperp","Cone Angle vs Pperp","Pperp","Cone Angle", 100,0,10,100,0,1,"Excl");
+    coneanglevsegXM2=createHisto("coneanglevsegXM2","egX missing M2 vs Cone Angle","Cone Angle (deg.)","egX missing M2 (GeV)",100,0,20,100,0,20,"Excl");
+    //Pid histograms
+    betahadhisto=createHisto("beta","#beta","Measured #beta",100,0,1,"Pid");
+    betacalchisto=createHisto("betacalc","#beta_calc","#beta calculated from relativistic momentum",100,0,1,"Pid");
+    betacalcvsP=createHisto("BetaCalcvsP","BetaCalc vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
+    betavsP=createHisto("BetavsP","Beta vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
+    deltabetavschi2=createHisto("Deltabeta_dvschi2PID","#Delta#beta_d vs #chi^2_PID", "#chi^2_PID", "#Delta#beta_d", 100,-30,30,100,-0.6,0., "Pid");
+    deltabeta=createHisto("BetamBetaCalc", "Beta - BetaCalc", "" ,100,-0.6,0., "Pid");
+    ctofdedxvsp=createHisto("ctofdedxvsp", "ctofdedxvsp", "", "", 100,0,2,100,0,100, "Pid");
+    dedxDeutvsP =createHisto("dedxDeutvsP","de/dx Deut vs P", "", "", 100,0,2,100,0,30, "Pid");
+    dedxCTOFvsP= createHisto("dedxCTOFvsP", "de/dx CTOF vs P", "","",100,0,2,100,0,30, "Pid");
+    dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "Pid");
+    thgvsthe=createHisto("thgvsthe", "#theta_#gamma vs #theta_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
+    System.out.println("creating histograms"  );
+  }
+  public H1F createHisto(String name,
+      String title,String titlex,
+      int nbins,double xmin,double xmax,String type){
+        H1F h;
+        if(readMode){
+          System.out.print("getting the histo "+name+" in "+baseDir+Config+"/"+type+"\n");
+          rootDirfile.ls();
+          h=(H1F)rootDirfile.getObject(baseDir+Config+"/"+type+"/",name); 
+        }
+        else{
+        h=new H1F(name,title,nbins,xmin,xmax);
+        h.setTitleX(titlex);
+        if(type == "Kine"){
+          kinehistos.add(h);
+        }
+        else if(type == "Excl"){
+          exclhistos.add(h);
+        }
+        else if(type == "Pid"){
+          pidhistos.add(h);
+        }
+      }
+      return h;
+      
+  }
+  public H2F createHisto(String name,
+      String title,String titlex,String titley,
+      int nbinsx,double xmin,double xmax,
+      int nbinsy,double ymin,double ymax,
+      String type){
+        H2F h;
+        if(readMode){
+          System.out.print("getting the histo "+name+" in "+baseDir+Config+"/"+type+"/"+"\n");
+          h=(H2F)rootDirfile.getObject(baseDir+Config+"/"+type+"/",name); 
+          
+        }
+        else{
+
+        h=new H2F(name,title,nbinsx,xmin,xmax,nbinsy,ymin,ymax);
+        h.setTitleX(titlex);
+        h.setTitleY(titley);
+        if(type == "Kine"){
+          kinehistos.add(h);
+        }
+        else if(type == "Excl"){
+          exclhistos.add(h);
+        }
+        else if(type == "Pid"){
+          pidhistos.add(h);
+        }
+      }
+      return h;
+      
+  }
 
   public void fillBasicHisto(DvcsEvent ev) {
     dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
@@ -359,6 +296,8 @@ public class DvcsHisto {
     ThvsP.fill(Math.toDegrees(ev.vhadron.theta()),ev.vhadron.p());
     elecThvsP.fill(Math.toDegrees(ev.velectron.theta()),ev.velectron.p());
     photThvsP.fill(Math.toDegrees(ev.vphoton.theta()),ev.vphoton.p());
+
+    thgvsthe.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
 //Xbj=ev.Xb();
 
     hgTh.fill(Math.toDegrees(ev.vphoton.theta()));
@@ -413,51 +352,52 @@ public class DvcsHisto {
 
   }
 
-  /*This stuff is all wrong for positive particles */
+  public  void writeHipooutput(TDirectory rootdir,String directory){
+    String hipodirectory = "/"+directory;
 
-  // public void fillPositives(DvcsEvent ev){
-  //   //betavsPplus.fill(ev.vpositive.p(),ev.betapos());
-  //   //ctofdedxvspplus.fill(ev.vpositive.p(),ev.ctofenpos());
-  //   //if (ev.FoundDeuteron==true){
-  //     betavsPdeut.fill(ev.vdeuteron.p(),ev.betadeut);
-  //     betavsPdeut.setTitle("Beta vs Momentum Deuteron");
-  //     ctofdedxvspdeut.fill(ev.vdeuteron.p(),ev.ctofenergydeut);
-  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
-  //   //}
-  //   //else if (ev.FoundProton==true){
-  //     betavsPprot.fill(ev.vproton.p(),ev.betaprot);
-  //     betavsPprot.setTitle("Beta vs Momentum Proton");
-  //     ctofdedxvspdeut.fill(ev.vproton.p(),ev.ctofenergyprot);
-  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Proton");
-  //   //}
-  //   //else if (ev.FoundPion==true){
-  //     betavsPpion.fill(ev.vpion.p(),ev.betapion);
-  //     betavsPpion.setTitle("Beta vs Momentum #pi+");
-  //     ctofdedxvspdeut.fill(ev.vpion.p(),ev.ctofenergypion);
-  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #pi+");
-  //   //}
-  //   //else if (ev.FoundKaon==true){
-  //     betavsPkaon.fill(ev.vkaon.p(),ev.betakaon);
-  //     betavsPkaon.setTitle("Beta vs Momentum #kappa");
-  //     ctofdedxvspdeut.fill(ev.vkaon.p(),ev.ctofenergykaon);
-  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #kappa");
-  //   //}
-  // }
-
-  // public void drawPositives(TCanvas ecP){
-  //   ecP.divide(2,2);
-  //   /*betavsPplus.add(betavsPprot);
-  //   betavsPplus.add(betavsPdeut);
-  //   betavsPplus.add(betavsPpion);
-  //   betavsPplus.add(betavsPkaon);
-  //   //ecP.getPad().getAxisZ().setLog(true);
-  //   ecP.draw(betavsPplus);*/
-  //   ecP.cd(0).draw(betavsPdeut);
-  //   ecP.cd(1).draw(betavsPprot);
-  //   ecP.cd(2).draw(betavsPpion);
-  //   ecP.cd(3).draw(betavsPkaon);
-  // }
-
+    String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid"};
+    
+  
+    rootdir.mkdir(sub[0]);
+    rootdir.cd(sub[0]);
+    for (Object obj: kinehistos) {
+      if (obj instanceof H1F){
+        rootdir.addDataSet((H1F) obj);
+      } else if (obj instanceof H2F) {
+        rootdir.addDataSet((H2F) obj);      } 
+    }
+    rootdir.mkdir(sub[1]);
+    rootdir.cd(sub[1]);
+    for (Object obj: exclhistos) {
+      if (obj instanceof H1F){
+        rootdir.addDataSet((H1F) obj);
+      } else if (obj instanceof H2F) {
+        rootdir.addDataSet((H2F) obj);      } 
+    }
+    rootdir.mkdir(sub[2]);
+    rootdir.cd(sub[2]);
+    for (Object obj: pidhistos) {
+      if (obj instanceof H1F){
+        rootdir.addDataSet((H1F) obj);
+      } else if (obj instanceof H2F) {
+        rootdir.addDataSet((H2F) obj);      } 
+    }
+    
+    // rootdir.mkdir(sub2);
+    // rootdir.cd(sub2);
+    // for (Object obj: exclhistos) {
+    //   if (obj instanceof H1F){
+    //     rootdir.addDataSet((H1F) obj);
+    //   } else if (obj instanceof H2F) {
+    //     rootdir.addDataSet((H2F) obj);      } 
+    // }
+    
+    //rootdir.addDataSet(coneanglevspperp);
+    //rootdir.addDataSet(coneanglevsedXM2);
+    //rootdir.addDataSet(coneanglevsegXM2);
+    rootdir.writeFile(this.outputdir + "/Angela.hipo");
+  
+  }
   public H1F buildAsym(TDirectory dir, String directory){
   H1F num;
   H1F denom;
@@ -511,7 +451,7 @@ public class DvcsHisto {
   
   
   
-
+//Here are the methods used by DoCode to fill the NickRichardson.hipo file 
 
   public void DrawParticleComparison(/*TCanvas ecPP,*/ TDirectory dir, String directory ){
 
@@ -738,5 +678,466 @@ public class DvcsHisto {
   //   dir.writeFile("myfile.hipo");
   // }
 
+  
+  
+//OLD histo def
+    //dir = new TDirectory();
+    //Xbj=new H1F("Xbj","X_b",100,0,1.0);
+    //kinehistos.add(Xbj);
+    //W= new H1F("W","W" ,100, 0, 10.0);
+    //kinehistos.add(W);
+    //W.setTitleX("W [GeV]");
+    //Q2 = new H1F("Q2","Q2",100, 0.1, 4.0);
+    //kinehistos.add(Q2);
+    //Q2.setTitleX("Q^2 [GeV/c^2]^2");
+    //hadmom = new H1F("hadmom","Hadron Momentum",100,0,10.0);
+    //kinehistos.add(hadmom);
+    //hadmom.setTitleX("Deteron momentum [GeV/c]");
+    //WvsQ2 = new H2F("Q2vsW", "Q2 vs W", 100,0,7,100,0,10);
+    //kinehistos.add(WvsQ2);
+    //WvsQ2.setTitleX("W [GeV]");
+    //WvsQ2.setTitleY("Q^2 [GeV/c^2]");
+    //Q2vsXbj = new H2F("Q2vsXb","Q^2 vs X_b",100,0,1,100,0,10);
+    //kinehistos.add(Q2vsXbj);
+    //Q2vsXbj.setTitleY("Q^2 [GeV/c^2]");
+    //Q2vsXbj.setTitleX("X_b");
+    //q2vst = new H2F("Q2vst", "Q2 vs t",100,0,5,100,0,5);
+    //kinehistos.add(q2vst);
+    //q2vst.setTitleY("Q2");
+    //q2vst.setTitleX("t");
+    //VertexElectron = new H1F("VertexElectron","Vertex Electron", 100,-10.0,10.0);
+    //kinehistos.add(VertexElectron);
+   // VertexElectron.setTitleX("Vertex Electron");
+    //VertexDuetron = new H1F("VertexDeuteron","Vertex Dueteron", 100,-10.0,10.0);
+    //kinehistos.add(VertexDuetron);
+    //VertexDuetron.setTitleX("z");
+    //vertexElecVSvertexDeut = new H2F ("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron",100,-10,10,100,-10,10);
+    //kinehistos.add(vertexElecVSvertexDeut);
+    //dedxDeutvsP = new H2F("dedxDeutvsP","dedxDeutvsP",100,0,2,100,0,50);
+    //kinehistos.add(dedxDeutvsP);
+    //dedxCTOFvsP = new H2F("dedxCTOFvsP", "dedx CTOF vs P", 100,0,2,100,0,30);
+    //kinehistos.add(dedxCTOFvsP);
+    //dedxCNDvsP = new H2F("dedxCNDvsP", "de/dx CND vs P", 100,0,2,100,0,30);
+    //kinehistos.add(dedxCNDvsP);
+    // ThvsPhi = new H2F("Deuteronthvsphi","Deuteron #theta vs #phi",100,-180,180,100,0,180);
+    // kinehistos.add(ThvsPhi);
+    // ThvsPhi.setTitleX("#phi [Degrees]");
+    // ThvsPhi.setTitleY("#theta [Degrees]");
+    // photThvsPhi = new H2F("Photonthvsphi","Photon #theta vs #phi",100,-180,180,100,0,40);
+    // kinehistos.add(photThvsPhi);
+    // photThvsPhi.setTitleX("#phi [Degrees]");
+    // photThvsPhi.setTitleY("#theta [Degrees]");
+    // elecThvsPhi = new H2F("Electronthvsphi","Electron #theta vs #phi",100,-180,180,100,0,100);
+    // kinehistos.add(elecThvsPhi);
+    // elecThvsPhi.setTitleX("#phi [Degrees]");
+    // elecThvsPhi.setTitleY("#theta [Degrees]");
 
+    // ThvsP = new H2F("Deuteronpvsth","Deuteron p vs #theta ",100,0,180,100,0,10.6);
+    // kinehistos.add(ThvsP);
+    // ThvsP.setTitleY("p [GeV/c]");
+    // ThvsP.setTitleX("#theta [Degrees]");
+    // elecThvsP = new H2F("Electronpvstheta","Electron p vs #theta ",100,0,40,100,0,10.6);
+    // kinehistos.add(elecThvsPhi);
+    // elecThvsP.setTitle("p [GeV/c]");
+    // elecThvsP.setTitleX("#theta [Degrees]");
+    // kinehistos.add(elecThvsP);
+    // photThvsP = new H2F("Photonpvstheta","Photon p vs #theta ",100,0,40,100,0,10.6);
+    // kinehistos.add(photThvsP);
+    // photThvsP.setTitleY("p [GeV/c]");
+    // photThvsP.setTitleX("#theta [Degrees]");
+    //hgTh = new H1F("hgTh",100,0,50);
+    //kinehistos.add(hgTh);
+    //hgTh.setTitleX("Photon Theta");
+    //hgEn = new H1F("Photonenergy","Photon energy",100,0,10);
+    //kinehistos.add(hgEn);
+    //hgEn.setTitleX("Photon Energy [GeV/c^2]");
+    //PhiPlaneHist = new H1F("PhiPlaneHist",100,0,360);
+    //kinehistos.add(PhiPlaneHist);
+    //PhiPlaneHist.setTitleX("#phi, the angle between the Leptonic and Hadronic planes");
+    //DPhiHist = new H1F("DPhiHist",100,-10,10);
+    //kinehistos.add(DPhiHist);
+    //DPhiHist.setTitle("DPhi");
+    //ConeAngleBtElectronPhotonFD = new H1F("ConeAngleBtElectronandPhoton", 100,0,80);
+    //kinehistos.add(ConeAngleBtElectronPhotonFD);
+    //ConeAngleBtElectronPhotonFD.setTitleX("Cone Angle Between Electron and Photon");
+      //phivshelicityPlus = new H2F("phivshelicityP", "phi vs helicity plus", 100,0,360,100,-4,4);
+    //kinehistos.add(phivshelicityPlus);
+    //phivshelicityMinus = new H2F("phivshelicityM", "phi vs helicity minus", 100,0,360,100,-4,4);
+    //kinehistos.add(phivshelicityMinus);
+
+    //helicityhisto=new H1F("Helicity",9,-4,4);
+    //kinehistos.add(helicityhisto);
+    //helicityhisto.setTitleX("Beam Helicity");
+    //helicityrawhisto=new H1F("HelicityRaw",9,-4,4);
+    //kinehistos.add(helicityrawhisto);
+    //helicityrawhisto.setTitleX("Helicity Raw");
+        
+    //phivshelicityPlus = new H2F("phivshelicityP", "phi vs helicity plus", 100,0,360,100,-4,4);
+    //kinehistos.add(phivshelicityPlus);
+    //phivshelicityMinus = new H2F("phivshelicityM", "phi vs helicity minus", 100,0,360,100,-4,4);
+    //kinehistos.add(phivshelicityMinus);
+
+    //helicityhisto=new H1F("Helicity",9,-4,4);
+    //kinehistos.add(helicityhisto);
+    //helicityhisto.setTitleX("Beam Helicity");
+    //helicityrawhisto=new H1F("HelicityRaw",9,-4,4);
+    //kinehistos.add(helicityrawhisto);
+    //helicityrawhisto.setTitleX("Helicity Raw");
+     //XvsY_electron = new H2F("XvsY", "X vs Y",100,-400,400,100,-400,400);
+    ////XvsY_electron_before = new H2F("X vs Y", "X vs Y",100,-400,400,100,-400,400);
+    //kinehistos.add(XvsY_electron);
+    
+    //chisqHad=new H1F("chisqHad","#chi^2 PID hadron",100,-25,25);
+    //kinehistos.add(chisqHad);
+    // thisto = new H1F("mt","-t",100,0,5);
+    // kinehistos.add(thisto);
+    // thisto.setTitleX("-t [GeV/c]^2");
+    // Phiplus = new H1F("Phiplus",10,0,360);
+    // kinehistos.add(Phiplus);
+    // Phiplus.setTitleX("Phi Plus");
+    // Phiminus = new H1F("Phiminus",10,0,360);
+    // kinehistos.add(Phiminus);
+    // Phiminus.setTitleX("Phi Minus");
+    
+    //MMass = new H1F("MMass",100,-10,10);
+    //MMass.setTitleX("Missing Mass Squared");
+    //MMom = new H1F("MMom",100,0,10);
+    //MMom.setTitleX("Missing Momentum");
+
+    // edgXmissingE = new H1F("edgXmissingE",100,0,10);
+    // exclhistos.add(edgXmissingE);
+    // edgXmissingE.setTitleX("eDγX Missing Energy [GeV]");
+    // exclhistos.add(edgXmissingE);
+    // edgXmissingM2 = new H1F("edgXmissingM2",100,-4,4);
+    // exclhistos.add(edgXmissingM2);
+    // edgXmissingM2.setTitleX("eDγX Missing Mass^2 [GeV/c^2]^2");
+    // edgXmissingP = new H1F("edgXmissingP",100,0,4);
+    // exclhistos.add(edgXmissingP);
+    // edgXmissingP.setTitleX("eDγX Missing Momentum [GeV/c]");
+    // edgXmissingPx = new H1F("MMomx",100,-1,1);
+    // exclhistos.add(edgXmissingPx);
+    // edgXmissingPx.setTitleX("Missing X Momentum");
+    // edgXmissingPy = new H1F("MMomy",100,-1,1);
+    // exclhistos.add(edgXmissingPy);
+    // edgXmissingPy.setTitleX("Missing Y Momentum");
+    // edgXmissingPz = new H1F("MMomz",100,-5,5);
+    // exclhistos.add(edgXmissingPz);
+    // edgXmissingPz.setTitleX("Missing Z Momentum [GeV/c]");
+    // pPerphisto = new H1F("pPerp","pPerp",100,0,3);
+    // exclhistos.add(pPerphisto);
+
+ // edXmissingE = new H1F ("edXmissingE",100,-5,5);
+    // exclhistos.add(edXmissingE);
+    // edXmissingE.setTitleX("eDX Missing Energy [GeV]");
+    
+    // edXmissingM2 = new H1F("edXmissingM2",100,-10,10);
+    // exclhistos.add(edXmissingM2);
+    // edXmissingM2.setTitleX("eDX Missing Mass^2 [GeV/c^2]^2");
+
+    // edXmissingM = new H1F("eDXmissingM",100,-0,5);
+    // exclhistos.add(edXmissingM);
+    // edXmissingM.setTitleX("eDX Missing Mass");
+
+
+    // egXmissingM2 = new H1F("egXmissingM2",100,-0,10);
+    // exclhistos.add(egXmissingM2);
+    // egXmissingM2.setTitleX("eGammaX Missing Mass2");
+    // egXmissingM = new H1F("egXmissingM",100,-0,5);
+    // exclhistos.add(egXmissingM);
+    // egXmissingM.setTitleX("M_x(ed#rarrowe#gammaX)");
+    // egXmissingM2vsTh =new H2F("egXmissingM2vsTh","egXmissing M2 vs Th",100,0,140,100,0,10);
+    // exclhistos.add(egXmissingM2vsTh);
+    // egXmissingM2vsTh.setTitleX("hadron theta");
+    // DeltaPhiPlaneHist = new H1F("DeltaPhiPlane",100,-10,10);
+    // exclhistos.add(DeltaPhiPlaneHist);
+    // DeltaPhiPlaneHist.setTitleX("Delta Phi Plane");
+    // DeltaPhiPlaneMattHist = new H1F("DeltaPhiPlane2",100,-100,100);
+    // exclhistos.add(DeltaPhiPlaneMattHist);
+    // DeltaPhiPlaneMattHist.setTitleX("Delta Phi Plane Hattawy");
+
+    // MissThetaHist = new H1F("MissThetaHist",100,0,180);
+    // exclhistos.add(MissThetaHist);
+    // MissThetaHist.setTitleX("Missing Photon Theta");
+
+    // ConeAngleHist = new H1F("ConeAngleHist",100,-3,10);
+    // exclhistos.add(ConeAngleHist);
+    // ConeAngleHist.setTitleX("Angle between gamma and missing eDX");
+   
+    // coneanglevsedgXM2 = new H2F("coneanglevsedgXM2","eDGammaX missing M2 vs Cone Angle",100,0,20,100,-1,0.5);
+    // exclhistos.add(coneanglevsedgXM2);
+    // coneanglevsedgXM2.setTitleX("Cone Angle (deg.)");
+    // coneanglevsedgXM2.setTitleY("eDGammaX missing M2 (GeV)");
+   // coneanglevsedXM2 = new H2F("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_,_x",100,0,20,100,-10,10);
+    // exclhistos.add(coneanglevsedXM2);
+    // coneanglevsedXM2.setTitleX("#theta#_{#gamma,x} [deg.]");
+    // coneanglevsedXM2.setTitleY("(M_x)^2(ed#rarrowed#X) [GeV/c^2]");
+    
+    // coneanglevspperp = new H2F("ConeAnglevsPperp", "Cone Angle vs Pperp", 100,0,10,100,0,1);
+    // exclhistos.add(coneanglevspperp);
+    // coneanglevspperp.setTitleX("Pperp");
+    // coneanglevspperp.setTitleY("Cone Angle");
+    // coneanglevsegXM2 = new H2F("coneanglevsegXM2","egX missing M2 vs Cone Angle",100,0,20,100,0,20);
+    // exclhistos.add(coneanglevsegXM2);
+    // coneanglevsegXM2.setTitleX("Cone Angle (deg.)");
+    // coneanglevsegXM2.setTitleY("egX missing M2 (GeV)");
+    // exclhistos.add(coneanglevsegXM2);
+
+
+
+    //MMvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
+    //MMvsMpz.setTitleX("Missing Mass");
+    //MMvsMpz.setTitleY("Missing Z Momentum");
+    //MpxvsMpz = new H2F("Q2 vs Xbj","Q2 vs Xbj",100,-2,2,100,-10,10);
+    //MpxvsMpz.setTitleX("Missing X Momentum");
+    //MpxvsMpz.setTitleY("Missing Z Momentum");
+    
+    //DAngleGammaHist = new H1F("DAngleGammaHist",100,-15,100);
+    //DAngleGammaHist.setTitle("Angle between gamma and missing eDX");
+ 
+    
+
+  /*This stuff is all wrong for positive particles */
+
+  // public void fillPositives(DvcsEvent ev){
+  //   //betavsPplus.fill(ev.vpositive.p(),ev.betapos());
+  //   //ctofdedxvspplus.fill(ev.vpositive.p(),ev.ctofenpos());
+  //   //if (ev.FoundDeuteron==true){
+  //     betavsPdeut.fill(ev.vdeuteron.p(),ev.betadeut);
+  //     betavsPdeut.setTitle("Beta vs Momentum Deuteron");
+  //     ctofdedxvspdeut.fill(ev.vdeuteron.p(),ev.ctofenergydeut);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Deuteron");
+  //   //}
+  //   //else if (ev.FoundProton==true){
+  //     betavsPprot.fill(ev.vproton.p(),ev.betaprot);
+  //     betavsPprot.setTitle("Beta vs Momentum Proton");
+  //     ctofdedxvspdeut.fill(ev.vproton.p(),ev.ctofenergyprot);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum Proton");
+  //   //}
+  //   //else if (ev.FoundPion==true){
+  //     betavsPpion.fill(ev.vpion.p(),ev.betapion);
+  //     betavsPpion.setTitle("Beta vs Momentum #pi+");
+  //     ctofdedxvspdeut.fill(ev.vpion.p(),ev.ctofenergypion);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #pi+");
+  //   //}
+  //   //else if (ev.FoundKaon==true){
+  //     betavsPkaon.fill(ev.vkaon.p(),ev.betakaon);
+  //     betavsPkaon.setTitle("Beta vs Momentum #kappa");
+  //     ctofdedxvspdeut.fill(ev.vkaon.p(),ev.ctofenergykaon);
+  //     ctofdedxvspdeut.setTitle("dE/dx vs Momentum #kappa");
+  //   //}
+  // }
+
+  // public void drawPositives(TCanvas ecP){
+  //   ecP.divide(2,2);
+  //   /*betavsPplus.add(betavsPprot);
+  //   betavsPplus.add(betavsPdeut);
+  //   betavsPplus.add(betavsPpion);
+  //   betavsPplus.add(betavsPkaon);
+  //   //ecP.getPad().getAxisZ().setLog(true);
+  //   ecP.draw(betavsPplus);*/
+  //   ecP.cd(0).draw(betavsPdeut);
+  //   ecP.cd(1).draw(betavsPprot);
+  //   ecP.cd(2).draw(betavsPpion);
+  //   ecP.cd(3).draw(betavsPkaon);
+  // }
+   // betahadhisto = new H1F("beta","#beta",100,0,1);
+    // pidhistos.add(betahadhisto);
+    // betacalchisto = new H1F("betacalc","#beta_calc",100,0,1);
+    // pidhistos.add(betacalchisto);
+    // betahadhisto.setTitleX("Measured #beta");
+    // betacalchisto.setTitleX("#beta calculated from relativistic momentum");
+   
+    // betacalcvsP = new H2F("BetaCalcvsP","BetaCalc vs P", 100,0,10.2,100,0,1.1);
+    // pidhistos.add(betacalcvsP);
+    // betavsP = new H2F("BetavsP","Beta vs P", 100,0,10.2,100,0,1.1);
+    // pidhistos.add(betavsP);
+    // deltabetavschi2=new H2F("Deltabeta_dvschi2PID","#Delta#beta_d vs #chi^2_PID",100,-30,30,100,-0.6,0.6);
+    // pidhistos.add(deltabetavschi2);
+    // deltabetavschi2.setTitleX("#chi^2_PID");
+    // deltabetavschi2.setTitleY("#Delta#beta_d");
+
+    // deltabeta = new H1F("BetamBetaCalc",100,-0.6,0.2);
+    // pidhistos.add(deltabeta);
+    // deltabeta.setTitleX("Beta - BetaCalc");
+
+        
+    
+    //ctofdedxvsp=new H2F("ctofdedxvsp",100,0,2,100,0,100);
+    //pidhistos.add(ctofdedxvsp);
 }
+
+
+
+
+
+//BACKUP
+// public  DvcsHisto(TDirectory rootdir, String basedir, String conf){
+
+//   String sub1=basedir+conf+"/Kine/";
+//   String sub2=basedir+conf+"/Excl/";
+//   String sub3=basedir+conf+"/Pid/";
+//   String sub="";
+//   System.out.println(sub2);
+//   sub=sub1;
+//    Xbj=(H1F)rootdir.getObject(sub,"Xbj");
+
+//    W=(H1F)rootdir.getObject(sub,"W"); //invariant mass of e target -> e' X
+//    Q2=(H1F)rootdir.getObject(sub,"Q2");//Momentum transfer squared  of e-e'
+//    hadmom=(H1F)rootdir.getObject(sub,"hadmom");
+//    WvsQ2=(H2F)rootdir.getObject(sub,"Q2vsW");
+//    Q2vsXbj=(H2F)rootdir.getObject(sub,"Q2vsXb");
+//    //tvsxb=(H2F)rootdir.getObject(sub,"");
+//    q2vst=(H2F)rootdir.getObject(sub,"Q2vst");
+
+//    VertexElectron=(H1F)rootdir.getObject(sub,"VertexElectron");
+//    VertexDuetron=(H1F)rootdir.getObject(sub,"VertexDeuteron");
+//    vertexElecVSvertexDeut=(H2F)rootdir.getObject(sub,"VertexElectronvsVertexDeuteron");
+
+   
+//    ThvsPhi=(H2F)rootdir.getObject(sub,"Deuteronthvsphi");//Theta vs phi for hadron
+//    elecThvsPhi=(H2F)rootdir.getObject(sub,"Electronthvsphi");
+//    photThvsPhi=(H2F)rootdir.getObject(sub,"Photonthvsphi");
+//    ThvsP=(H2F)rootdir.getObject(sub,"Deuteronpvsth");//Theta vs mom for hadron
+//    elecThvsP=(H2F)rootdir.getObject(sub,"Electronpvstheta");
+//    photThvsP=(H2F)rootdir.getObject(sub,"Photonpvstheta");
+
+//    hgTh=(H1F)rootdir.getObject(sub,"hgTh");//theta gamma
+//    hgEn=(H1F)rootdir.getObject(sub,"Photonenergy");//Energy gamma
+//    PhiPlaneHist =(H1F)rootdir.getObject(sub,"PhiPlaneHist"); //angle between electrons plane and hadron/gamma plane
+//    DPhiHist =(H1F)rootdir.getObject(sub,"DPhiHist");//phi gamma minus phi missing hadron+e vector
+
+
+   
+//    ConeAngleBtElectronPhotonFD=(H1F)rootdir.getObject(sub,"ConeAngleBtElectronandPhoton");
+
+//    phivshelicityPlus=(H2F)rootdir.getObject(sub,"phivshelicityP");
+//    phivshelicityMinus=(H2F)rootdir.getObject(sub,"phivshelicityM");
+//    helicityhisto=(H1F)rootdir.getObject(sub,"Helicity");
+//    helicityrawhisto=(H1F)rootdir.getObject(sub,"HelicityRaw");
+
+//    XvsY_electron=(H2F)rootdir.getObject(sub,"XvsY");
+  
+//    chisqHad=(H1F)rootdir.getObject(sub,"chisqHad");
+//    thisto=(H1F)rootdir.getObject(sub,"mt");
+
+
+
+//    Phiplus=(H1F)rootdir.getObject(sub,"Phiplus");
+//    Phiminus=(H1F)rootdir.getObject(sub,"Phiminus");
+//    sub=sub2; 
+//    edgXmissingE=(H1F)rootdir.getObject(sub,"edgXmissingE"); // missing mass of a complete DVCS final state e hadron gamma
+//    edgXmissingM2 =(H1F)rootdir.getObject(sub,"edgXmissingM2"); // missing mass of a complete DVCS final state e hadron gamma
+//    edgXmissingP =(H1F)rootdir.getObject(sub,"edgXmissingP"); // missing mass of a complete DVCS final state e hadron gamma
+//    edgXmissingPx=(H1F)rootdir.getObject(sub,"MMomx");// missing px of a complete DVCS final state e hadron gamma
+//    edgXmissingPy=(H1F)rootdir.getObject(sub,"MMomy");// missing py of a complete DVCS final state e hadron gamma
+//    edgXmissingPz=(H1F)rootdir.getObject(sub,"MMomz");// missing pz of a complete DVCS final state e hadron gamma
+//    pPerphisto=(H1F)rootdir.getObject(sub,"pPerp");
+
+//    edXmissingE=(H1F)rootdir.getObject(sub,"edXmissingE");
+//    edXmissingM2=(H1F)rootdir.getObject(sub,"edXmissingM2"); // missing mass of hadron electron final state (to be compared with gamma)
+//    edXmissingM=(H1F)rootdir.getObject(sub,"eDXmissingM");
+  
+//    egXmissingM2=(H1F)rootdir.getObject(sub,"egXmissingM2"); // missing mass of gamma electron final state (to be compared with hadron)
+//    egXmissingM=(H1F)rootdir.getObject(sub,"egXmissingM");
+//    egXmissingM2vsTh=(H2F)rootdir.getObject(sub,"egXmissingM2vsTh");
+
+//    DeltaPhiPlaneHist=(H1F)rootdir.getObject(sub,"DeltaPhiPlane"); //angle planes Q2/hadron and gamma/hadrom
+//    DeltaPhiPlaneMattHist=(H1F)rootdir.getObject(sub,"DeltaPhiPlane2");//angle planes Q2/hadron and Q2/gamma
+//    MissThetaHist=(H1F)rootdir.getObject(sub,"MissThetaHist");//theta missing hadron+e vector
+//    ConeAngleHist=(H1F)rootdir.getObject(sub,"ConeAngleHist");//angle between gamma vector and missing hadron+e vector
+
+//    coneanglevsedgXM2=(H2F)rootdir.getObject(sub,"coneanglevsedgXM2");//angle between gamma vector and missing hadron+e vector vs missin mass square ehgX
+//    coneanglevsedXM2=(H2F)rootdir.getObject(sub,"coneanglevsedXM2");//angle between gamma vector and missing hadron+e vector vs missin mass square ehX
+//    coneanglevspperp=(H2F)rootdir.getObject(sub,"ConeAnglevsPperp");
+//    coneanglevsegXM2=(H2F)rootdir.getObject(sub,"coneanglevsegXM2");
+//    sub=sub3;
+   
+   
+//    betahadhisto=(H1F)rootdir.getObject(sub,"beta");
+//    betacalchisto=(H1F)rootdir.getObject(sub,"betacalc");
+//    betavsP=(H2F)rootdir.getObject(sub,"BetavsP");
+//    deltabetavschi2=(H2F)rootdir.getObject(sub,"BetaCalcvsP");
+//    deltabeta=(H1F)rootdir.getObject(sub,"BetamBetaCalc");
+//    betacalcvsP=(H2F)rootdir.getObject(sub,"betacalcvsP");
+//    ctofdedxvsp=(H2F)rootdir.getObject(sub,"ctofdedxvsp");
+//    dedxDeutvsP=(H2F)rootdir.getObject(sub,"dedxDeutvsP");
+//    dedxCTOFvsP=(H2F)rootdir.getObject(sub,"dedxCTOFvsP");
+//    dedxCNDvsP=(H2F)rootdir.getObject(sub,"dedxCNDvsP");
+
+// }
+// public DvcsHisto() {
+//   kinehistos= new ArrayList<Object>();
+//   exclhistos= new ArrayList<Object>();
+//   pidhistos = new ArrayList<Object>();
+//   Xbj=createHisto("Xbj","x_b_j", "", 100, 0., 1.,"kine");
+//   W=createHisto("W","W","W [GeV]",100,0,10,"kine");
+//   Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"kine");
+//   hadmom=createHisto("hadmom","Deuteron Momentum","p [GeV/c]",100,0,10.0,"kine");
+//   WvsQ2=createHisto("Q2vsW", "Q2 vs W", "W [GeV]","Q^2 [GeV/c^2]", 100,0,7,100,0,10,"kine");
+//   Q2vsXbj=createHisto("Q2vsXb","Q^2 vs X_b", "X_b", "Q^2 [GeV/c^2]", 100,0,1,100,0,10, "kine");
+//   q2vst=createHisto("Q2vst",  "Q2 vs t", "t", "Q2", 100,0,5,100,0,5, "kine");
+//   VertexElectron=createHisto("VertexElectron","Vertex Electron", "z",100,-10.0,10.0, "kine");
+//   VertexDuetron=createHisto("VertexDeuteron","Vertex Dueteron", "z",  100,-10.0,10.0, "kine");
+//   vertexElecVSvertexDeut=createHisto("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron", "", "", 100,-10,10,100,-10,10, "kine");
+  
+//   ThvsPhi=createHisto("Deuteronthvsphi","Deuteron #theta vs #phi", "#phi [Degrees", "#theta [Degrees]", 100,-180,180,100,0,180, "kine");
+//   photThvsPhi=createHisto("Photonthvsphi","Photon #theta vs #phi", "#phi [Degrees]", "#theta [Degrees]", 100,-180,180,100,0,180, "kine");
+//   elecThvsPhi=createHisto("Electronthvsphi","Electron #theta vs #phi", "#phi [Degrees]" ,"#theta [Degrees]", 100,-180,180,100,0,180, "kine");
+//   ThvsP=createHisto("Deuteronpvsth", "Deuteron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "kine");
+//   elecThvsP=createHisto("Electronpvstheta", "Electron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "kine");
+//   photThvsP=createHisto("Photonpvstheta", "Photon p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "kine");
+//   hgTh=createHisto("hgTh", "Photon Theta", "#theta_#gamma",100,0,50,"kine");
+//   hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,50,"kine");
+//   PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"kine" );
+//   DPhiHist=createHisto("DPhiHist", "DPhi", "", 100,-10,10, "kine");
+//   ConeAngleBtElectronPhotonFD=createHisto("ConeAngleBtElectronandPhoton", "Cone Angle Between Electron and Photon", "", 100,0,80, "kine");
+//   phivshelicityPlus=createHisto("phivshelicityP", "phi vs helicity plus", "", "", 100,0,360,100,-4,4, "kine");
+//   phivshelicityMinus=createHisto("phivshelicityM", "phi vs helicity minus", "", "", 100,0,360,100,-4,4, "kine");
+//   helicityhisto=createHisto("Helicity", "Beam Helicity", "", 9,-4,4, "kine");
+//   helicityrawhisto=createHisto("HelicityRaw", "Beam Raw Helicity", "", 9,-4,4, "kine");
+//   XvsY_electron=createHisto("XvsY", "X vs Y","","",100,-400,400,100,-400,400,"kine");
+//   chisqHad=createHisto("chisqHad","#chi^2 PID hadron","",100,-25,25,"kine");
+//   thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,5,"kine");
+//   Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"kine");
+//   Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"kine");
+ 
+//   //START OF EXC POTS
+//   //edgX
+//   edgXmissingE =createHisto("edgXmissingE", "eD#gammaX Missing Energy", "E_e_D_#gamma_X [GeV]", 100,0,10, "Excl");
+//   edgXmissingM2=createHisto("edgXmissingM2", "eD#gammaX Missing Mass^2", "M^2_x [GeV/c^2]^2", 100,-4,4, "Excl");
+//   edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "p_x [GeV/c]", 100,0,4, "Excl");
+//   edgXmissingPx=createHisto("MMomx", "Missing X Momentum", "", 100,-1,1, "Excl");
+//   edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
+//   edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
+//   pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,3, "Excl");
+//   //edX
+//   edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-5,5, "Excl");
+//   edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+//   edXmissingM=createHisto("eDXmissingM", "eDX Missing Mass", "", 100,-0,5, "Excl");
+//   //egX
+//   egXmissingM2=createHisto("egXmissingM2","e#gammaX Missing Mass2","",100,-0,10, "Excl");//M_e_#gamma_X^2 [GeV/c^2]^2
+//   egXmissingM=createHisto("egXmissingM","e#gammaX Mass","",100,-0,5, "Excl");//M_e_#gamma_X [GeV/c^2]
+//   egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//e#gammaX MM^2 vs #theta
+//   //Phi planes
+//   DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi Plane", "", 100,-10,10, "Excl");
+//   DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi Plane Hattawy", "", 100,-10,10, "Excl");
+//   MissThetaHist=createHisto("MissThetaHist", "MissThetaHist", "", 100,0,180, "Excl");
+//   //cone angles
+//   ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,-3,10, "Excl");
+//   coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX missing M2 vs Cone Angle", "Cone Angle (deg.)", "eDGammaX missing M2 (GeV)", 100,0,20,100,-1,0.5, "Excl");
+//   coneanglevsedXM2=createHisto("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_{#gamma,x} [deg.]","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,20,100,-10,10, "Excl");
+//   coneanglevspperp=createHisto("ConeAnglevsPperp","Cone Angle vs Pperp","Pperp","Cone Angle", 100,0,10,100,0,1,"Excl");
+//   coneanglevsegXM2=createHisto("coneanglevsegXM2","egX missing M2 vs Cone Angle","Cone Angle (deg.)","egX missing M2 (GeV)",100,0,20,100,0,20,"Excl");
+//   //pid histograms
+//   betahadhisto=createHisto("beta","#beta","Measured #beta",100,0,1,"pid");
+//   betacalchisto=createHisto("betacalc","#beta_calc","#beta calculated from relativistic momentum",100,0,1,"pid");
+//   betacalcvsP=createHisto("BetaCalcvsP","BetaCalc vs P", "", "", 100,0,10.2,100,0,1.1, "pid");
+//   betavsP=createHisto("BetavsP","Beta vs P", "", "", 100,0,10.2,100,0,1.1, "pid");
+//   deltabetavschi2=createHisto("Deltabeta_dvschi2PID","#Delta#beta_d vs #chi^2_PID", "#chi^2_PID", "#Delta#beta_d", 100,-30,30,100,-0.6,0., "pid");
+//   deltabeta=createHisto("BetamBetaCalc", "Beta - BetaCalc", "" ,100,-0.6,0., "pid");
+//   ctofdedxvsp=createHisto("ctofdedxvsp", "ctofdedxvsp", "", "", 100,0,2,100,0,100, "pid");
+//   dedxDeutvsP =createHisto("dedxDeutvsP","de/dx Deut vs P", "", "", 100,0,2,100,0,30, "pid");
+//   dedxCTOFvsP= createHisto("dedxCTOFvsP", "de/dx CTOF vs P", "","",100,0,2,100,0,30, "pid");
+//   dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "pid");
+//   System.out.println("creating histograms"  );
+// }
