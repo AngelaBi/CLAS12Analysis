@@ -573,7 +573,7 @@ public byte detectorProt;
               // builder.append("1\n");
 
               if (beta>0.16 && ctofen>5  && dedxDeutCTOF>1){
-                /* THis is for no ML
+                //THis is for no ML
                 ndeut++;
                 vtmp.setPxPyPzM(particles.getFloat("px",npart),
                 particles.getFloat("py",npart),
@@ -583,44 +583,44 @@ public byte detectorProt;
                   nd=npart;
                   this.d_en_max=vtmp.e();
                 }
-                */
+                
 
-                if(dedxDeutCND>0){
-                  vtmp.setPxPyPzM(particles.getFloat("px",npart),
-                  particles.getFloat("py",npart),
-                  particles.getFloat("pz",npart),
-                  this.MNUC);
-                  double value = dedxDeutCTOF* 0.486 + dedxDeutCND * 0.469 + vtmp.p() * 6.87 -12.22;
-                  if (1/(1+Math.exp(-value)) > 0.5){
-                    ndeut++;
-                    vtmp.setPxPyPzM(particles.getFloat("px",npart),
-                    particles.getFloat("py",npart),
-                    particles.getFloat("pz",npart),
-                    this.MNUC);
-                    if(vtmp.e()>this.d_en_max){
-                      nd=npart;
-                      this.d_en_max=vtmp.e();
-                }
-                  }
-                }else{//this is the condition if there is only CTOF dedx
+                // if(dedxDeutCND>0){
+                //   vtmp.setPxPyPzM(particles.getFloat("px",npart),
+                //   particles.getFloat("py",npart),
+                //   particles.getFloat("pz",npart),
+                //   this.MNUC);
+                //   double value = dedxDeutCTOF* 0.486 + dedxDeutCND * 0.469 + vtmp.p() * 6.87 -12.22;
+                //   if (1/(1+Math.exp(-value)) > 0.5){
+                //     ndeut++;
+                //     vtmp.setPxPyPzM(particles.getFloat("px",npart),
+                //     particles.getFloat("py",npart),
+                //     particles.getFloat("pz",npart),
+                //     this.MNUC);
+                //     if(vtmp.e()>this.d_en_max){
+                //       nd=npart;
+                //       this.d_en_max=vtmp.e();
+                // }
+                //   }
+                // }else{//this is the condition if there is only CTOF dedx
 
-                  vtmp.setPxPyPzM(particles.getFloat("px",npart),
-                  particles.getFloat("py",npart),
-                  particles.getFloat("pz",npart),
-                  this.MNUC);
-                  double value = dedxDeutCTOF* 0.3241  + vtmp.p() * 2.2909 - 4.58;
-                  if (1/(1+Math.exp( -value)) > 0.5){
-                    ndeut++;
-                    vtmp.setPxPyPzM(particles.getFloat("px",npart),
-                    particles.getFloat("py",npart),
-                    particles.getFloat("pz",npart),
-                    this.MNUC);
-                    if(vtmp.e()>this.d_en_max){
-                      nd=npart;
-                      this.d_en_max=vtmp.e();
-                    }
-                  }
-                }
+                //   vtmp.setPxPyPzM(particles.getFloat("px",npart),
+                //   particles.getFloat("py",npart),
+                //   particles.getFloat("pz",npart),
+                //   this.MNUC);
+                //   double value = dedxDeutCTOF* 0.3241  + vtmp.p() * 2.2909 - 4.58;
+                //   if (1/(1+Math.exp( -value)) > 0.5){
+                //     ndeut++;
+                //     vtmp.setPxPyPzM(particles.getFloat("px",npart),
+                //     particles.getFloat("py",npart),
+                //     particles.getFloat("pz",npart),
+                //     this.MNUC);
+                //     if(vtmp.e()>this.d_en_max){
+                //       nd=npart;
+                //       this.d_en_max=vtmp.e();
+                //     }
+                //   }
+                // }
 
 
                 }
