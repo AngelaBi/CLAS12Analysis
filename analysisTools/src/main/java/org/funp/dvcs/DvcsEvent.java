@@ -453,7 +453,7 @@ public byte detectorProt;
         //status 2000-2999 is FD
         //if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
 
-        if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<4000){
+        if(pid==11 && Math.abs(status)>=1000 && Math.abs(status)<4000){
           nelec++;
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
