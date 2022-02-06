@@ -3,6 +3,7 @@ package org.funp;
 import org.jlab.groot.ui.TCanvas;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*;
+import org.jline.terminal.impl.jna.freebsd.CLibrary.winsize;
 import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
@@ -47,9 +48,10 @@ public class NickHipoReader{
     static TDirectory dir2;
     static TCanvas ec4;
     static TCanvas ecA;
+    
     public static void main( String[] args ) throws FileNotFoundException, IOException 
   {
-processInput inputParam=new processInput(args);
+    processInput inputParam=new processInput(args);
     dir2 = new TDirectory();
     dir2.readFile("NickRichardson.hipo");
     //dir2.readFile("Bplots.hipo");
@@ -164,9 +166,9 @@ processInput inputParam=new processInput(args);
 if(showExcCutsplots){
 
     TCanvas ec1000 = new TCanvas("Exclusivity cuts for selection of edg FT",1200,1000);
-    DrawCutsFT( ec1000, "Excl after DVCS cuts FT");//changed this line
-    //TCanvas ec1001 = new TCanvas("Exclusivity cuts for selection of edg FD",1200,1000);
-    //DrawCutsFD( ec1001, "Excl after DVCS cuts FD");//changed this line
+    DrawCuts( ec1000, "Excl after DVCS cuts ","FT");//changed this line
+    TCanvas ec1001 = new TCanvas("Exclusivity cuts for selection of edg FD",1200,1000);
+    DrawCuts( ec1001, "Excl after DVCS cuts ","FD");//changed this line
    }
 
     if (showExcl_missing_quants_ALL){
@@ -320,8 +322,8 @@ if(showExcCutsplots){
     H2F phivshelicityMinus = (H2F) dir2.getObject(dir + "/", "phi vs helicity");
     H1F chisqHad = (H1F) dir2.getObject(dir + "/", "Chi2Pid");
     H1F thisto = (H1F) dir2.getObject(dir + "/", "-t");
-    H1F VertexElectron = (H1F) dir2.getObject(dir + "/", "Vertex Electron");
-    H1F VertexDuetron = (H1F) dir2.getObject(dir + "/", "Vertex Dueteron");
+    //H1F VertexElectron = (H1F) dir2.getObject(dir + "/", "Vertex Electron");
+    //H1F VertexDuetron = (H1F) dir2.getObject(dir + "/", "Vertex Dueteron");
     H2F XvsY_electron = (H2F) dir2.getObject(dir + "/", "X vs Y");
     H2F dedxCNDvsP = (H2F) dir2.getObject(dir + "/", "dedx CTOF vs P");
     H2F dedxCTOFvsP = (H2F) dir2.getObject(dir + "/", "dedx CND vs P");
@@ -348,8 +350,8 @@ if(showExcCutsplots){
     ec4.cd(13).draw(phivshelicityMinus);
     ec4.cd(14).draw(chisqHad);
     ec4.cd(15).draw(thisto);
-    ec4.cd(16).draw(VertexElectron);
-    ec4.cd(17).draw(VertexDuetron);
+    //ec4.cd(16).draw(VertexElectron);
+    //ec4.cd(17).draw(VertexDuetron);
     ec4.cd(18).draw(XvsY_electron);
     ec4.cd(19).draw(dedxCNDvsP);
     ec4.cd(20).draw(dedxCTOFvsP);
@@ -450,8 +452,8 @@ if(showExcCutsplots){
         DataFitter.fit(Asymfunc,buildAsym(ecA, dir),"");
         ecA.draw(Asymfunc,"same");
     }
-public static void DrawCutsFT(TCanvas ec4, String dir){
-  /*
+public static void DrawCuts(TCanvas ec4, String basedir,String conf){
+  /* FT
 
         *      (this.X("eh").mass2() < (-1.5* this.coneangle()+2) HIST EXISTS coneanglevsedXM2 HIPO
         *       && this.X("eh").mass2() >-2   HIST EXISTS edXmissingM2. ??
@@ -464,45 +466,75 @@ public static void DrawCutsFT(TCanvas ec4, String dir){
 
 
   */
-  
+  /* 
+      (this.X("eh").mass2() < (-1* this.coneangle()+2)  different
+      && this.X("eh").mass2()>-2   same
+      && this.X("ehg").mass2()>-0.75    redudants?
+      && this.X("ehg").e()<3  different 
+      && this.pPerp()<0.5 same
+      &&this.X("ehg").p()<1.5 same
+      && Math.abs(this.chi2pid()) < 3.5 
+      && this.X("eh").mass() < 0.7 same
+      && vertexCut
 
-  H2F coneanglevsedXM2 =(H2F) dir2.getObject(dir+"/","coneanglevsedXM2");
-  H1F edXmissingM2=(H1F) dir2.getObject(dir+"/","edXmissingM2");
-  H1F edgXmissingE=(H1F) dir2.getObject(dir+"/","edgXmissingE");
-  H1F pPerphisto=(H1F) dir2.getObject(dir+"/","pPerp");
-  H1F edgXmissingP=(H1F) dir2.getObject(dir+"/","edgXmissingP");
-  H1F eDXmissingM=(H1F) dir2.getObject(dir+"/","eDXmissingM");
-  H1F Chi2Pid=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","Chi2Pid");
-  H1F VertexE=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","VertexElectron");
-  H1F VertexD=(H1F) dir2.getObject("Kinematics DVCS Cut FT"+"/","VertexDeuteron");
+  */
   
-  DataLine line1 = new DataLine(-2,0.0,-2,edXmissingM2.getMax());
-line1.setLineColor(2);
-line1.setLineWidth(2);
-//ec.getScreenShot();
+  String dir=basedir+conf+"/";
+  H2F coneanglevsedXM2 =(H2F) dir2.getObject(dir,"coneanglevsedXM2");
+  H1F edXmissingM2=(H1F) dir2.getObject(dir,"edXmissingM2");
+  H1F edgXmissingE=(H1F) dir2.getObject(dir,"edgXmissingE");
+  H1F pPerphisto=(H1F) dir2.getObject(dir,"pPerp");
+  H1F edgXmissingP=(H1F) dir2.getObject(dir,"edgXmissingP");
+  H1F eDXmissingM=(H1F) dir2.getObject(dir,"eDXmissingM");
+  H1F Chi2Pid=(H1F) dir2.getObject("Kinematics DVCS Cut "+conf+"/","Chi2Pid");
+  H1F VertexE=(H1F) dir2.getObject("Kinematics DVCS Cut "+conf+"/","VertexElectron");
+  H1F VertexD=(H1F) dir2.getObject("Kinematics DVCS Cut "+conf+"/","VertexDeuteron");
   
-  DataLine line2 = new DataLine(2,0.0,2,edgXmissingE.getMax());
-line2.setLineColor(2);
-line2.setLineWidth(2);
+  //DataLine line1 = new DataLine(-2,0.0,-2,edXmissingM2.getMax());
+  //line1.setLineColor(2);
+  //line1.setLineWidth(2);
+  //ec.getScreenShot();
+  
+  //DataLine line2 = new DataLine(2,0.0,2,edgXmissingE.getMax());
+  //line2.setLineColor(2);
+  //line2.setLineWidth(2);
 
   ec4.divide(3,3);
   ec4.cd(0).draw(coneanglevsedXM2);
   ec4.cd(1).draw(edXmissingM2);
- System.out.println(ec4.getHeight());
-ec4.cd(1).draw(line1);
+  drawCut(-2.,edXmissingM2,ec4,1);
+  //ec4.cd(1).draw(line1);
   ec4.cd(2).draw(edgXmissingE);
-ec4.cd(2).draw(line2);
+  double cc=0;
+  if(conf=="FT") cc=2;
+  else cc=3;
+  drawCut(cc,edgXmissingE,ec4,2);
+  //ec4.cd(2).draw(line2);
   ec4.cd(3).draw(pPerphisto);
+  drawCut(0.5,pPerphisto,ec4,3);
   ec4.cd(4).draw(edgXmissingP);
+  drawCut(1.5,edgXmissingP,ec4,4);
   ec4.cd(5).draw(eDXmissingM);
+  drawCut(0.7,eDXmissingM,ec4,5);
   ec4.cd(6).draw(Chi2Pid);
   ec4.cd(7).draw(VertexE);
+  drawCut(-6.5,VertexE,ec4,7);
+  drawCut(0.,VertexE,ec4,7);
   ec4.cd(8).draw(VertexD);
 
 
 
  
 }
-public static void DrawCutsFD(TCanvas ec4, String dir){
+public static void drawCut(double cut,H1F histo,TCanvas canvas,int pad){
+  DataLine line = new DataLine(cut,0,cut,histo.getMax());
+  line.setLineColor(2);
+  line.setLineWidth(2);
+  canvas.cd(pad).draw(line);
 }
+
+
 }
+
+
+
