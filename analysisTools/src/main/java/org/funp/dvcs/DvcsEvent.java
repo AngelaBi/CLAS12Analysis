@@ -883,20 +883,35 @@ public byte detectorProt;
     );
     return cut;
   }
+  public boolean PrelimExclusivitycut(){
+    boolean cut=false;
+    if (conf==1){
+      cut=
+      //(this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when i do tag evetns
+      (this.X("eh").mass2() < (-1.5* this.coneangle()+2) 
+      && this.X("eh").mass2() >-2) ; 
+    }
+    else if (conf==2){
+    cut=
+       (this.X("eh").mass2() < (-1* this.coneangle()+2) 
+      && this.X("eh").mass2()>-2);
+    }
+    return cut;
+  }
   public boolean Exclusivitycut(int runNumber){
     boolean cut=false;
-    boolean dedxCut = true;
+    //boolean dedxCut = true;
     boolean vertexCut = false;
-
-      if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654 *Math.pow(vhadron.p(),-1.851)){
-        dedxCut = false;
-      }
-      if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
-        dedxCut = false;
-      }
-      if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628 *Math.pow(vhadron.p(),-2.398)){
-        dedxCut = false;
-      }
+      //THESE ARE THE dedx cuts done manually, they should be removed  since we are looking into ML stuff
+      // if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654 *Math.pow(vhadron.p(),-1.851)){
+      //   dedxCut = false;
+      // }
+      // if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
+      //   dedxCut = false;
+      // }
+      // if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628 *Math.pow(vhadron.p(),-2.398)){
+      //   dedxCut = false;
+      // }
       
       if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron) && vertexElectron < (1.5 + vertexDeuteron)){
         vertexCut = true;
@@ -907,11 +922,12 @@ public byte detectorProt;
     if (conf==1){
       cut=
       //(this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when i do tag evetns
-      (this.X("eh").mass2() < (-1.5* this.coneangle()+2) 
-      && this.X("eh").mass2() >-2  
+      (
+      //  this.X("eh").mass2() < (-1.5* this.coneangle()+2) 
+      //&& this.X("eh").mass2() >-2  && //Commenting these two lines becasue I move the coneangle cut in the PrelimExclusivitycut
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      && this.X("ehg").e()<2 
+      this.X("ehg").e()<2 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
       //&& Math.abs(this.chi2pid()) < 3.5
@@ -925,11 +941,12 @@ public byte detectorProt;
 
       
       cut=
-       (this.X("eh").mass2() < (-1* this.coneangle()+2) 
-      && this.X("eh").mass2()>-2 
+       (
+      //   this.X("eh").mass2() < (-1* this.coneangle()+2) 
+      //&& this.X("eh").mass2()>-2 && //Commenting these two lines becasue I move the coneangle cut in the PrelimExclusivitycut
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /*&& ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      && this.X("ehg").mass2()>-0.75 
+      this.X("ehg").mass2()>-0.75 
       && this.X("ehg").e()<3 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5

@@ -104,11 +104,14 @@ public class DvcsHisto {
   public H2F thgvsthe;
   ArrayList<Object> kinehistos;
   ArrayList<Object> exclhistos;
+  ArrayList<Object> asymhistos;
   ArrayList<Object> pidhistos;
   boolean readMode=false;
   private TDirectory rootDirfile;
   private String baseDir;//NC DC AC
   private String Config;//FT,FT or nothing
+
+
 
   private String outputdir=new String(".");
 
@@ -132,7 +135,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   public void SetHisto(){
     kinehistos= new ArrayList<Object>();
     exclhistos= new ArrayList<Object>();
+    asymhistos = new ArrayList<Object>();
     pidhistos = new ArrayList<Object>();
+    
     Xbj=createHisto("Xbj","x_b_j", "", 100, 0., 1.,"Kine");
     W=createHisto("W","W","W [GeV]",100,0,10,"Kine");
     Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"Kine");
@@ -162,8 +167,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     XvsY_electron=createHisto("XvsY", "X vs Y","","",100,-400,400,100,-400,400,"Kine");
     chisqHad=createHisto("chisqHad","#chi^2 PID hadron","",100,-25,25,"Kine");
     thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,5,"Kine");
-    Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Kine");
-    Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Kine");
+    Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
+    Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
    
     //START OF EXC POTS
     //edgX
@@ -227,6 +232,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
         else if(type == "Pid"){
           pidhistos.add(h);
         }
+        else if(type == "Asym"){
+          asymhistos.add(h);
+        }
       }
       return h;
       
@@ -262,6 +270,11 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   }
 
   public void fillBasicHisto(DvcsEvent ev) {
+    double[] q2bins={0,1.75,2.5,10};
+    double[] tbins={0,0.39,0.57,10};
+      double[] xbbin={0,0.128,0.182,10};
+
+
     dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
     dedxCNDvsP.fill(ev.vhadron.p(),ev.dedxDeutCND);
   
@@ -355,7 +368,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   public  void writeHipooutput(TDirectory rootdir,String directory){
     String hipodirectory = "/"+directory;
 
-    String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid"};
+    String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid",hipodirectory+"/Asym"};
     
   
     rootdir.mkdir(sub[0]);
@@ -377,6 +390,14 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     rootdir.mkdir(sub[2]);
     rootdir.cd(sub[2]);
     for (Object obj: pidhistos) {
+      if (obj instanceof H1F){
+        rootdir.addDataSet((H1F) obj);
+      } else if (obj instanceof H2F) {
+        rootdir.addDataSet((H2F) obj);      } 
+    }
+    rootdir.mkdir(sub[3]);
+    rootdir.cd(sub[3]);
+    for (Object obj: asymhistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
@@ -451,229 +472,229 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   
   
   
-//Here are the methods used by DoCode to fill the NickRichardson.hipo file 
+// //Here are the methods used by DoCode to fill the NickRichardson.hipo file 
 
-  public void DrawParticleComparison(/*TCanvas ecPP,*/ TDirectory dir, String directory ){
+//   public void DrawParticleComparison(/*TCanvas ecPP,*/ TDirectory dir, String directory ){
 
 
-    String hipodirectory = "/"+directory;
-    dir.mkdir(hipodirectory);
-    dir.cd(hipodirectory);
+//     String hipodirectory = "/"+directory;
+//     dir.mkdir(hipodirectory);
+//     dir.cd(hipodirectory);
     
-    dir.addDataSet(elecThvsPhi);
-    dir.addDataSet(elecThvsP);
-    dir.addDataSet(photThvsPhi);
-    dir.addDataSet(photThvsP);
-    dir.addDataSet(ThvsPhi);
-    dir.addDataSet(ThvsP);
-    dir.addDataSet(dedxDeutvsP);
-    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
-    // ecPP.divide(2,4);
+//     dir.addDataSet(elecThvsPhi);
+//     dir.addDataSet(elecThvsP);
+//     dir.addDataSet(photThvsPhi);
+//     dir.addDataSet(photThvsP);
+//     dir.addDataSet(ThvsPhi);
+//     dir.addDataSet(ThvsP);
+//     dir.addDataSet(dedxDeutvsP);
+//     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
+//     // ecPP.divide(2,4);
     
-    // ecPP.cd(0).draw(elecThvsPhi);
-    // ecPP.cd(1).draw(elecThvsP);
-    // ecPP.cd(2).draw(photThvsPhi);
-    // ecPP.cd(3).draw(photThvsP);
-    // ecPP.cd(4).draw(ThvsPhi);
-    // ecPP.cd(5).draw(ThvsP);
-    // ecPP.cd(6).draw(dedxDeutvsP);
-    // ecPP.getCanvas().getScreenShot();
-    // System.out.println(this.outputdir+"/"+ecPP.getTitle()+".png" );
-    // ecPP.getCanvas().save(this.outputdir+"/"+ecPP.getTitle()+".png");
-    
-
+//     // ecPP.cd(0).draw(elecThvsPhi);
+//     // ecPP.cd(1).draw(elecThvsP);
+//     // ecPP.cd(2).draw(photThvsPhi);
+//     // ecPP.cd(3).draw(photThvsP);
+//     // ecPP.cd(4).draw(ThvsPhi);
+//     // ecPP.cd(5).draw(ThvsP);
+//     // ecPP.cd(6).draw(dedxDeutvsP);
+//     // ecPP.getCanvas().getScreenShot();
+//     // System.out.println(this.outputdir+"/"+ecPP.getTitle()+".png" );
+//     // ecPP.getCanvas().save(this.outputdir+"/"+ecPP.getTitle()+".png");
     
 
-  }
-
-  public void DrawMissingQuants(/*TCanvas ec4, */TDirectory dir, String directory){
-
-    //ec4.divide(4,4);
-    String hipodirectory = "/"+directory;
-    dir.mkdir(hipodirectory);
-    dir.cd(hipodirectory);
-    
-    dir.addDataSet(edgXmissingE);
-    dir.addDataSet(edgXmissingM2);
-    dir.addDataSet(edgXmissingP);
-    dir.addDataSet(edgXmissingPx);
-    dir.addDataSet(edgXmissingPy);
-    dir.addDataSet(edgXmissingPz);
-    dir.addDataSet(pPerphisto);
-    
-    dir.addDataSet(edXmissingE);
-    dir.addDataSet(edXmissingM2);
-    dir.addDataSet(edXmissingM);
-
-    dir.addDataSet(egXmissingM2);
-    dir.addDataSet(egXmissingM);
-
-    dir.addDataSet(DeltaPhiPlaneHist);
-    dir.addDataSet(DeltaPhiPlaneMattHist);
-    dir.addDataSet(MissThetaHist);
-    dir.addDataSet(ConeAngleHist);
-
-    dir.addDataSet(coneanglevspperp);
-    dir.addDataSet(coneanglevsedXM2);
-    dir.addDataSet(coneanglevsegXM2);
-    dir.addDataSet(coneanglevsegXM2);
-
-
-    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     
 
+//   }
 
+//   public void DrawMissingQuants(/*TCanvas ec4, */TDirectory dir, String directory){
 
-  }
-  public void DrawKinematics(/*TCanvas ec,*/ TDirectory dir, String directory){
+//     //ec4.divide(4,4);
+//     String hipodirectory = "/"+directory;
+//     dir.mkdir(hipodirectory);
+//     dir.cd(hipodirectory);
     
-    String hipodirectory = "/"+directory;
-    dir.mkdir(hipodirectory);
-    dir.cd(hipodirectory);
+//     dir.addDataSet(edgXmissingE);
+//     dir.addDataSet(edgXmissingM2);
+//     dir.addDataSet(edgXmissingP);
+//     dir.addDataSet(edgXmissingPx);
+//     dir.addDataSet(edgXmissingPy);
+//     dir.addDataSet(edgXmissingPz);
+//     dir.addDataSet(pPerphisto);
     
-    dir.addDataSet(Xbj);
-    dir.addDataSet(Q2);
-    dir.addDataSet(W);
-    dir.addDataSet(hadmom);
-    dir.addDataSet(WvsQ2);
-    dir.addDataSet(Q2vsXbj);
-    //dir.addDataSet(tvsxb);
-    dir.addDataSet(q2vst);
+//     dir.addDataSet(edXmissingE);
+//     dir.addDataSet(edXmissingM2);
+//     dir.addDataSet(edXmissingM);
+
+//     dir.addDataSet(egXmissingM2);
+//     dir.addDataSet(egXmissingM);
+
+//     dir.addDataSet(DeltaPhiPlaneHist);
+//     dir.addDataSet(DeltaPhiPlaneMattHist);
+//     dir.addDataSet(MissThetaHist);
+//     dir.addDataSet(ConeAngleHist);
+
+//     dir.addDataSet(coneanglevspperp);
+//     dir.addDataSet(coneanglevsedXM2);
+//     dir.addDataSet(coneanglevsegXM2);
+//     dir.addDataSet(coneanglevsegXM2);
+
+
+//     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
     
 
-    dir.addDataSet(VertexElectron);
-    dir.addDataSet(VertexDuetron);
-    dir.addDataSet(vertexElecVSvertexDeut);
-    dir.addDataSet(dedxDeutvsP);
-    dir.addDataSet(dedxCTOFvsP);
-    dir.addDataSet(dedxCNDvsP);
+
+
+//   }
+//   public void DrawKinematics(/*TCanvas ec,*/ TDirectory dir, String directory){
+    
+//     String hipodirectory = "/"+directory;
+//     dir.mkdir(hipodirectory);
+//     dir.cd(hipodirectory);
+    
+//     dir.addDataSet(Xbj);
+//     dir.addDataSet(Q2);
+//     dir.addDataSet(W);
+//     dir.addDataSet(hadmom);
+//     dir.addDataSet(WvsQ2);
+//     dir.addDataSet(Q2vsXbj);
+//     //dir.addDataSet(tvsxb);
+//     dir.addDataSet(q2vst);
     
 
-    dir.addDataSet(ThvsPhi);
-    dir.addDataSet(elecThvsPhi);
-    dir.addDataSet(photThvsPhi);
-    dir.addDataSet(ThvsP);
-    dir.addDataSet(elecThvsP);
-    dir.addDataSet(photThvsP);
+//     dir.addDataSet(VertexElectron);
+//     dir.addDataSet(VertexDuetron);
+//     dir.addDataSet(vertexElecVSvertexDeut);
+//     dir.addDataSet(dedxDeutvsP);
+//     dir.addDataSet(dedxCTOFvsP);
+//     dir.addDataSet(dedxCNDvsP);
+    
 
-    dir.addDataSet(hgTh);
-    dir.addDataSet(hgEn);
-    dir.addDataSet(PhiPlaneHist);
-    dir.addDataSet(DPhiHist);
+//     dir.addDataSet(ThvsPhi);
+//     dir.addDataSet(elecThvsPhi);
+//     dir.addDataSet(photThvsPhi);
+//     dir.addDataSet(ThvsP);
+//     dir.addDataSet(elecThvsP);
+//     dir.addDataSet(photThvsP);
 
-    dir.addDataSet(betahadhisto);
-    dir.addDataSet(betacalchisto);
-    dir.addDataSet(betacalcvsP);
-    dir.addDataSet(deltabetavschi2);
-    dir.addDataSet(deltabeta);
+//     dir.addDataSet(hgTh);
+//     dir.addDataSet(hgEn);
+//     dir.addDataSet(PhiPlaneHist);
+//     dir.addDataSet(DPhiHist);
+
+//     dir.addDataSet(betahadhisto);
+//     dir.addDataSet(betacalchisto);
+//     dir.addDataSet(betacalcvsP);
+//     dir.addDataSet(deltabetavschi2);
+//     dir.addDataSet(deltabeta);
    
-    dir.addDataSet(ConeAngleBtElectronPhotonFD);
+//     dir.addDataSet(ConeAngleBtElectronPhotonFD);
 
-    //dir.addDataSet(phivshelicityPlus);
-    dir.addDataSet(phivshelicityMinus);
-    //dir.addDataSet(helicityhisto);
-    //dir.addDataSet(helicityrawhisto);
+//     //dir.addDataSet(phivshelicityPlus);
+//     dir.addDataSet(phivshelicityMinus);
+//     //dir.addDataSet(helicityhisto);
+//     //dir.addDataSet(helicityrawhisto);
 
-    dir.addDataSet(XvsY_electron);
+//     dir.addDataSet(XvsY_electron);
 
-    dir.addDataSet(chisqHad);
-    dir.addDataSet(thisto);
-    dir.addDataSet(ConeAngleHist);//Should be in missing
-    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
-    // ec.divide(5,5);
-    // ec.cd(0).draw(WvsQ2);
-    // ec.cd(1).draw(Q2vsXbj);
-    // ec.cd(2).draw(betacalcvsP);
+//     dir.addDataSet(chisqHad);
+//     dir.addDataSet(thisto);
+//     dir.addDataSet(ConeAngleHist);//Should be in missing
+//     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
+//     // ec.divide(5,5);
+//     // ec.cd(0).draw(WvsQ2);
+//     // ec.cd(1).draw(Q2vsXbj);
+//     // ec.cd(2).draw(betacalcvsP);
 
-    // ec.cd(3).draw(chi2vsdeltabeta);
-    // //ec.getPad(1).getAxisZ().setLog(true);
-    // ec.cd(4).draw(W);
-    // ec.cd(5).draw(hgTh);
-    // ec.cd(6).draw(hgEn);
-    // ec.cd(7).draw(Q2);
-    // ec.cd(8).draw(ConeAngleHist);
-    // ec.cd(9).draw(ConeAngleBtElectronPhotonFD);
-    // //ec.getPad(1).getAxisZ().setLog(true);
-    // ec.cd(10).draw(PhiPlaneHist);
-    // ec.cd(11).draw(DPhiHist);
-    // ec.cd(12).draw(q2vst);
-    // //ec.cd(25).draw(helicityrawhisto);
-    // ec.cd(13).draw(thisto);
-    // ec.cd(14).draw(phivshelicityMinus);
-    // //ec.cd(14).draw(deltabeta);
-    // ec.cd(15).draw(chisqHad);
-    // ec.cd(16).draw(betacalchisto);
-    // ec.cd(17).draw(betahadhisto);
-    // ec.cd(18).draw(XvsY_electron);
-    // ec.cd(19).draw(thisto);
-    // ec.cd(20).draw(VertexElectron);
-    // ec.cd(21).draw(VertexDuetron);
-    // ec.cd(22).draw(vertexElecVSvertexDeut);
-    // ec.cd(23).draw(dedxCNDvsP);
-    // ec.cd(24).draw(dedxCTOFvsP);
-    // ec.cd(23).draw(Phiplus);
-    // ec.cd(24).draw(Phiminus);
+//     // ec.cd(3).draw(chi2vsdeltabeta);
+//     // //ec.getPad(1).getAxisZ().setLog(true);
+//     // ec.cd(4).draw(W);
+//     // ec.cd(5).draw(hgTh);
+//     // ec.cd(6).draw(hgEn);
+//     // ec.cd(7).draw(Q2);
+//     // ec.cd(8).draw(ConeAngleHist);
+//     // ec.cd(9).draw(ConeAngleBtElectronPhotonFD);
+//     // //ec.getPad(1).getAxisZ().setLog(true);
+//     // ec.cd(10).draw(PhiPlaneHist);
+//     // ec.cd(11).draw(DPhiHist);
+//     // ec.cd(12).draw(q2vst);
+//     // //ec.cd(25).draw(helicityrawhisto);
+//     // ec.cd(13).draw(thisto);
+//     // ec.cd(14).draw(phivshelicityMinus);
+//     // //ec.cd(14).draw(deltabeta);
+//     // ec.cd(15).draw(chisqHad);
+//     // ec.cd(16).draw(betacalchisto);
+//     // ec.cd(17).draw(betahadhisto);
+//     // ec.cd(18).draw(XvsY_electron);
+//     // ec.cd(19).draw(thisto);
+//     // ec.cd(20).draw(VertexElectron);
+//     // ec.cd(21).draw(VertexDuetron);
+//     // ec.cd(22).draw(vertexElecVSvertexDeut);
+//     // ec.cd(23).draw(dedxCNDvsP);
+//     // ec.cd(24).draw(dedxCTOFvsP);
+//     // ec.cd(23).draw(Phiplus);
+//     // ec.cd(24).draw(Phiminus);
 
 
-    //i removed this jsut because its not useful and i wanted to make plot 4/5
-//    ec.cd(14).draw(helicityhisto);
+//     //i removed this jsut because its not useful and i wanted to make plot 4/5
+// //    ec.cd(14).draw(helicityhisto);
     
 
-    // ec.getCanvas().getScreenShot();
-    // ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
+//     // ec.getCanvas().getScreenShot();
+//     // ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
 
-    //ec.divide(4,3);
-    //ec2.cd(0).draw(DAngleGammaHist);
+//     //ec.divide(4,3);
+//     //ec2.cd(0).draw(DAngleGammaHist);
 
-    // ec2.cd(10).draw(ThvsPhi);
-    // ec2.cd(11).draw(MMomx);
-    // ec2.cd(12).draw(MMomy);
-    // ec2.cd(13).draw(MMomz);
-    // ec2.cd(14).draw(edgXmissingE);
-    // ec2.cd(15).draw(edgXmissingM2);
-    // ec2.cd(16).draw(edgXmissingP);
-    // ec2.cd(17).draw(edXmissingM2);
-    // ec2.cd(18).draw(egXmissingM2);
-    // ec2.cd(19).draw(ThvsPhi);
-    // ec2.cd(20).draw(hgTh);
-  }
-  public void DrawConeAngle(/*TCanvas ec,*/ TDirectory dir,  String directory ){
+//     // ec2.cd(10).draw(ThvsPhi);
+//     // ec2.cd(11).draw(MMomx);
+//     // ec2.cd(12).draw(MMomy);
+//     // ec2.cd(13).draw(MMomz);
+//     // ec2.cd(14).draw(edgXmissingE);
+//     // ec2.cd(15).draw(edgXmissingM2);
+//     // ec2.cd(16).draw(edgXmissingP);
+//     // ec2.cd(17).draw(edXmissingM2);
+//     // ec2.cd(18).draw(egXmissingM2);
+//     // ec2.cd(19).draw(ThvsPhi);
+//     // ec2.cd(20).draw(hgTh);
+//   }
+//   public void DrawConeAngle(/*TCanvas ec,*/ TDirectory dir,  String directory ){
 
-    String hipodirectory = "/"+directory;
-    dir.mkdir(hipodirectory);
-    dir.cd(hipodirectory);
+//     String hipodirectory = "/"+directory;
+//     dir.mkdir(hipodirectory);
+//     dir.cd(hipodirectory);
 
-    dir.addDataSet(coneanglevspperp);
-    dir.addDataSet(coneanglevsedXM2);
-    dir.addDataSet(coneanglevsegXM2);
-    dir.addDataSet(betavsP);
-    dir.writeFile(this.outputdir + "/NickRichardson.hipo");
-    // ec.divide(2,2);
-    // ec.cd(0).draw(coneanglevspperp);
-    // ec.cd(1).draw(coneanglevsedXM2);
-    // ec.cd(2).draw(coneanglevsegXM2);
+//     dir.addDataSet(coneanglevspperp);
+//     dir.addDataSet(coneanglevsedXM2);
+//     dir.addDataSet(coneanglevsegXM2);
+//     dir.addDataSet(betavsP);
+//     dir.writeFile(this.outputdir + "/NickRichardson.hipo");
+//     // ec.divide(2,2);
+//     // ec.cd(0).draw(coneanglevspperp);
+//     // ec.cd(1).draw(coneanglevsedXM2);
+//     // ec.cd(2).draw(coneanglevsegXM2);
 
-    // ec.cd(3).draw(betavsP);
-    // ec.getPad().getAxisZ().setLog(true);
-    // ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
+//     // ec.cd(3).draw(betavsP);
+//     // ec.getPad().getAxisZ().setLog(true);
+//     // ec.getCanvas().save(this.outputdir+"/"+ec.getTitle()+".png");
 
 
-    //ec.divide(4,3);
-    //ec2.cd(0).draw(DAngleGammaHist);
+//     //ec.divide(4,3);
+//     //ec2.cd(0).draw(DAngleGammaHist);
 
-    // ec2.cd(10).draw(ThvsPhi);
-    // ec2.cd(11).draw(MMomx);
-    // ec2.cd(12).draw(MMomy);
-    // ec2.cd(13).draw(MMomz);
-    // ec2.cd(14).draw(edgXmissingE);
-    // ec2.cd(15).draw(edgXmissingM2);
-    // ec2.cd(16).draw(edgXmissingP);
-    // ec2.cd(17).draw(edXmissingM2);
-    // ec2.cd(18).draw(egXmissingM2);
-    // ec2.cd(19).draw(ThvsPhi);
-    // ec2.cd(20).draw(hgTh);
-  }
+//     // ec2.cd(10).draw(ThvsPhi);
+//     // ec2.cd(11).draw(MMomx);
+//     // ec2.cd(12).draw(MMomy);
+//     // ec2.cd(13).draw(MMomz);
+//     // ec2.cd(14).draw(edgXmissingE);
+//     // ec2.cd(15).draw(edgXmissingM2);
+//     // ec2.cd(16).draw(edgXmissingP);
+//     // ec2.cd(17).draw(edXmissingM2);
+//     // ec2.cd(18).draw(egXmissingM2);
+//     // ec2.cd(19).draw(ThvsPhi);
+//     // ec2.cd(20).draw(hgTh);
+//   }
   // public void writeHipo(){
   //   dir.writeFile("myfile.hipo");
   // }

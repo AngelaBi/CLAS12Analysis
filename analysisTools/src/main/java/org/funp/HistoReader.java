@@ -48,8 +48,11 @@ public class HistoReader {
   static TCanvas ec4;
   static TCanvas ecA;
   static DvcsHisto hDCFT;
-  static DvcsHisto hACFT;
   static DvcsHisto hDCFD;
+  static DvcsHisto hCCFT;
+  static DvcsHisto hCCFD;
+  static DvcsHisto hACFT;
+  
   static DvcsHisto hACFD;
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
@@ -59,18 +62,24 @@ public class HistoReader {
     hipobasedir = new TDirectory();
     hipobasedir.readFile("Angela.hipo");
     hDCFT = new DvcsHisto(hipobasedir, "DC", "FT");
-    hACFT = new DvcsHisto(hipobasedir, "AC", "FT");
     hDCFD = new DvcsHisto(hipobasedir, "DC", "FD");
+    hCCFT = new DvcsHisto(hipobasedir, "CC", "FT");
+    hCCFD = new DvcsHisto(hipobasedir, "CC", "FD");
+    hACFT = new DvcsHisto(hipobasedir, "AC", "FT");
     hACFD = new DvcsHisto(hipobasedir, "AC", "FD");
 
-    TCanvas ec = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    displayExcCuts(ec, hDCFT);
-    TCanvas ec2 = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    displayExcCuts(ec2, hACFT);
-    TCanvas ec3 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
-    displayExcCuts(ec3, hDCFD);
-    TCanvas ec4 = new TCanvas("Exclusivity cuts for selection of edg Fd", 1200, 1000);
-    displayExcCuts(ec4, hACFD);
+    // TCanvas ec = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
+    // displayExcCuts(ec, hDCFT);
+    // TCanvas ec2 = new TCanvas("Exclusivity cuts for selection of edg FT after coneangle cuts", 1200, 1000);
+    // displayExcCuts(ec2, hCCFT);
+    // TCanvas ec3 = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
+    // displayExcCuts(ec3, hACFT);
+    TCanvas ec4 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
+    displayExcCuts(ec4, hDCFD);
+    TCanvas ec5 = new TCanvas("Exclusivity cuts for selection of edg FD  after coneangle cuts", 1200, 1000);
+    displayExcCuts(ec5, hCCFD);
+    TCanvas ec6 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
+    displayExcCuts(ec6, hACFD);
     TCanvas ecA = new TCanvas("Asym FT", 1200, 1000);
     drawAsym(ecA, hACFT);
 
