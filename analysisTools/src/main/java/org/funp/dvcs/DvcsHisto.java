@@ -99,6 +99,8 @@ public class DvcsHisto {
   public H2F dedxDeutvsP;
   public H2F dedxCTOFvsP;
   public H2F dedxCNDvsP;
+  public H1F[] phiplusQ2bin;
+  public H1F[] phiminusQ2bin;
 
   public H2F thgvsthe;
   ArrayList<Object> kinehistos;
@@ -208,6 +210,12 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     dedxCTOFvsP= createHisto("dedxCTOFvsP", "de/dx CTOF vs P", "","",100,0,2,100,0,30, "Pid");
     dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "Pid");
     thgvsthe=createHisto("thgvsthe", "#theta_#gamma vs #theta_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
+    phiplusQ2bin=new H1F[3];
+    phiminusQ2bin=new H1F[3];
+    for (int i=0;i<3;i++){
+      phiplusQ2bin[i]=createHisto("PhiplusQ2bin"+i, "PhiplusQ2", "", 10, 0, 360, "Asym");
+      phiminusQ2bin[i]=createHisto("PhiminusQ2bin"+i, "PhiminusQ2", "", 10, 0, 360, "Asym");
+    }
     System.out.println("creating histograms"  );
   }
   public H1F createHisto(String name,
@@ -360,7 +368,18 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       Phiminus.fill(ev.PhiPlane());
       phivshelicityMinus.fill(ev.PhiPlane(), ev.helicity);
     }
-
+    for (int i=0;i<q2bins.length-1;i++){
+      if(-ev.Q().mass2()>q2bins[i] && -ev.Q().mass2()<q2bins[i+1]){
+      if(ev.helicity==1){
+        
+        phiplusQ2bin[i].fill(ev.PhiPlane());
+        
+      }
+      else if (ev.helicity==-1){
+        phiminusQ2bin[i].fill(ev.PhiPlane());
+      }
+    }
+    }
 
   }
 
@@ -415,7 +434,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     //rootdir.addDataSet(coneanglevspperp);
     //rootdir.addDataSet(coneanglevsedXM2);
     //rootdir.addDataSet(coneanglevsegXM2);
-    rootdir.writeFile(this.outputdir + "/Angela.hipo");
+    //rootdir.writeFile(this.outputdir + "/Angela.hipo");
   
   }
   public H1F buildAsym(TDirectory dir, String directory){

@@ -361,7 +361,8 @@ public class DcoDe
     hDCFT.writeHipooutput(rootdir,"DCFT");
     hAC.writeHipooutput(rootdir,"AC");
     hACFD.writeHipooutput(rootdir,"ACFD");
-    hACFT.writeHipooutput(rootdir,"ACFT");   
+    hACFT.writeHipooutput(rootdir,"ACFT");  
+    rootdir.writeFile(inputParam.OutputLocation + "/Angela.hipo"); 
    
     //TCanvas ec = new TCanvas("Before cuts",1200,1000);
     //hNC.DrawBasic( ec);
