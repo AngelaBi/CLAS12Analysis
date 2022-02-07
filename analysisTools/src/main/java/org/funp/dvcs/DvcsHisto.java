@@ -2,7 +2,6 @@ package org.funp.dvcs;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*;
 
-import de.erichseifert.vectorgraphics2d.intermediate.commands.SetHintCommand;
 
 import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
