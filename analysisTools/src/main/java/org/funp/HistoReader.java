@@ -84,7 +84,14 @@ public class HistoReader {
     drawAsym(ecA, hACFT);
 
   }
+  public static void displayOthercuts(TCanvas c, DvcsHisto h){
+    c.divide(2, 2);
+    c.cd(0).draw(h.VertexElectron);
+    drawCut(-6.5, h.VertexElectron, c, 7);
+    drawCut(0., h.VertexElectron, c, 7);
 
+    c.cd(1).draw(h.vertexElecVSvertexDeut);
+  }
   public static void displayExcCuts(TCanvas ec, DvcsHisto h) {
 
     ec.divide(3, 3);
@@ -111,11 +118,11 @@ public class HistoReader {
 
     ec.cd(6).draw(h.chisqHad);
 
-    ec.cd(7).draw(h.VertexElectron);
-    drawCut(-6.5, h.VertexElectron, ec, 7);
-    drawCut(0., h.VertexElectron, ec, 7);
+    ec.cd(7).draw(h.coneanglevsegXM2);
 
-    ec.cd(8).draw(h.vertexElecVSvertexDeut);
+    ec.cd(8).draw(h.egXmissingM2);
+
+    
 
   }
 
