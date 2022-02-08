@@ -174,7 +174,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     //START OF EXC POTS
     //edgX
     edgXmissingE =createHisto("edgXmissingE", "eD#gammaX Missing Energy", "E_e_D_#gamma_X [GeV]", 100,0,10, "Excl");
-    edgXmissingM2=createHisto("edgXmissingM2", "eD#gammaX Missing Mass^2", "M^2_x [GeV/c^2]^2", 100,-4,4, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "", "M^2_x [GeV/c^2]^2", 100,-4,4, "Excl");
     edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "p_x [GeV/c]", 100,0,4, "Excl");
     edgXmissingPx=createHisto("MMomx", "Missing X Momentum", "", 100,-1,1, "Excl");
     edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
