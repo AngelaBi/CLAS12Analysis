@@ -186,7 +186,7 @@ public byte detectorProt;
     velectron.setPxPyPzM(particles.getFloat("px",ne),
     particles.getFloat("py",ne),
     particles.getFloat("pz",ne),
-    0.0005);
+    0.000511);
     if(Math.abs(particles.getInt("status", ne)) >= 1000 && Math.abs(particles.getInt("status", ne)) < 2000){
       velectron=Correct_FT_E(velectron, 0.000511);
     }
@@ -287,10 +287,14 @@ public byte detectorProt;
     particles.getFloat("py",ng),
     particles.getFloat("pz",ng),
     0.0);
+    
+    // 
     if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
+      //vphoton.print();
       vphoton=Correct_FT_E(vphoton, 0.0);
+      //vphoton.print();
     }
-
+    // 
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
     // photon_v = -10;
@@ -385,13 +389,13 @@ public byte detectorProt;
 
     double E_new, Px_el, Py_el, Pz_el;
     LorentzVector el_new = new LorentzVector();
-
+    //System.out.println(x.e());
     E_new = x.e() - 0.03689 + 0.1412 * x.e() - 0.04316 * Math.pow(x.e(), 2) + 0.007046 * Math.pow(x.e(), 3)
         - 0.0004055 * Math.pow(x.e(), 4);
-
-    Px_el = E_new * (x.px() / x.p());
-    Py_el = E_new * (x.px() / x.p());
-    Pz_el = E_new * (x.px() / x.p());
+      //  System.out.println(E_new);
+    Px_el = E_new * (x.px() / x.vect().mag());
+    Py_el = E_new * (x.py() / x.vect().mag());
+    Pz_el = E_new * (x.pz() / x.vect().mag());
 
     el_new.setPxPyPzM(Px_el, Py_el, Pz_el, mass);
 
