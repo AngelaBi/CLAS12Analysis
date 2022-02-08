@@ -68,12 +68,12 @@ public class HistoReader {
     hACFT = new DvcsHisto(hipobasedir, "AC", "FT");
     hACFD = new DvcsHisto(hipobasedir, "AC", "FD");
 
-    // TCanvas ec = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    // displayExcCuts(ec, hDCFT);
-    // TCanvas ec2 = new TCanvas("Exclusivity cuts for selection of edg FT after coneangle cuts", 1200, 1000);
-    // displayExcCuts(ec2, hCCFT);
-    // TCanvas ec3 = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    // displayExcCuts(ec3, hACFT);
+    TCanvas ec = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
+    displayExcCuts(ec, hDCFT);
+    TCanvas ec2 = new TCanvas("Exclusivity cuts for selection of edg FT after coneangle cuts", 1200, 1000);
+    displayExcCuts(ec2, hCCFT);
+    TCanvas ec3 = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
+    displayExcCuts(ec3, hACFT);
     TCanvas ec4 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
     displayExcCuts(ec4, hDCFD);
     TCanvas ec5 = new TCanvas("Exclusivity cuts for selection of edg FD  after coneangle cuts", 1200, 1000);

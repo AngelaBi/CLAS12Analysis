@@ -894,7 +894,8 @@ public byte detectorProt;
     else if (conf==2){
     cut=
        (this.X("eh").mass2() < (-1* this.coneangle()+2) 
-      && this.X("eh").mass2()>-2);
+      && this.X("eh").mass2()>-2
+      && this.X("eg").mass2()< +12-1.5*this.coneangle());
     }
     return cut;
   }
