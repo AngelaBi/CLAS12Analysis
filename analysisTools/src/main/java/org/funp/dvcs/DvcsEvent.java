@@ -187,6 +187,10 @@ public byte detectorProt;
     particles.getFloat("py",ne),
     particles.getFloat("pz",ne),
     0.0005);
+    if(Math.abs(particles.getInt("status", ne)) >= 1000 && Math.abs(particles.getInt("status", ne)) < 2000){
+      velectron=Correct_FT_E(velectron, 0.000511);
+    }
+
     vertexElectron = particles.getFloat("vz", ne);
     elec_v = -10;
     elec_w = -10;
@@ -283,6 +287,10 @@ public byte detectorProt;
     particles.getFloat("py",ng),
     particles.getFloat("pz",ng),
     0.0);
+    if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
+      vphoton=Correct_FT_E(vphoton, 0.0);
+    }
+
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
     // photon_v = -10;
@@ -373,6 +381,24 @@ public byte detectorProt;
     }
               
   }
+  LorentzVector Correct_FT_E(LorentzVector x, double mass) {
+
+    double E_new, Px_el, Py_el, Pz_el;
+    LorentzVector el_new = new LorentzVector();
+
+    E_new = x.e() - 0.03689 + 0.1412 * x.e() - 0.04316 * Math.pow(x.e(), 2) + 0.007046 * Math.pow(x.e(), 3)
+        - 0.0004055 * Math.pow(x.e(), 4);
+
+    Px_el = E_new * (x.px() / x.p());
+    Py_el = E_new * (x.px() / x.p());
+    Pz_el = E_new * (x.px() / x.p());
+
+    el_new.setPxPyPzM(Px_el, Py_el, Pz_el, mass);
+
+    return el_new;
+  }
+
+
   public void setPositives(Bank particles, Bank scint, int np){
     if (this.FoundDeuteron==true){
     vdeuteron.setPxPyPzM(particles.getFloat("px",np),
