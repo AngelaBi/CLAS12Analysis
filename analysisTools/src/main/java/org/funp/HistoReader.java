@@ -82,6 +82,8 @@ public class HistoReader {
     displayExcCuts(ec6, hACFD);
     TCanvas ecA = new TCanvas("Asym FT", 1200, 1000);
     drawAsym(ecA, hACFT);
+    TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
+    drawAsym(ecA2, hACFD);
 
   }
   public static void displayOthercuts(TCanvas c, DvcsHisto h){
