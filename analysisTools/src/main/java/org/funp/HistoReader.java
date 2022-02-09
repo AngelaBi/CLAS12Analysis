@@ -100,13 +100,13 @@ public class HistoReader {
     ec.cd(0).draw(h.coneanglevsedXM2);
 
     ec.cd(1).draw(h.edXmissingM2);
-    drawCut(-2., h.edXmissingM2, ec, 1);
+    drawCut(-1., h.edXmissingM2, ec, 1);
 
     ec.cd(2).draw(h.edgXmissingE);
     double cc = 0;
     // if(conf=="FT") cc=2;
     // else
-    cc = 3;
+    cc = 2;
     drawCut(cc, h.edgXmissingE, ec, 2);
 
     ec.cd(3).draw(h.pPerphisto);

@@ -919,12 +919,12 @@ public byte detectorProt;
       cut=
       //(this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when i do tag evetns
       (this.X("eh").mass2() < (-1.5* this.coneangle()+2) 
-      && this.X("eh").mass2() >-2) ; 
+      && this.X("eh").mass2() >-1) ; 
     }
     else if (conf==2){
     cut=
        (this.X("eh").mass2() < (-1* this.coneangle()+2) 
-      && this.X("eh").mass2()>-2
+      && this.X("eh").mass2()>-1
       //&& this.X("eg").mass2()< +12-1.5*this.coneangle()
       );
     }
@@ -959,11 +959,12 @@ public byte detectorProt;
       //&& this.X("eh").mass2() >-2  && //Commenting these two lines becasue I move the coneangle cut in the PrelimExclusivitycut
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
+      this.X("ehg").mass2()>-0.75 && this.X("ehg").mass2()<0.25 && //was none
       this.X("ehg").e()<2 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
       //&& Math.abs(this.chi2pid()) < 3.5
-      && this.X("eh").mass() < 0.7
+      && this.X("eh").mass() < 1.5//was 0.7
       && vertexCut
       //&& dedxCut
       //&& -1*this.t().mass2()  < 1.4
@@ -978,13 +979,13 @@ public byte detectorProt;
       //&& this.X("eh").mass2()>-2 && //Commenting these two lines becasue I move the coneangle cut in the PrelimExclusivitycut
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /*&& ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      this.X("ehg").mass2()>-0.75 
-      && this.X("ehg").e()<3 
+      this.X("ehg").mass2()>-0.25 && this.X("ehg").mass2()<0.25 //>-0.75
+      && this.X("ehg").e()<2//was 3 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
      // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
       //&& Math.abs(this.chi2pid()) < 3.5
-      && this.X("eh").mass() < 0.7
+      && this.X("eh").mass() < 1.5//was 0.7
       && vertexCut
       //&& dedxCut
       //&& -1*this.t().mass2() < 1.4

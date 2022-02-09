@@ -88,6 +88,7 @@ public class DvcsHisto {
   public H2F coneanglevsedXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehX
   public H2F coneanglevspperp;
   public H2F coneanglevsegXM2;
+  public H2F dphiPlanevsdphiPlane2;
   //pid id histos 
   public H2F betacalcvsP;//y
   public H1F betahadhisto;//y
@@ -181,9 +182,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
     pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,3, "Excl");
     //edX
-    edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-5,5, "Excl");
+    edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-1,10, "Excl");
     edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
-    edXmissingM=createHisto("eDXmissingM", "eDX Missing Mass", "", 100,-0,5, "Excl");
+    edXmissingM=createHisto("edXmissingM", "edX Missing Mass", "", 100,-0,5, "Excl");
     //egX
     egXmissingM2=createHisto("egXmissingM2","e#gammaX Missing Mass2","",100,-0,10, "Excl");//M_e_#gamma_X^2 [GeV/c^2]^2
     egXmissingM=createHisto("egXmissingM","e#gammaX Mass","",100,-0,5, "Excl");//M_e_#gamma_X [GeV/c^2]
@@ -192,12 +193,13 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi Plane", "", 100,-10,10, "Excl");
     DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi Plane Hattawy", "", 100,-10,10, "Excl");
     MissThetaHist=createHisto("MissThetaHist", "MissThetaHist", "", 100,0,180, "Excl");
+    dphiPlanevsdphiPlane2=createHisto("phiPlanevsPhiPlane2", "phiPlane vs PhiPlane2", "phiPlane", "phiPlane", 100, -10, 10, 100, -10, 10, "Excl");
     //cone angles
-    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,-3,10, "Excl");
-    coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX missing M2 vs Cone Angle", "Cone Angle (deg.)", "eDGammaX missing M2 (GeV)", 100,0,20,100,-1,0.5, "Excl");
-    coneanglevsedXM2=createHisto("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_{#gamma,x} [deg.]","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,20,100,-10,10, "Excl");
-    coneanglevspperp=createHisto("ConeAnglevsPperp","Cone Angle vs Pperp","Pperp","Cone Angle", 100,0,10,100,0,1,"Excl");
-    coneanglevsegXM2=createHisto("coneanglevsegXM2","egX missing M2 vs Cone Angle","Cone Angle (deg.)","egX missing M2 (GeV)",100,0,20,100,0,20,"Excl");
+    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,0,15, "Excl");
+    coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX M^2_x vs #theta_#gamma_x", "#theta#_#gamma_x", "eDGammaX M^2_x (GeV)", 100,0,15,100,-3,4, "Excl");
+    coneanglevsedXM2=createHisto("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_#gamma_x","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,15,100,-10,10, "Excl");
+    coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs #theta_#gamma_x","#theta_#gamma_x","Pperp", 100,0,15,100,0,3,"Excl");
+    coneanglevsegXM2=createHisto("coneanglevsegXM2","egX M^2_x vs #theta_#gamma_x","#theta_#gamma_x","egX M^2_x (GeV)",100,0,15,100,0,7,"Excl");
     //Pid histograms
     betahadhisto=createHisto("beta","#beta","Measured #beta",100,0,1,"Pid");
     betacalchisto=createHisto("betacalc","#beta_calc","#beta calculated from relativistic momentum",100,0,1,"Pid");
@@ -285,7 +287,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
     dedxCNDvsP.fill(ev.vhadron.p(),ev.dedxDeutCND);
   
-    coneanglevspperp.fill(ev.pPerp(), ev.coneangle());
+    
     XvsY_electron.fill(ev.elec_x,ev.elec_y);
    // XvsY_electron_after.fill(ev.elec_x,ev.elec_y);
     W.fill(ev.W().mass());
@@ -296,17 +298,18 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
     Xbj.fill(ev.Xb());
     //missing quantities of a complete DVCS final state e hadron gamma
-    edgXmissingE.fill(ev.X("ehg").e());
-    edgXmissingM2.fill(ev.X("ehg").mass2());
-    edgXmissingP.fill(ev.X("ehg").p());
-    edgXmissingPx.fill(ev.X("ehg").px());
-    edgXmissingPy.fill(ev.X("ehg").py());
-    edgXmissingPz.fill(ev.X("ehg").pz());
+    edgXmissingE.fill(ev.X("egh").e());
+    edgXmissingM2.fill(ev.X("egh").mass2());
+    edgXmissingP.fill(ev.X("egh").p());
+    edgXmissingPx.fill(ev.X("egh").px());
+    edgXmissingPy.fill(ev.X("egh").py());
+    edgXmissingPz.fill(ev.X("egh").pz());
 
-    edXmissingE.fill(ev.X("eg").e());
+    edXmissingE.fill(ev.X("eh").e());
     edXmissingM2.fill(ev.X("eh").mass2());
-    egXmissingM2.fill(ev.X("eg").mass2());
     edXmissingM.fill(ev.X("eh").mass());
+
+    egXmissingM2.fill(ev.X("eg").mass2());
     egXmissingM.fill(ev.X("eg").mass());
     egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("eg").mass2());
 
@@ -329,10 +332,12 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     DPhiHist.fill(ev.DPhi());
     DeltaPhiPlaneHist.fill(ev.deltaPhiPlane());
     DeltaPhiPlaneMattHist.fill(ev.deltaPhiPlane2());
+    dphiPlanevsdphiPlane2.fill(ev.deltaPhiPlane2(),ev.deltaPhiPlane());
 
     coneanglevsedgXM2.fill(ev.coneangle(),ev.X("egh").mass2());
     coneanglevsedXM2.fill(ev.coneangle(),ev.X("eh").mass2());
     coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
+    coneanglevspperp.fill(ev.coneangle(),ev.pPerp() );
 
     ConeAngleBtElectronPhotonFD.fill(ev.angleBetweenElectronPhoton()); 
 
