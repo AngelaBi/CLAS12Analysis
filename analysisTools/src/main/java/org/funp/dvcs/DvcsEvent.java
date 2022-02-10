@@ -964,7 +964,7 @@ public byte detectorProt;
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
       //&& Math.abs(this.chi2pid()) < 3.5
-      && this.X("eh").mass() < 1.5//was 0.7
+      //&& this.X("eh").mass() < 1.5//was 0.7
       && vertexCut
       //&& dedxCut
       //&& -1*this.t().mass2()  < 1.4
@@ -983,9 +983,9 @@ public byte detectorProt;
       && this.X("ehg").e()<2//was 3 
       && this.pPerp()<0.5
       &&this.X("ehg").p()<1.5
-     // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
+      // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
       //&& Math.abs(this.chi2pid()) < 3.5
-      && this.X("eh").mass() < 1.5//was 0.7
+      //&& this.X("eh").mass() < 1.5//was 0.7
       && vertexCut
       //&& dedxCut
       //&& -1*this.t().mass2() < 1.4
@@ -1010,9 +1010,9 @@ public byte detectorProt;
     //Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
     Phi = leptonicPlane.theta(hadronicPlane);
     // Vector3 leptonicPlane = new Vector3();
-    //     leptonicPlane.copy(vBeam.vect().cross(velectron.vect()));
+    // leptonicPlane.copy(vBeam.vect().cross(velectron.vect()));
     // Vector3 hadronicPlane = new Vector3();
-    //     hadronicPlane.copy(vhadron.vect().cross(vphoton.vect()));
+    // hadronicPlane.copy(vhadron.vect().cross(vphoton.vect()));
     // Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
     //System.out.println("Angle = " + Phi);
 if(leptonicPlane.dot(vphoton.vect()) < 0){
