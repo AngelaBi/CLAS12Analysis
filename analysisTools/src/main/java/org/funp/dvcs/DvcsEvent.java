@@ -294,6 +294,9 @@ public byte detectorProt;
       vphoton=Correct_FT_E(vphoton, 0.0);
       //vphoton.print();
     }
+    else {
+      vphoton=Correct_FD_E(vphoton, 0.0);
+    }
     // 
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
@@ -392,6 +395,21 @@ public byte detectorProt;
     //System.out.println(x.e());
     E_new = x.e() - 0.03689 + 0.1412 * x.e() - 0.04316 * Math.pow(x.e(), 2) + 0.007046 * Math.pow(x.e(), 3)
         - 0.0004055 * Math.pow(x.e(), 4);
+      //  System.out.println(E_new);
+    Px_el = E_new * (x.px() / x.vect().mag());
+    Py_el = E_new * (x.py() / x.vect().mag());
+    Pz_el = E_new * (x.pz() / x.vect().mag());
+
+    el_new.setPxPyPzM(Px_el, Py_el, Pz_el, mass);
+
+    return el_new;
+  }
+  LorentzVector Correct_FD_E(LorentzVector x, double mass) {
+
+    double E_new, Px_el, Py_el, Pz_el;
+    LorentzVector el_new = new LorentzVector();
+    //System.out.println(x.e());
+    E_new = x.e() + 0.527;
       //  System.out.println(E_new);
     Px_el = E_new * (x.px() / x.vect().mag());
     Py_el = E_new * (x.py() / x.vect().mag());

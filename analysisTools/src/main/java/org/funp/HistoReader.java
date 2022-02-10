@@ -84,6 +84,10 @@ public class HistoReader {
     drawAsym(ecA, hACFT);
     TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
     drawAsym(ecA2, hACFD);
+    TCanvas ect1 = new TCanvas("Asym FT", 1200, 1000);
+    drawAsymtbins(ect1, hACFT);
+    TCanvas ect2 = new TCanvas("Asym FD", 1200, 1000);
+    drawAsymtbins(ect2, hACFD);
 
   }
   public static void displayOthercuts(TCanvas c, DvcsHisto h){
@@ -135,17 +139,22 @@ public class HistoReader {
     canvas.cd(pad).draw(line);
   }
 
-  public static H1F buildAsym(DvcsHisto h) {
+  public static H1F buildAsym(H1F hp,H1F hm) {
     H1F num;
     H1F denom;
     H1F Asym;
     num = new H1F("num", 10, 0, 360);
     denom = new H1F("denom", 10, 0, 360);
     Asym = new H1F("Asymmetry", "Asymmetry", 10, 0, 360);
-    num.add(h.Phiplus);
-    num.sub(h.Phiminus);
-    denom.add(h.Phiplus);
-    denom.add(h.Phiminus);
+    num.add(hp);
+    num.sub(hm);
+    denom.add(hp);
+    denom.add(hm);
+    
+    // num.add(h.phiplustbin[0]);
+    // num.sub(h.phiminustbin[0]);
+    // denom.add(h.phiplustbin[0]);
+    // denom.add(h.phiminustbin[0]);
 
     Asym = H1F.divide(num, denom);
     Asym.divide(0.8);
@@ -158,7 +167,7 @@ public class HistoReader {
 
   public static void drawAsym(TCanvas ec, DvcsHisto h) {
     ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
-    ec.draw((buildAsym(h)), "E");
+    ec.draw((buildAsym(h.Phiplus,h.Phiminus)), "E");
 
     F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
     // Asymfunc.setParameter(0,0.1);
@@ -167,7 +176,25 @@ public class HistoReader {
     Asymfunc.setParameter(0, 0.1);
     // Asymfunc.setParameter(1,0.01);
     // Asymfunc.setParameter(2,-0.01);
-    DataFitter.fit(Asymfunc, buildAsym(h), "");
+    DataFitter.fit(Asymfunc, buildAsym(h.Phiplus,h.Phiminus), "");
     ec.draw(Asymfunc, "same");
+  }
+  public static void drawAsymtbins(TCanvas ec, DvcsHisto h) {
+    ec.divide(3,1);
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+    ec.draw((buildAsym(h.phiplustbin[i],h.phiminustbin[i])), "E");
+
+    F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+    // Asymfunc.setParameter(0,0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.1);
+    Asymfunc.setParameter(0, 0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.01);
+    DataFitter.fit(Asymfunc, buildAsym(h.phiplustbin[i],h.phiminustbin[i]), "");
+    ec.draw(Asymfunc, "same");
+    }
   }
 }
