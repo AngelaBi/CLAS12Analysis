@@ -978,9 +978,9 @@ public byte detectorProt;
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
       this.X("ehg").mass2()>-0.75 && this.X("ehg").mass2()<0.25 && //was none
-      this.X("ehg").e()<2 
+      this.X("ehg").e()<1 //Was 2, not a big change of FT
       && this.pPerp()<0.5
-      &&this.X("ehg").p()<1.5
+      &&this.X("ehg").p()<0.5//was 1.5
       //&& Math.abs(this.chi2pid()) < 3.5
       //&& this.X("eh").mass() < 1.5//was 0.7
       && vertexCut
@@ -998,9 +998,9 @@ public byte detectorProt;
       //&& ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25)) 
       /*&& ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
       this.X("ehg").mass2()>-0.25 && this.X("ehg").mass2()<0.25 //>-0.75
-      && this.X("ehg").e()<2//was 3 
+      && this.X("ehg").e()<2//was 3 //was 2// probably removing pions
       && this.pPerp()<0.5
-      &&this.X("ehg").p()<1.5
+      &&this.X("ehg").p()<0.8//was 1.5
       // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
       //&& Math.abs(this.chi2pid()) < 3.5
       //&& this.X("eh").mass() < 1.5//was 0.7
