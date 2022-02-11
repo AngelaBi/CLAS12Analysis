@@ -103,7 +103,7 @@ public class processInput {
 			if (cmd.hasOption("hf")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				hipoFilename=cmd.getOptionValue("hf");
-				log.log(Level.INFO, "Using processInput argument -hp=" + hipoFilename);
+				log.log(Level.INFO, "Using processInput argument -hf=" + hipoFilename);
 				// Whatever you want to do with the setting goes here
 			} else {
 				log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
