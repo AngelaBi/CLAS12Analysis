@@ -17,12 +17,12 @@ import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
 
 import org.jlab.groot.ui.TCanvas;
-import org.jlab.groot.data.TDirectory;
 
 //import org.funp.dvcs.DvcsEvent;;
 
 public class DvcsHisto {
 
+  
   double[] q2bins={0,1.75,2.5,10};
   double[] tbins={0,0.3,0.6,10};//{0,0.39,0.57,10}
   double[] xbbin={0,0.128,0.182,10};

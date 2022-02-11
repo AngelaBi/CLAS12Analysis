@@ -278,7 +278,7 @@ public class DcoDe
     hAC.writeHipooutput(rootdir,"AC");
     hACFD.writeHipooutput(rootdir,"ACFD");
     hACFT.writeHipooutput(rootdir,"ACFT");  
-    rootdir.writeFile(inputParam.OutputLocation + "/Angela.hipo"); 
+    rootdir.writeFile(inputParam.OutputLocation + "/"+inputParam.gethipoFile()); 
    
 
     if (ev.isML){

@@ -19,6 +19,7 @@ public class processInput {
 
 	//public String DataLocation=new String(".");
 	public String FileListName=new String("fileslist.txt");
+	public String hipoFilename=new String("Angela.hipo");//input file name for HistoReader and for DcoDe
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
 	private boolean MCmode=false;
@@ -33,6 +34,7 @@ public class processInput {
 		//options.addOption("l", "input dir", true, "Set DATA files location .");
 		options.addOption("f", "file", true, "Set input file with data files list .");
 		options.addOption("o", "outputdir", true, "Set output file dir .");
+		options.addOption("hf","hipoFile",true,"Set hipo histo file name for input/output");
 		options.addOption("MC", "Montecarlofiles", false, "Enable MC mode");
 		options.addOption("pass0", "Pass0Files", false, "Pass0");
 		options.addOption("ML", "CreateMLfiles", false, "Create ML files");
@@ -95,6 +97,16 @@ public class processInput {
 				// Whatever you want to do with the setting goes here
 			} else {
 				log.log(Level.INFO, "Using default file with list of data filename=" + FileListName);
+				//log.log(Level.SEVERE, "MIssing l option");
+				//help();
+			}
+			if (cmd.hasOption("hf")) {
+				//System.out.println("here"+cmd.getOptionValue("l"));
+				hipoFilename=cmd.getOptionValue("hf");
+				log.log(Level.INFO, "Using processInput argument -hp=" + hipoFilename);
+				// Whatever you want to do with the setting goes here
+			} else {
+				log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
@@ -187,5 +199,8 @@ public class processInput {
 	}
 	public String getOutputDir(){
 		return this.OutputLocation;
+	}
+	public String gethipoFile(){
+		return this.hipoFilename;
 	}
 }

@@ -60,7 +60,7 @@ public class HistoReader {
     hACFT = new DvcsHisto();
     processInput inputParam = new processInput(args);
     hipobasedir = new TDirectory();
-    hipobasedir.readFile("Angela.hipo");
+    hipobasedir.readFile(inputParam.gethipoFile());
     hDCFT = new DvcsHisto(hipobasedir, "DC", "FT");
     hDCFD = new DvcsHisto(hipobasedir, "DC", "FD");
     hCCFT = new DvcsHisto(hipobasedir, "CC", "FT");
