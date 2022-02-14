@@ -1003,7 +1003,7 @@ public byte detectorProt;
       &&this.X("ehg").p()<0.8//was 1.5
       // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
       //&& Math.abs(this.chi2pid()) < 3.5
-      //&& this.X("eh").mass() < 1.5//was 0.7
+      && this.X("eh").mass() < 0.7//was 1.5//was nothing - desperate attempt to reduce pion background
       && vertexCut
       //&& dedxCut
       //&& -1*this.t().mass2() < 1.4
