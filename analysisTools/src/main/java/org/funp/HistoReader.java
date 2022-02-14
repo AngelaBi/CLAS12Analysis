@@ -217,7 +217,7 @@ public class HistoReader {
     DvcsHisto hACFT3= new DvcsHisto(hipobasedir3, "AC", "FT");
     DvcsHisto hACFD3 = new DvcsHisto(hipobasedir3, "AC", "FD");
     TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
-    drawAsymtbins3runperiods(ect1, hACFT1,hACFT3,hACFT3);
+    drawAsymtbins3runperiods(ect1, hACFT1,hACFT2,hACFT3);
     TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
     drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
   }
