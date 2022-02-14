@@ -404,7 +404,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     }
     for (int i=0;i<tbins.length-1;i++){
-      if(-1*ev.t().mass2()>tbins[i] && -1*ev.t().mass2()<tbins[i+1]){
+      //old t value (-1*ev.t().mass2()>tbins[i] && -1*ev.t().mass2()<tbins[i+1])
+      if(-1*ev.tFX()>tbins[i] && -1*ev.tFX()<tbins[i+1]){
       if(ev.helicity==1){       
         phiplustbin[i].fill(ev.PhiPlane());    
       }
