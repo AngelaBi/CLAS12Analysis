@@ -54,11 +54,17 @@ public class HistoReader {
   static DvcsHisto hACFT;
   
   static DvcsHisto hACFD;
+  static processInput inputParam;
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
-    hDCFT = new DvcsHisto();
-    hACFT = new DvcsHisto();
-    processInput inputParam = new processInput(args);
+    inputParam = new processInput(args);
+    onefilePlots();
+    
+    //mergeThreeRunperiods();
+
+  }
+  public static void onefilePlots(){
+    
     hipobasedir = new TDirectory();
     hipobasedir.readFile(inputParam.gethipoFile());
     hDCFT = new DvcsHisto(hipobasedir, "DC", "FT");
@@ -80,16 +86,17 @@ public class HistoReader {
     displayExcCuts(ec5, hCCFD);
     TCanvas ec6 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
     displayExcCuts(ec6, hACFD);
-    TCanvas ecA = new TCanvas("Asym FT", 1200, 1000);
-    drawAsym(ecA, hACFT);
-    TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
-    drawAsym(ecA2, hACFD);
-    TCanvas ect1 = new TCanvas("Asym FT", 1200, 1000);
+    //TCanvas ecA = new TCanvas("Asym FT", 1200, 1000);
+    //drawAsym(ecA, hACFT);
+    //TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
+    //drawAsym(ecA2, hACFD);
+    TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
     drawAsymtbins(ect1, hACFT);
-    TCanvas ect2 = new TCanvas("Asym FD", 1200, 1000);
+    TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
     drawAsymtbins(ect2, hACFD);
 
   }
+  
   public static void displayOthercuts(TCanvas c, DvcsHisto h){
     c.divide(2, 2);
     c.cd(0).draw(h.VertexElectron);
@@ -107,24 +114,22 @@ public class HistoReader {
     drawCut(-1., h.edXmissingM2, ec, 1);
 
     ec.cd(2).draw(h.edgXmissingE);
-    double cc = 0;
-    // if(conf=="FT") cc=2;
-    // else
-    cc = 2;
-    drawCut(cc, h.edgXmissingE, ec, 2);
+    drawCut(1, h.edgXmissingE, ec, 2);
+    drawCut(2, h.edgXmissingE, ec, 2);
 
     ec.cd(3).draw(h.pPerphisto);
     drawCut(0.5, h.pPerphisto, ec, 3);
 
     ec.cd(4).draw(h.edgXmissingP);
-    drawCut(1.5, h.edgXmissingP, ec, 4);
+    drawCut(0.5, h.edgXmissingP, ec, 4);
+    drawCut(0.8, h.edgXmissingP, ec, 4);
 
     ec.cd(5).draw(h.edXmissingM);
-    drawCut(0.7, h.edXmissingM, ec, 5);
+    //drawCut(0.7, h.edXmissingM, ec, 5);
 
     ec.cd(6).draw(h.chisqHad);
 
-    ec.cd(7).draw(h.coneanglevsegXM2);
+    //ec.cd(7).draw(h.coneanglevsegXM2);
 
     ec.cd(8).draw(h.egXmissingM2);
 
@@ -196,5 +201,45 @@ public class HistoReader {
     DataFitter.fit(Asymfunc, buildAsym(h.phiplustbin[i],h.phiminustbin[i]), "");
     ec.draw(Asymfunc, "same");
     }
+  }
+  //BAD programming to quickly merge run periods
+  public static void mergeThreeRunperiods(){
+    TDirectory hipobasedir1 = new TDirectory();
+    TDirectory hipobasedir2 = new TDirectory();
+    TDirectory hipobasedir3 = new TDirectory();
+    hipobasedir1.readFile("S19.hipo");
+    hipobasedir2.readFile("F19.hipo");
+    hipobasedir3.readFile("S20.hipo");
+    DvcsHisto hACFT1= new DvcsHisto(hipobasedir1, "AC", "FT");
+    DvcsHisto hACFD1 = new DvcsHisto(hipobasedir1, "AC", "FD");
+    DvcsHisto hACFT2= new DvcsHisto(hipobasedir2, "AC", "FT");
+    DvcsHisto hACFD2 = new DvcsHisto(hipobasedir2, "AC", "FD");
+    DvcsHisto hACFT3= new DvcsHisto(hipobasedir3, "AC", "FT");
+    DvcsHisto hACFD3 = new DvcsHisto(hipobasedir3, "AC", "FD");
+    TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
+    drawAsymtbins3runperiods(ect1, hACFT1,hACFT3,hACFT3);
+    TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
+    drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
+  }
+  public static void drawAsymtbins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
+    ec.divide(3,1);
+    H1F totPhip= new H1F("totPhip", 10, 0, 360);
+    H1F totPhim= new H1F("totPhim", 10, 0, 360);
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+      totPhip.add(h1.phiplustbin[i]);
+      //totPhip.add(h2.phiplustbin[i]);
+      totPhip.add(h3.phiplustbin[i]);
+      totPhim.add(h1.phiminustbin[i]);
+      //totPhim.add(h2.phiminustbin[i]);
+      totPhim.add(h3.phiminustbin[i]);
+      ec.draw((buildAsym(totPhip,totPhim)), "E");
+      F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+      Asymfunc.setParameter(0, 0.1);
+      DataFitter.fit(Asymfunc, buildAsym(totPhip,totPhim), "");
+      ec.draw(Asymfunc, "same");
+    }
+
   }
 }
