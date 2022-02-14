@@ -190,7 +190,7 @@ public class processInput {
 		return MLmode;
 	}
 
-	public boolean getPass0(){
+	public static boolean getPass0(){
 		return pass0;
 	}
 	public String getFileName(int i){

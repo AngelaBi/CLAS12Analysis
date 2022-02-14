@@ -60,7 +60,7 @@ public class DcoDe
     static int ndegamma;
     static int counter;
     static int FDCounter;
-    static  int FTCounter;
+    static int FTCounter;
 
 
 

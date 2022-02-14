@@ -299,6 +299,7 @@ public byte detectorProt;
         //vphoton.print();
         //System.out.println("here");
         vphoton=Correct_FT_E(vphoton, 0.0);
+        vphoton=Correct_FT_theta(vphoton);
         //vphoton.print();
       }
       else {
@@ -428,7 +429,21 @@ public byte detectorProt;
 
     return el_new;
   }
+  LorentzVector Correct_FT_theta(LorentzVector photon){
+    LorentzVector newphoton=new LorentzVector();
+    double mag=photon.p();
+    double phi=photon.phi();
+    double theta=photon.theta();
+    //System.out.println(vertexElectron);
+    theta = Math.atan( Math.tan(theta) * 194.3/ (196.3 - (vertexElectron)));
+    Vector3 vec=new Vector3();
+    vec.setMagThetaPhi(mag, theta, phi);
+    newphoton.setVectM(vec, 0);   
+    //photon.print();
+    //newphoton.print();
+    return newphoton;
 
+  }
 
   public void setPositives(Bank particles, Bank scint, int np){
     if (this.FoundDeuteron==true){
