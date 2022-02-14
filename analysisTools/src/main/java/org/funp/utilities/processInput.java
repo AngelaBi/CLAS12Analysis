@@ -22,10 +22,10 @@ public class processInput {
 	public String hipoFilename=new String("Angela.hipo");//input file name for HistoReader and for DcoDe
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
-	private boolean MCmode=false;
-	private boolean nTmode=false;
+	private static boolean MCmode=false;
+	private static boolean nTmode=false;
 	private static boolean MLmode=false;
-	private boolean pass0=false;
+	private static boolean pass0=false;
 	public processInput(String[] args) {
 
 		this.args = args;
@@ -67,6 +67,7 @@ public class processInput {
 			if (cmd.hasOption("MC")){
 				System.out.println("setting MC mode");
 				MCmode=true;
+				System.out.println(MCmode);
 			}
 			if (cmd.hasOption("nT")){
 				System.out.println("setting no tags mode");
@@ -83,30 +84,30 @@ public class processInput {
 			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				OutputLocation=cmd.getOptionValue("o")+"/";
-				//log.log(Level.INFO, "Using processInput argument -o=" + OutputLocation+"/");
+				log.log(Level.INFO, "Using processInput argument -o=" + OutputLocation+"/");
 				// Whatever you want to do with the setting goes here
 			} else {
-				//log.log(Level.INFO, "Using location output default value=" + OutputLocation);
+				log.log(Level.INFO, "Using location output default value=" + OutputLocation);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
 			if (cmd.hasOption("f")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				FileListName=cmd.getOptionValue("f");
-				//log.log(Level.INFO, "Using processInput argument -f=" + FileListName);
+				log.log(Level.INFO, "Using processInput argument -f=" + FileListName);
 				// Whatever you want to do with the setting goes here
 			} else {
-				//log.log(Level.INFO, "Using default file with list of data filename=" + FileListName);
+				log.log(Level.INFO, "Using default file with list of data filename=" + FileListName);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
 			if (cmd.hasOption("hf")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				hipoFilename=cmd.getOptionValue("hf");
-				//log.log(Level.INFO, "Using processInput argument -hf=" + hipoFilename);
+				log.log(Level.INFO, "Using processInput argument -hf=" + hipoFilename);
 				// Whatever you want to do with the setting goes here
 			} else {
-				//log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
+				log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
@@ -178,19 +179,19 @@ public class processInput {
 		return this.filenames.size();
 
 	}
-	public boolean getMCmode(){
-		return this.MCmode;
+	public static boolean  getMCmode(){
+		return MCmode;
 	}
 
-	public boolean getnTmode(){
-		return this.nTmode;
+	public static boolean getnTmode(){
+		return nTmode;
 	}
 	public static boolean getMLmode(){
 		return MLmode;
 	}
 
 	public boolean getPass0(){
-		return this.pass0;
+		return pass0;
 	}
 	public String getFileName(int i){
 		//String tmp=new String();

@@ -35,16 +35,16 @@ import java.io.FileNotFoundException;
 public class DvcsEvent {
   public PrintWriter pw = null;
   public StringBuilder builder;
-  public String [] args;
+  //public String [] args;
   public boolean isML = false;
-  public  void setArgs(String [] argss){
-    System.out.println("Processing");
-        args = argss;
-        for(int i = 0; i < argss.length;i++){
-              System.out.println(argss[i]);
-        }
+  // public  void setArgs(String [] argss){
+  //   System.out.println("Processing");
+  //       args = argss;
+  //       for(int i = 0; i < argss.length;i++){
+  //             System.out.println(argss[i]);
+  //       }
         
-  }
+  // }
 
    public void isML(boolean var){
         isML = var;
@@ -53,7 +53,7 @@ public class DvcsEvent {
   
 
 
-  processInput inputParam=new processInput(args);
+  //processInput inputParam=new processInput(args);
   public void makecsv(){
     
     try{
@@ -190,7 +190,7 @@ public byte detectorProt;
     particles.getFloat("py",ne),
     particles.getFloat("pz",ne),
     0.000511);
-    if (!inputParam.getMCmode()){
+    if (!processInput.getMCmode()){
     if(Math.abs(particles.getInt("status", ne)) >= 1000 && Math.abs(particles.getInt("status", ne)) < 2000){
       velectron=Correct_FT_E(velectron, 0.000511);
     }
@@ -294,15 +294,15 @@ public byte detectorProt;
     
     // 
     //This correction holds only for data 
-    if (!inputParam.getMCmode()){
+    if (!processInput.getMCmode()){
      if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
         //vphoton.print();
-        System.out.println("here");
+        //System.out.println("here");
         vphoton=Correct_FT_E(vphoton, 0.0);
         //vphoton.print();
       }
       else {
-        System.out.println("here"+!inputParam.getMCmode());
+        //System.out.println("here"+!processInput.getMCmode());
         vphoton=Correct_FD_E(vphoton, 0.0);
       }
     }

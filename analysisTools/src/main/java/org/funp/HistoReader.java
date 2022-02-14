@@ -58,9 +58,9 @@ public class HistoReader {
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
-    //onefilePlots();
+    onefilePlots();
     
-    mergeThreeRunperiods();
+    //mergeThreeRunperiods();
 
   }
   public static void onefilePlots(){

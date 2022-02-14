@@ -34,7 +34,7 @@ static int ndegamma;
     ev    = new DvcsEvent();
     runMap = runUtil.createMapGagikStyle();
     processInput inputParam=new processInput(args);
-    ev.setArgs(args);
+    //ev.setArgs(args);
     ev.isML(processInput.getMLmode());
     //runUtil runInfo=new runUtil();
 

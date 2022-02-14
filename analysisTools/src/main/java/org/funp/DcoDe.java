@@ -91,6 +91,7 @@ public class DcoDe
     int counter11 = 0;
     System.out.println("\n Processing arguments \n");
     processInput inputParam=new processInput(args);
+    System.out.println(processInput.getMCmode());
     //runUtil runInfo=new runUtil();
     
 
@@ -153,7 +154,7 @@ public class DcoDe
     for (int i=0; i<inputParam.getNfiles(); i++) {
       goodEvent=0;
       HipoReader reader = new HipoReader();
-      if(!inputParam.getMCmode() && !inputParam.getnTmode()) reader.setTags(9,10,11);
+      if(!processInput.getMCmode() && !processInput.getnTmode()) reader.setTags(9,10,11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event,0); //Reads the first event and resets to the begining of the file
@@ -168,12 +169,12 @@ public class DcoDe
       int runNumberIndex = -1;
       boolean runFound = false;
       int runNumber=runconfig.getInt("run",0);
-      if (runMap.get(runNumber)!=null || inputParam.getMCmode()){//This if will keep runs in the map or MC
+      if (runMap.get(runNumber)!=null || processInput.getMCmode()){//This if will keep runs in the map or MC
         //BEam energy from the file or set by hand for the MC        
         //right now the beam energy for the MC is hardcoded
         if(runMap.get(runNumber)!=null )
           ev.BeamEnergy = runMap.get(runNumber).get(2);
-        else if (inputParam.getMCmode())
+        else if (processInput.getMCmode())
           ev.BeamEnergy =10.6; 
 
         System.out.println("Beam energy found is "+ev.BeamEnergy);
@@ -205,7 +206,7 @@ public class DcoDe
           boolean beginningEventsGood = false;
           boolean endEventsGood = false;
           boolean neitherEventsGood = false; 
-          if (!inputParam.getMCmode()){
+          if (!processInput.getMCmode()){
           allEventsGood= (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0); 
           beginningEventsGood = (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) != 0.0);
           endEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) == 0.0);
@@ -216,9 +217,9 @@ public class DcoDe
 
           
           if( 
-            (inputParam.getMCmode() || 
+            (processInput.getMCmode() || 
              ((event.getEventTag()==11 || event.getEventTag()==10 || event.getEventTag()==9) 
-             || inputParam.getnTmode() )&& 
+             || processInput.getnTmode() )&& 
             //((event.getEventTag()==11 ) && 
             (allEventsGood ||  /*//all events are good */ 
             (beginningEventsGood && (runconfig.getInt("event",0)< runMap.get(runNumber).get(1))) || 
