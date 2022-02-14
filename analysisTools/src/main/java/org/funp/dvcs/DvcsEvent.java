@@ -294,16 +294,17 @@ public byte detectorProt;
     // 
     //This correction holds only for data 
     if (!inputParam.getMCmode()){
-    if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
-      //vphoton.print();
-      vphoton=Correct_FT_E(vphoton, 0.0);
-      //vphoton.print();
+     if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
+        //vphoton.print();
+        System.out.println("here");
+        vphoton=Correct_FT_E(vphoton, 0.0);
+        //vphoton.print();
+      }
+      else {
+        System.out.println("here"+!inputParam.getMCmode());
+        vphoton=Correct_FD_E(vphoton, 0.0);
+      }
     }
-    else {
-      System.out.println("here");
-      vphoton=Correct_FD_E(vphoton, 0.0);
-    }
-  }
     // 
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
