@@ -13,6 +13,8 @@ import java.util.Comparator;
 //import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+
 import org.funp.utilities.*;
 import java.lang.Math;
 import org.jlab.clas.physics.*;
@@ -187,10 +189,11 @@ public byte detectorProt;
     particles.getFloat("py",ne),
     particles.getFloat("pz",ne),
     0.000511);
+    if (!inputParam.getMCmode()){
     if(Math.abs(particles.getInt("status", ne)) >= 1000 && Math.abs(particles.getInt("status", ne)) < 2000){
       velectron=Correct_FT_E(velectron, 0.000511);
     }
-
+  }
     vertexElectron = particles.getFloat("vz", ne);
     elec_v = -10;
     elec_w = -10;
@@ -289,6 +292,8 @@ public byte detectorProt;
     0.0);
     
     // 
+    //This correction holds only for data 
+    if (!inputParam.getMCmode()){
     if(Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000){
       //vphoton.print();
       vphoton=Correct_FT_E(vphoton, 0.0);
@@ -297,6 +302,7 @@ public byte detectorProt;
     else {
       vphoton=Correct_FD_E(vphoton, 0.0);
     }
+  }
     // 
 
     Map<Integer,List<Integer>> caloMap = loadMapByIndex(calos,"pindex");
@@ -848,52 +854,26 @@ public byte detectorProt;
     tmp.sub(vphoton);
     return tmp;
   }
+  public LorentzVector tH(){
+    LorentzVector tmp = new LorentzVector();
+    tmp.copy(vTarget);
+    tmp.sub(vhadron);
+    return tmp;
+  }
+  public double tFX(){
+    double q2=this.Q().mass2();
+    double mu=this.Q().e();
+    double costhetagvg=(this.Q().vect().dot(this.vphoton.vect()))/this.Q().vect().mag()/this.vphoton.vect().mag();
+    double THETA=Math.sqrt(Math.pow(mu,2)+q2)*costhetagvg;
+    return -(MNUC*q2+2*MNUC*mu*(mu-THETA))/(MNUC+mu-THETA);
+
+  }
   public double pPerp(){
     double px=(this.vBeam.px()-this.velectron.px()-this.vhadron.px()-this.vphoton.px());
     double py=(this.vBeam.py()-this.velectron.py()-this.vhadron.py()-this.vphoton.py());
     return Math.sqrt(px*px+py*py);
   }
-  // public LorentzVector DVCSmissX(){
-  //     LorentzVector  tmp = new LorentzVector();
-  //     tmp.copy(vBeam);
-  //     tmp.add(vTarget);
-  //     tmp.sub(velectron);
-  //     tmp.sub(vphoton);
-  //     return tmp;
-  //
-  // }
-  // public LorentzVector ehehgX(){
-  //     LorentzVector  tmp = new LorentzVector();
-  //     tmp.copy(vBeam);
-  //     tmp.add(vTarget);
-  //     tmp.sub(velectron);
-  //     tmp.sub(vphoton);
-  //     tmp.sub(vhadron);
-  //     return tmp;
-  // }
-  // public LorentzVector ehehX(){
-  //     LorentzVector  tmp = new LorentzVector();
-  //     tmp.copy(vBeam);
-  //     tmp.add(vTarget);
-  //     tmp.sub(velectron);
-  //     tmp.sub(vhadron);
-  //     return tmp;
-  // }
-  //public double MM2(){
-  // return this.X("ehg").mass2();
-  //}
-  //public double Mp(){
-  //     return this.X("ehg").p();
-  //}
-  //public double Mpx(){
-  //   return this.X("ehg").px();
-  //}
-  //public double Mpy(){
-  //   return this.X("ehg").py();
-  //}
-  //public double Mpz(){
-  //   return this.X("ehg").pz();
-  //}
+  
 
   public boolean TagEventsDVCScut(){
     return -this.Q().mass2()>1 && this.W().mass()>2;
