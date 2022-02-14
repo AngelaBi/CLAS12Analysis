@@ -36,8 +36,9 @@ public class DvcsEvent {
   public PrintWriter pw = null;
   public StringBuilder builder;
   public String [] args;
-  public static boolean isML = false;
+  public boolean isML = false;
   public  void setArgs(String [] argss){
+    System.out.println("Processing");
         args = argss;
         for(int i = 0; i < argss.length;i++){
               System.out.println(argss[i]);
@@ -45,7 +46,7 @@ public class DvcsEvent {
         
   }
 
-   public static void isML(boolean var){
+   public void isML(boolean var){
         isML = var;
         
   }

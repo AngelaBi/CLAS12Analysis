@@ -83,30 +83,30 @@ public class processInput {
 			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				OutputLocation=cmd.getOptionValue("o")+"/";
-				log.log(Level.INFO, "Using processInput argument -o=" + OutputLocation+"/");
+				//log.log(Level.INFO, "Using processInput argument -o=" + OutputLocation+"/");
 				// Whatever you want to do with the setting goes here
 			} else {
-				log.log(Level.INFO, "Using location output default value=" + OutputLocation);
+				//log.log(Level.INFO, "Using location output default value=" + OutputLocation);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
 			if (cmd.hasOption("f")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				FileListName=cmd.getOptionValue("f");
-				log.log(Level.INFO, "Using processInput argument -f=" + FileListName);
+				//log.log(Level.INFO, "Using processInput argument -f=" + FileListName);
 				// Whatever you want to do with the setting goes here
 			} else {
-				log.log(Level.INFO, "Using default file with list of data filename=" + FileListName);
+				//log.log(Level.INFO, "Using default file with list of data filename=" + FileListName);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
 			if (cmd.hasOption("hf")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
 				hipoFilename=cmd.getOptionValue("hf");
-				log.log(Level.INFO, "Using processInput argument -hf=" + hipoFilename);
+				//log.log(Level.INFO, "Using processInput argument -hf=" + hipoFilename);
 				// Whatever you want to do with the setting goes here
 			} else {
-				log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
+				//log.log(Level.INFO, "Using default name for hipo histo file=" + hipoFilename);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}

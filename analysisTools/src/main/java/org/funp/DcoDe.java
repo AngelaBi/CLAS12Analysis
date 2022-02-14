@@ -89,6 +89,7 @@ public class DcoDe
 
     int goodEvent;
     int counter11 = 0;
+    System.out.println("\n Processing arguments \n");
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
     
@@ -97,7 +98,7 @@ public class DcoDe
 
       event = new Event();
       ev    = new DvcsEvent();
-      ev.setArgs(args);
+      //ev.setArgs(args);
       ev.isML(processInput.getMLmode());
       if(ev.isML) ev.makecsv();
       //NO CUTS 

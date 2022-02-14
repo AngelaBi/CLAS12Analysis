@@ -58,9 +58,9 @@ public class HistoReader {
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
-    onefilePlots();
+    //onefilePlots();
     
-    //mergeThreeRunperiods();
+    mergeThreeRunperiods();
 
   }
   public static void onefilePlots(){
@@ -229,10 +229,10 @@ public class HistoReader {
       ec.cd(i);
       ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
       totPhip.add(h1.phiplustbin[i]);
-      //totPhip.add(h2.phiplustbin[i]);
+      totPhip.add(h2.phiplustbin[i]);
       totPhip.add(h3.phiplustbin[i]);
       totPhim.add(h1.phiminustbin[i]);
-      //totPhim.add(h2.phiminustbin[i]);
+      totPhim.add(h2.phiminustbin[i]);
       totPhim.add(h3.phiminustbin[i]);
       ec.draw((buildAsym(totPhip,totPhim)), "E");
       F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
