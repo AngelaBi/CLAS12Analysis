@@ -158,7 +158,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     hadmom=createHisto("hadmom","Deuteron Momentum","p [GeV/c]",100,0,10.0,"Kine");
     WvsQ2=createHisto("Q2vsW", "Q2 vs W", "W [GeV]","Q^2 [GeV/c^2]", 100,0,7,100,0,10,"Kine");
     Q2vsXbj=createHisto("Q2vsXb","Q^2 vs X_b", "X_b", "Q^2 [GeV/c^2]", 100,0,1,100,0,10, "Kine");
-    q2vst=createHisto("Q2vst",  "Q2 vs t", "t", "Q2", 100,0,5,100,0,2, "Kine");
+    q2vst=createHisto("Q2vst",  "Q2 vs t", "t", "Q2", 100,0,2,100,0,4, "Kine");
     VertexElectron=createHisto("VertexElectron","Vertex Electron", "z",100,-10.0,10.0, "Kine");
     VertexDuetron=createHisto("VertexDeuteron","Vertex Dueteron", "z",  100,-10.0,10.0, "Kine");
     vertexElecVSvertexDeut=createHisto("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron", "", "", 100,-10,10,100,-10,10, "Kine");
