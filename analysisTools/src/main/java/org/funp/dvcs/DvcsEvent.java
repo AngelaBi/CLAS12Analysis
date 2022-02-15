@@ -922,7 +922,7 @@ public byte detectorProt;
     (-this.Q().mass2()>1 
     && this.W().mass()>2  
     && this.vhadron.p()<2  
-    && this.vphoton.e()>2 //changed from 1
+    && this.vphoton.e()>1 //changed from 2//proton analysis was 1 not sure when we changed it to 2
     && this.angleBetweenElectronPhoton()>8
     // && fiducialCutPhoton
      && fiducialCutElectron
