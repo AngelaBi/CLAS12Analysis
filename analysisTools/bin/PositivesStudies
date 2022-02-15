@@ -1,4 +1,0 @@
-#!/bin/bash
-java -version
-#java -cp "${HOME}/local/src/gavalian/jaw-2.0/lib/jaw-2.0.jar:${HOME}/local/src/clas12analysis/analysisTools/target/analysis-1.0-SNAPSHOT.jar:${HOME}/local/src/javalib/commons-cli-1.4/commons-cli-1.4.jar" org.funp.PositivesStudies $*
-java -cp  "${HOME}/local/src/clas12analysis/analysisTools/target/analysis-1.0-SNAPSHOT-jar-with-dependencies.jar" org.funp.PositivesStudies $*
