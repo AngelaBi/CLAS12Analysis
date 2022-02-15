@@ -919,7 +919,7 @@ public byte detectorProt;
     // }
     // return fiducialCutElectron;
     boolean cut=
-    (-this.Q().mass2()>1 
+    (-this.Q().mass2()>1.5 //TEMP!!!!!! 
     && this.W().mass()>2  
     && this.vhadron.p()<2  
     && this.vphoton.e()>1 //changed from 2//proton analysis was 1 not sure when we changed it to 2
