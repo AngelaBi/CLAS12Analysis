@@ -63,6 +63,7 @@ public class DvcsHisto {
   public H1F chisqHad;
   public H1F thisto;
   public H1F tfxhisto;
+  public H2F tvstfx;
 
   public H1F Phiplus;
   public H1F Phiminus;
@@ -182,6 +183,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     chisqHad=createHisto("chisqHad","#chi^2 PID hadron","",100,-25,25,"Kine");
     thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tfxhisto=createHisto("mtfx","-t","-t [GeV/c]^2",100,0,2,"Kine");
+    tvstfx=createHisto("tvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
     Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
    
@@ -380,6 +382,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     helicityrawhisto.fill(ev.helicityraw);
     thisto.fill(-1*ev.t().mass2());
     tfxhisto.fill(-1*ev.tFX());
+    tvstfx.fill(-1*ev.tFX(),-1*ev.t().mass2());
     pPerphisto.fill(ev.pPerp());
 
 
