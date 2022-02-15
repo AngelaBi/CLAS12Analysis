@@ -4,7 +4,6 @@ package org.funp;
 import org.jlab.groot.ui.TCanvas;
 //---- imports for HIPO4 library
 import org.jlab.jnp.hipo4.io.*;
-import org.jline.terminal.impl.jna.freebsd.CLibrary.winsize;
 import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
@@ -90,10 +89,14 @@ public class HistoReader {
     //drawAsym(ecA, hACFT);
     //TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
     //drawAsym(ecA2, hACFD);
-    TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
+    TCanvas ect1 = new TCanvas("Asym FT t dep", 1200, 500);
     drawAsymtbins(ect1, hACFT);
-    TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
+    TCanvas ect2 = new TCanvas("Asym FD t dep", 1200, 500);
     drawAsymtbins(ect2, hACFD);
+    TCanvas ecQ1 = new TCanvas("Asym FT Q2 dep", 1200, 500);
+    drawAsymQ2bins(ecQ1, hACFT);
+    TCanvas ecQ2 = new TCanvas("Asym FD Q2 dep", 1200, 500);
+    drawAsymQ2bins(ecQ2, hACFD);
 
   }
   
@@ -162,7 +165,7 @@ public class HistoReader {
     // denom.add(h.phiminustbin[0]);
 
     Asym = H1F.divide(num, denom);
-    Asym.divide(0.8);
+    Asym.divide(0.85);
     Asym.setTitleX("#phi [deg.]");
     Asym.setTitleY("A_LU(#phi)");
 
@@ -199,6 +202,24 @@ public class HistoReader {
     // Asymfunc.setParameter(1,0.01);
     // Asymfunc.setParameter(2,-0.01);
     DataFitter.fit(Asymfunc, buildAsym(h.phiplustbin[i],h.phiminustbin[i]), "");
+    ec.draw(Asymfunc, "same");
+    }
+  }
+  public static void drawAsymQ2bins(TCanvas ec, DvcsHisto h) {
+    ec.divide(3,1);
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+    ec.draw((buildAsym(h.phiplusQ2bin[i],h.phiminusQ2bin[i])), "E");
+
+    F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+    // Asymfunc.setParameter(0,0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.1);
+    Asymfunc.setParameter(0, 0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.01);
+    DataFitter.fit(Asymfunc, buildAsym(h.phiplusQ2bin[i],h.phiminusQ2bin[i]), "");
     ec.draw(Asymfunc, "same");
     }
   }
