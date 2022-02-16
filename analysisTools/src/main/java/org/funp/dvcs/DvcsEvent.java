@@ -20,7 +20,6 @@ import java.lang.Math;
 import org.jlab.clas.physics.*;
 //import org.jlab.io.base.DataEvent;
 //import org.jlab.io.base.DataBank;
-//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
 
 import java.util.Map;
 import java.util.HashMap;
@@ -32,24 +31,9 @@ import java.io.FileNotFoundException;
 
 public class DvcsEvent {
   public PrintWriter pw = null;
+  
+  //CODE TO CREATE A CSV FILE
   public StringBuilder builder;
-  // public String [] args;
-  public boolean isML = false;
-  // public void setArgs(String [] argss){
-  // System.out.println("Processing");
-  // args = argss;
-  // for(int i = 0; i < argss.length;i++){
-  // System.out.println(argss[i]);
-  // }
-
-  // }
-
-  public void isML(boolean var) {
-    isML = var;
-
-  }
-
-  // processInput inputParam=new processInput(args);
   public void makecsv() {
 
     try {
@@ -57,11 +41,9 @@ public class DvcsEvent {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     }
-
     builder = new StringBuilder();
     String columnNames = "dedxCTOF,dedxCND,beta,momentum,chi2,particle";
     builder.append(columnNames + "\n");
-
   }
 
   // StringBuilder builder = new StringBuilder();
@@ -72,7 +54,7 @@ public class DvcsEvent {
   double MPION = 0.1349768;
   double MKAON = 0.4977;
   double MPROT = 0.93828;
-  public double mpos;
+  
   // Dmass = 1.8756;
   // double MNUC=0.938;
   public double BeamEnergy = 10.1998;
@@ -81,11 +63,10 @@ public class DvcsEvent {
   public LorentzVector velectron = new LorentzVector();
   public LorentzVector vphoton = new LorentzVector();
   public LorentzVector vhadron = new LorentzVector();
-  // public LorentzVector vpositive = new LorentzVector();
-  public LorentzVector vdeuteron = new LorentzVector();
-  public LorentzVector vproton = new LorentzVector();
+  //public LorentzVector vdeuteron = new LorentzVector();
+  //public LorentzVector vproton = new LorentzVector();
   public LorentzVector vpion = new LorentzVector();
-  // public LorentzVector vkaon = new LorentzVector();
+  
 
   public byte detectorHad;
   public byte detectorProt;
@@ -114,21 +95,12 @@ public class DvcsEvent {
   boolean FoundProton = false;
   boolean FoundKaon = false;
   boolean FoundPion = false;
-  // boolean NewEvent=false;
+ 
   double betahad = -10;
   double betaprot_ML = -10;
   double betadeut_ML = -10;
-  double betapos = -10;
-  double betadeut = -10;
-  double betaprot = -10;
-  double betakaon = -10;
-  double betapion = -10;
   double ctofenergyhad = -10;
-  double ctofenergypos = -10;
-  double ctofenergydeut = -10;
-  double ctofenergyprot = -10;
-  double ctofenergykaon = -10;
-  double ctofenergypion = -10;
+  
   double chi2pidhad = -10;
   public int tmpdeutctof = 0;
   public int tmpdeut = 0;
@@ -149,11 +121,7 @@ public class DvcsEvent {
   public double photon_x;
   public double photon_y;
   public byte photon_sector;
-  public double beforeFidCut = 0;
-  // public double elec_layer_4_x;
-  // public double elec_layer_4_y;
-  // public double elec_layer_7_x;
-  // public double elec_layer_7_y;
+  
   public byte electron_layer;
   public byte photon_layer;
   public boolean inCTOF;
@@ -195,10 +163,7 @@ public class DvcsEvent {
     vertexElectron = particles.getFloat("vz", ne);
     elec_v = -10;
     elec_w = -10;
-    // elec_layer_4_x = -10000;
-    // elec_layer_4_y = -10000;
-    // elec_layer_7_x = -10000;
-    // elec_layer_7_y = -10000;
+    
 
     Map<Integer, List<Integer>> caloMap = loadMapByIndex(calos, "pindex");
 
@@ -419,7 +384,7 @@ public class DvcsEvent {
     }
 
     // this iswhat i commneted out on jan 26
-    if (isML) {
+    if (processInput.getMLmode()) {
       builder.append(dedxDeutCTOF + ",");
       builder.append(dedxDeutCND + ",");
       builder.append(betahad + ",");
@@ -480,36 +445,7 @@ public class DvcsEvent {
 
   }
 
-  // public void setPositives(Bank particles, Bank scint, int np){
-  // if (this.FoundDeuteron==true){
-  // vdeuteron.setPxPyPzM(particles.getFloat("px",np),
-  // particles.getFloat("py",np),
-  // particles.getFloat("pz",np),
-  // this.MNUC);
-  // betadeut=particles.getFloat("beta",np);
-  // }
-  // else if (this.FoundProton==true){
-  // vproton.setPxPyPzM(particles.getFloat("px",np),
-  // particles.getFloat("py",np),
-  // particles.getFloat("pz",np),
-  // this.MPROT);
-  // betaprot=particles.getFloat("beta",np);
-  // }
-  // else if (this.FoundPion==true){
-  // vpion.setPxPyPzM(particles.getFloat("px",np),
-  // particles.getFloat("py",np),
-  // particles.getFloat("pz",np),
-  // this.MPION);
-  // betapion=particles.getFloat("beta",np);
-  // }
-  // else if (this.FoundKaon==true){
-  // vkaon.setPxPyPzM(particles.getFloat("px",np),
-  // particles.getFloat("py",np),
-  // particles.getFloat("pz",np),
-  // this.MKAON);
-  // betakaon=particles.getFloat("beta",np);
-  // }
-  // }
+  
   public void setHelicity(Bank hel, int runNumber) {
     helicity = hel.getInt("helicity", 0);
     if (runNumber < 6700 && runNumber != 6378) {
@@ -766,10 +702,7 @@ public class DvcsEvent {
     boolean keepbottom = this.X("eh").mass2() > -2;
     return keeptop && keepbottom;
   }
-
-  public boolean DVCScut() {
-    // && Math.toDegrees(this.vphoton.theta())<5
-
+  public boolean FiducialCuts(){
     boolean fiducialCutElectron = false;
     // System.out.println(elec_sector);
     if ((elec_sector == 1 && elec_v > 9.7824 && elec_v < 402.06 && elec_w > 0.47359 && elec_w < 393.895)
@@ -780,8 +713,7 @@ public class DvcsEvent {
         || (elec_sector == 6 && elec_v > 9.12088 && elec_v < 403.581 && elec_w > 8.13996 && elec_w < 403.886)) {
       fiducialCutElectron = true;
     }
-
-    // boolean fiducialCutPhoton = false;
+      // boolean fiducialCutPhoton = false;
     // //System.out.println(elec_sector);
     // if ((photon_sector==1 && photon_v >9.7824 && photon_v < 402.06 &&
     // photon_w>0.47359 && photon_w<393.895)|| (photon_sector == 2 &&
@@ -796,13 +728,18 @@ public class DvcsEvent {
     // fiducialCutPhoton = true;
     // }
     // return fiducialCutElectron;
+    return fiducialCutElectron;
+  }
+
+  public boolean DVCScut() {
+    
     boolean cut = (-this.Q().mass2() > 1.0 // TEMP!!!!!!
         && this.W().mass() > 2
         && this.vhadron.p() < 2
         && this.vphoton.e() > 1 // changed from 2//proton analysis was 1 not sure when we changed it to 2
         && this.angleBetweenElectronPhoton() > 8
         // && fiducialCutPhoton
-        && fiducialCutElectron);
+        );
     return cut;
   }
 
@@ -833,32 +770,48 @@ public class DvcsEvent {
     }
     return !IsAPion;
   }
-
-  public boolean Exclusivitycut(int runNumber) {
-    boolean cut = false;
-    // boolean dedxCut = true;
+  public boolean VertexCut(int runNumber){
     boolean vertexCut = false;
-    // THESE ARE THE dedx cuts done manually, they should be removed since we are
-    // looking into ML stuff
-    // if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654
-    // *Math.pow(vhadron.p(),-1.851)){
-    // dedxCut = false;
-    // }
-    // if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
-    // dedxCut = false;
-    // }
-    // if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628
-    // *Math.pow(vhadron.p(),-2.398)){
-    // dedxCut = false;
-    // }
-
     if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron)
-        && vertexElectron < (1.5 + vertexDeuteron)) {
-      vertexCut = true;
-    } else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
-        && vertexElectron < (1.8 + vertexDeuteron)) {
-      vertexCut = true;
+    && vertexElectron < (1.5 + vertexDeuteron)) {
+  vertexCut = true;
+} else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
+    && vertexElectron < (1.8 + vertexDeuteron)) {
+  vertexCut = true;
+}
+  return vertexCut;
+  }
+  public boolean PIDdeutCut(){
+  boolean dedxCut = true;
+// THESE ARE THE dedx cuts done manually, they should be removed since we are
+    // looking into ML stuff
+    if (inCTOF && vhadron.p() < 1.1 && vhadron.p() > 0.6 && dedxDeutCTOF < 4.3654
+    *Math.pow(vhadron.p(),-1.851)){
+    dedxCut = false;
     }
+    if (inCTOF && dedxDeutCTOF > 11.464 *Math.pow(vhadron.p(),-1.161)){
+    dedxCut = false;
+    }
+    if (inCND && vhadron.p() < 1.1 && vhadron.p() > 0.8 && dedxDeutCND < 3.628
+    *Math.pow(vhadron.p(),-2.398)){
+    dedxCut = false;
+    }
+
+   
+    return dedxCut;
+  }
+  public boolean Exclusivitycut() {
+    boolean cut = false;
+    
+    //boolean vertexCut = false;
+     // if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron)
+    //     && vertexElectron < (1.5 + vertexDeuteron)) {
+    //   vertexCut = true;
+    // } else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
+    //     && vertexElectron < (1.8 + vertexDeuteron)) {
+    //   vertexCut = true;
+    // }
+    
 
     if (conf == 1) {
       cut =
@@ -1021,18 +974,13 @@ public class DvcsEvent {
     return betahad;
   }
 
-  public double betapos() {
-    return betapos;
-  }
+
 
   public double ctofen() {
     return ctofenergyhad;
   }
 
-  public double ctofenpos() {
-    return ctofenergypos;
-  }
-
+  
   public double chi2pid() {
     return chi2pidhad;
   }
@@ -1083,6 +1031,10 @@ public class DvcsEvent {
   // //int status = particles.getInt("status", npart);
   // float beta = particles.getFloat("beta", npart);
   // int charge = particles.getInt("charge",npart);
+
+
+//public double mpos;
+
 
   // if(charge >= 0){
   // FoundPositives = true;
@@ -1350,3 +1302,95 @@ public class DvcsEvent {
           
             }
           }
+
+
+
+          // public void setPositives(Bank particles, Bank scint, int np){
+  // if (this.FoundDeuteron==true){
+  // vdeuteron.setPxPyPzM(particles.getFloat("px",np),
+  // particles.getFloat("py",np),
+  // particles.getFloat("pz",np),
+  // this.MNUC);
+  // betadeut=particles.getFloat("beta",np);
+  // }
+  // else if (this.FoundProton==true){
+  // vproton.setPxPyPzM(particles.getFloat("px",np),
+  // particles.getFloat("py",np),
+  // particles.getFloat("pz",np),
+  // this.MPROT);
+  // betaprot=particles.getFloat("beta",np);
+  // }
+  // else if (this.FoundPion==true){
+  // vpion.setPxPyPzM(particles.getFloat("px",np),
+  // particles.getFloat("py",np),
+  // particles.getFloat("pz",np),
+  // this.MPION);
+  // betapion=particles.getFloat("beta",np);
+  // }
+  // else if (this.FoundKaon==true){
+  // vkaon.setPxPyPzM(particles.getFloat("px",np),
+  // particles.getFloat("py",np),
+  // particles.getFloat("pz",np),
+  // this.MKAON);
+  // betakaon=particles.getFloat("beta",np);
+  // }
+  // }
+
+
+
+   // public String [] args;
+  // public void setArgs(String [] argss){
+  // System.out.println("Processing");
+  // args = argss;
+  // for(int i = 0; i < argss.length;i++){
+  // System.out.println(argss[i]);
+  // }
+
+  // }
+
+
+  // public boolean isML = false;
+ 
+
+  // public void isML(boolean var) {
+  //   isML = var;
+
+  // }
+  // processInput inputParam=new processInput(args);
+//public double beforeFidCut = 0;
+  // public double elec_layer_4_x;
+  // public double elec_layer_4_y;
+  // public double elec_layer_7_x;
+  // public double elec_layer_7_y;
+  // && Math.toDegrees(this.vphoton.theta())<5
+
+  // public LorentzVector vpositive = new LorentzVector();
+  // public LorentzVector vkaon = new LorentzVector();
+
+
+  // elec_layer_4_x = -10000;
+    // elec_layer_4_y = -10000;
+    // elec_layer_7_x = -10000;
+    // elec_layer_7_y = -10000;
+
+
+     // boolean NewEvent=false;
+  //double betapos = -10;
+  //double betadeut = -10;
+  //double betaprot = -10;
+  //double betakaon = -10;
+  //double betapion = -10;
+  
+  //double ctofenergypos = -10;
+  //double ctofenergydeut = -10;
+  //double ctofenergyprot = -10;
+  //double ctofenergykaon = -10;
+  //double ctofenergypion = -10;
+
+
+  // public double betapos() {
+  //   return betapos;
+  // }
+  // public double ctofenpos() {
+  //   return ctofenergypos;
+  // }

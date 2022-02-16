@@ -60,9 +60,7 @@ public class DcoDe {
   static int FDCounter;
   static int FTCounter;
 
-  // static int beforefid;
-  // static int afterfid;
-  // static List<List<String>> records ;
+  
   static HashMap<Integer, List<Double>> runMap;
 
   static StringBuilder builder;
@@ -81,17 +79,18 @@ public class DcoDe {
     // builder.append(columnNames+"\n");
 
     int goodEvent;
-    int counter11 = 0;
+    
+
     System.out.println("\n Processing arguments \n");
     processInput inputParam = new processInput(args);
-    // runUtil runInfo=new runUtil();
-
+    
     event = new Event();
     ev = new DvcsEvent();
-    // ev.setArgs(args);
-    ev.isML(processInput.getMLmode());
-    if (ev.isML)
+
+    //MAKING CSV FILE
+    if (processInput.getMLmode())
       ev.makecsv();
+    
     // NO CUTS
     hNC = new DvcsHisto();// No cuts
     hNC.setOutputDir(inputParam.getOutputDir());
@@ -128,46 +127,42 @@ public class DcoDe {
     ndegamma = 0;
     counter = 0;
     FDCounter = 0;
-    FTCounter = 0;
+    FTCounter = 0;  
 
-    // HashMap<Integer, Double> hmap=createrunmap();
-    // Why calling createrunmap using the class name and not object
-    // HashMap<Integer, Double> hmap=runUtil.createrunmap();
-
-    // this is me making a hashmap of the runs from the txtfile
-    // structure of hashmap
-    // runnumber:firstevent, lastevent, beamenergy
-
+    //READING MAP FOR GOOD RUNS
     runMap = runUtil.createMapGagikStyle();
 
+    //LOOP OVER THE HIPO FILES
     for (int i = 0; i < inputParam.getNfiles(); i++) {
       goodEvent = 0;
       HipoReader reader = new HipoReader();
-      if (!processInput.getMCmode() && !processInput.getnTmode())
+      if (!processInput.getMCmode() && !processInput.getnTmode())//skipping if MC or untagged
         reader.setTags(9, 10, 11);
       reader.open(inputParam.getFileName(i));
       System.out.println(inputParam.getFileName(i));
       reader.getEvent(event, 0); // Reads the first event and resets to the begining of the file
       Bank runconfig = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
-      // runconfig = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
+      
       event.read(runconfig);
       while (runconfig.getInt("run", 0) == 0) {
         reader.nextEvent(event);
         event.read(runconfig);
       }
       System.out.println("Reading run :" + runconfig.getInt("run", 0));
-      int runNumberIndex = -1;
-      boolean runFound = false;
+
       int runNumber = runconfig.getInt("run", 0);
       if (runMap.get(runNumber) != null || processInput.getMCmode()) {// This if will keep runs in the map or MC
-        // BEam energy from the file or set by hand for the MC
+        // Beam energy from the file or set by hand for the MC
         // right now the beam energy for the MC is hardcoded
-        if (runMap.get(runNumber) != null)
+        if (runMap.get(runNumber) != null){
           ev.BeamEnergy = runMap.get(runNumber).get(2);
-        else if (processInput.getMCmode())
+          System.out.println("Beam energy found is " + ev.BeamEnergy);
+        }
+        else if (processInput.getMCmode()){
           ev.BeamEnergy = 10.6;
-
-        System.out.println("Beam energy found is " + ev.BeamEnergy);
+          System.out.println("Beam energy set manually to " + ev.BeamEnergy);
+        }
+        
         ev.vBeam.setPxPyPzE(0, 0, Math.sqrt(ev.BeamEnergy * ev.BeamEnergy - 0.0005 * 0.0005), ev.BeamEnergy);
 
         System.out.println("Beam energy found for run" + runconfig.getInt("run", 0) + " " + ev.vBeam.e());
@@ -203,15 +198,22 @@ public class DcoDe {
             neitherEventsGood = (runMap.get(runNumber).get(0) != 0.0 && runMap.get(runNumber).get(1) != 0.0);
           }
 
-          if ((processInput.getMCmode() ||
-              ((event.getEventTag() == 11 || event.getEventTag() == 10 || event.getEventTag() == 9)
-                  || processInput.getnTmode()) &&
-              // ((event.getEventTag()==11 ) &&
-                  (allEventsGood || /* //all events are good */
-                      (beginningEventsGood && (runconfig.getInt("event", 0) < runMap.get(runNumber).get(1))) ||
-                      (endEventsGood && (runconfig.getInt("event", 0) > runMap.get(runNumber).get(0))) ||
-                      (neitherEventsGood && runconfig.getInt("event", 0) < runMap.get(runNumber).get(1)
-                          && runconfig.getInt("event", 0) > runMap.get(runNumber).get(0))))) {
+          if (
+            (
+              processInput.getMCmode() ||
+              (
+                (event.getEventTag() == 11 || event.getEventTag() == 10 || event.getEventTag() == 9)||
+                processInput.getnTmode()
+              ) &&
+                  (
+                    allEventsGood || /* //all events are good */
+                    (beginningEventsGood && (runconfig.getInt("event", 0) < runMap.get(runNumber).get(1))) ||
+                    (endEventsGood && (runconfig.getInt("event", 0) > runMap.get(runNumber).get(0))) ||
+                    (neitherEventsGood && runconfig.getInt("event", 0) < runMap.get(runNumber).get(1)
+                          && runconfig.getInt("event", 0) > runMap.get(runNumber).get(0))
+                  )
+              )
+            ) {
             goodEvent = 1;
           }
           if (goodEvent == 1)
@@ -228,8 +230,7 @@ public class DcoDe {
 
     } // end of the loop over files
 
-    // if(counter==0)break;
-    // counter--;
+
 
     System.out.println("total dvcs events: " + ndvcs);
     System.out.println("total deuteron gamma electron events : " + ndegamma);
@@ -242,10 +243,7 @@ public class DcoDe {
     System.out.println("total events after excl cuts: " + counter);
     System.out.println("total events after excl cuts in FT: " + FTCounter);
     System.out.println("total events after excl cuts in FD: " + FDCounter);
-    // System.out.println("number before fid"+ev.beforeFidCut);
-    // System.out.println("number after fid" + afterfid);
-    System.out.println("number of 11 = " + counter11);
-
+   
     hNC.writeHipooutput(rootdir, "NC");
     hNCFD.writeHipooutput(rootdir, "NCFD");
     hNCFT.writeHipooutput(rootdir, "NCFT");
@@ -263,7 +261,7 @@ public class DcoDe {
     hACFT.writeHipooutput(rootdir, "ACFT");
     rootdir.writeFile(inputParam.OutputLocation + "/" + inputParam.gethipoFile());
 
-    if (ev.isML) {
+    if (processInput.getMLmode()) {
       ev.pw.write(ev.builder.toString());
       ev.pw.close();
     }
@@ -275,10 +273,7 @@ public class DcoDe {
 
     if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber)) {
       hNC.fillBasicHisto(ev);
-      // beforefid++;
-      // if (ev.X("eh").mass2() > (-20.0/6.0* ev.coneangle()+10)){
-      // System.out.println(event.getEventTag());
-      // }
+
 
       if (ev.GetConf() == 1) {
         hNCFT.fillBasicHisto(ev);
@@ -286,13 +281,8 @@ public class DcoDe {
         hNCFD.fillBasicHisto(ev);
       }
       ndegamma++;
-      if (ev.DVCScut()) {
-
-        // afterfid++;
+      if (ev.DVCScut() && ev.FiducialCuts()) {
         ndvcs++;
-        // if(vMMass.mass2()>-1 && vMMass.mass2()<1 &&
-        // (vphoton.theta()*180./Math.PI)<5){
-        // MMom.fill(vMMom.p());
         hDC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
           hDCFT.fillBasicHisto(ev);
@@ -316,7 +306,7 @@ public class DcoDe {
           } else if (ev.GetConf() == 2) {
             hCCFD.fillBasicHisto(ev);
           }
-          if (ev.Exclusivitycut(runNumber)) {
+          if (ev.Exclusivitycut() && ev.VertexCut(runNumber)) {
             // && (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
             if (ev.GetConf() == 1) {
               hACFT.fillBasicHisto(ev);
@@ -324,9 +314,6 @@ public class DcoDe {
             } else if (ev.GetConf() == 2) {
               hACFD.fillBasicHisto(ev);
               FDCounter++;
-              // if (-ev.Q().mass2()>1.5){
-              // BinnedHACFD.fillBasicHisto(ev);//?????????
-              // }
             }
             counter++;
           }
@@ -338,3 +325,41 @@ public class DcoDe {
   }// end of goodEventFilterParticle
 
 }
+
+
+
+// ev.setArgs(args);
+    //ev.isML(processInput.getMLmode());
+// runUtil runInfo=new runUtil();
+// static int beforefid;
+  // static int afterfid;
+  // static List<List<String>> records ;
+   // System.out.println("number before fid"+ev.beforeFidCut);
+    // System.out.println("number after fid" + afterfid);
+   // System.out.println("number of 11 = " + counter11);
+   //int counter11 = 0;
+
+
+   // HashMap<Integer, Double> hmap=createrunmap();
+    // Why calling createrunmap using the class name and not object
+    // HashMap<Integer, Double> hmap=runUtil.createrunmap();
+
+    // this is me making a hashmap of the runs from the txtfile
+    // structure of hashmap
+    // runnumber:firstevent, lastevent, beamenergy
+
+    //   runconfig = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
+      //int runNumberIndex = -1;
+      //boolean runFound = false;
+
+
+      // if (-ev.Q().mass2()>1.5){
+              // BinnedHACFD.fillBasicHisto(ev);//?????????
+              // }
+
+
+                    // if (ev.X("eh").mass2() > (-20.0/6.0* ev.coneangle()+10)){
+      // System.out.println(event.getEventTag());
+      // }
+          // if(counter==0)break;
+    // counter--;

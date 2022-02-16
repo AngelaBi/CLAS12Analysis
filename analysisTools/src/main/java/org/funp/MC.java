@@ -94,8 +94,7 @@ public class MC
         event.read(runconfig);
       }
       System.out.println("Reading run :"+runconfig.getInt("run",0));
-      int runNumberIndex = -1;
-      boolean runFound = false;
+     
       int runNumber=runconfig.getInt("run",0);
       
      
@@ -164,3 +163,6 @@ public class MC
 
 
 }
+
+ //int runNumberIndex = -1;
+      //boolean runFound = false;

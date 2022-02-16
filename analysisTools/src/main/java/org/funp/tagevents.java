@@ -35,14 +35,14 @@ static int ndegamma;
     runMap = runUtil.createMapGagikStyle();
     processInput inputParam=new processInput(args);
     //ev.setArgs(args);
-    ev.isML(processInput.getMLmode());
+    //ev.isML(processInput.getMLmode());
     //runUtil runInfo=new runUtil();
 
     //int ndeut=0;
     //int nphot=0;
     //int nelec=0;
     int totalcounter=0;
-   ndegamma=0;
+    ndegamma=0;
     //int dvcscounter=0;
 
  
