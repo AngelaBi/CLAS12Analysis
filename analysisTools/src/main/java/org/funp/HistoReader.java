@@ -98,6 +98,8 @@ public class HistoReader {
     TCanvas ecQ2 = new TCanvas("Asym FD Q2 dep", 1200, 500);
     drawAsymQ2bins(ecQ2, hACFD);
 
+    TCanvas oc = new TCanvas("other cuts", 1200, 500);
+    displayOthercuts(oc,hDCFT);
   }
   
   public static void displayOthercuts(TCanvas c, DvcsHisto h){
@@ -130,9 +132,9 @@ public class HistoReader {
     ec.cd(5).draw(h.edXmissingM);
     //drawCut(0.7, h.edXmissingM, ec, 5);
 
-    ec.cd(6).draw(h.chisqHad);
+    ec.cd(6).draw(h.edgXmissingPz);
 
-    //ec.cd(7).draw(h.coneanglevsegXM2);
+    ec.cd(7).draw(h.DeltaPhiPlaneHist);
 
     ec.cd(8).draw(h.egXmissingM2);
 
@@ -255,6 +257,7 @@ public class HistoReader {
       totPhim.add(h1.phiminustbin[i]);
       totPhim.add(h2.phiminustbin[i]);
       totPhim.add(h3.phiminustbin[i]);
+      System.out.println(totPhip.integral()+" "+totPhim.integral());
       ec.draw((buildAsym(totPhip,totPhim)), "E");
       F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
       Asymfunc.setParameter(0, 0.1);

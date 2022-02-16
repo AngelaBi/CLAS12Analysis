@@ -736,7 +736,7 @@ public class DvcsEvent {
     boolean cut = (-this.Q().mass2() > 1.0 // TEMP!!!!!!
         && this.W().mass() > 2
         && this.vhadron.p() < 2
-        && this.vphoton.e() > 1 // changed from 2//proton analysis was 1 not sure when we changed it to 2
+        && this.vphoton.e() > 2 // changed from 1//proton analysis was 1 not sure when we changed it to 2
         && this.angleBetweenElectronPhoton() > 8
         // && fiducialCutPhoton
         );
@@ -803,14 +803,7 @@ public class DvcsEvent {
   public boolean Exclusivitycut() {
     boolean cut = false;
     
-    //boolean vertexCut = false;
-     // if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron)
-    //     && vertexElectron < (1.5 + vertexDeuteron)) {
-    //   vertexCut = true;
-    // } else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
-    //     && vertexElectron < (1.8 + vertexDeuteron)) {
-    //   vertexCut = true;
-    // }
+   
     
 
     if (conf == 1) {
@@ -829,9 +822,7 @@ public class DvcsEvent {
               && this.X("ehg").p() < 0.5// was 1.5
               // && Math.abs(this.chi2pid()) < 3.5
               // && this.X("eh").mass() < 1.5//was 0.7
-              && vertexCut
           // && dedxCut
-          // && -1*this.t().mass2() < 1.4
           /* && getDedxDeut()> (-30*vhadron.p() +30) */);
     } else if (conf == 2) {
 
@@ -848,9 +839,7 @@ public class DvcsEvent {
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
           && this.X("eh").mass() < 0.7// was 1.5//was nothing - desperate attempt to reduce pion background
-          && vertexCut
       // && dedxCut
-      // && -1*this.t().mass2() < 1.4
       /* && getDedxDeut()> (-30*vhadron.p()+30) */);
     }
     return cut;
