@@ -822,6 +822,17 @@ public class DvcsEvent {
     }
     return cut;
   }
+  public boolean ExcludePionsCut(){
+    boolean IsAPion=false;
+    double mean=1.703491e-02;
+    double sigma=3.581490e-03;
+    if(vpion.px()<50){//This ensure there were two photons
+      if(vpion.mass2()<mean+3*sigma && vpion.mass2()>mean-3*sigma){
+        IsAPion=true;
+      }
+    }
+    return IsAPion;
+  }
 
   public boolean Exclusivitycut(int runNumber) {
     boolean cut = false;
