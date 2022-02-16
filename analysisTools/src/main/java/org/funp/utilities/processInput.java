@@ -67,7 +67,6 @@ public class processInput {
 			if (cmd.hasOption("MC")){
 				System.out.println("setting MC mode");
 				MCmode=true;
-				System.out.println(MCmode);
 			}
 			if (cmd.hasOption("nT")){
 				System.out.println("setting no tags mode");
