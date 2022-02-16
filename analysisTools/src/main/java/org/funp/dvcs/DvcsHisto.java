@@ -106,6 +106,9 @@ public class DvcsHisto {
   public H2F dedxDeutvsP;
   public H2F dedxCTOFvsP;
   public H2F dedxCNDvsP;
+
+  public H1F pionmass2;
+
   public H1F[] phiplusQ2bin;
   public H1F[] phiminusQ2bin;
   public H1F[] phiplustbin;
@@ -129,7 +132,7 @@ public class DvcsHisto {
 
   public void setOutputDir(String otherdir){
     this.outputdir=otherdir;
-    System.out.println("**** setting out dir for plots to" + this.outputdir);
+    //System.out.println("**** setting out dir for plots to" + this.outputdir);
 }
 public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   readMode=true;
@@ -228,6 +231,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "Pid");
     thgvsthe=createHisto("thgvsthe", "#theta_#gamma vs #theta_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
     
+
+    pionmass2=createHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "Kine");
+
     phiplusQ2bin=new H1F[q2bins.length-1];
     phiminusQ2bin=new H1F[q2bins.length-1];
     for (int i=0;i<q2bins.length-1;i++){
@@ -240,7 +246,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       phiplustbin[i]=createHisto("Phiplustbin"+i, "Phiplust", "", 10, 0, 360, "Asym");
       phiminustbin[i]=createHisto("Phiminustbin"+i, "Phiminust", "", 10, 0, 360, "Asym");
     }
-    System.out.println("creating histograms"  );
+    //System.out.println("creating histograms"  );
   }
   public H1F createHisto(String name,
       String title,String titlex,
@@ -342,6 +348,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     photThvsP.fill(Math.toDegrees(ev.vphoton.theta()),ev.vphoton.p());
 
     thgvsthe.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
+    pionmass2.fill(ev.vpion.mass2());
+    //System.out.println(ev.vpion.mass2());
 //Xbj=ev.Xb();
 
     hgTh.fill(Math.toDegrees(ev.vphoton.theta()));
