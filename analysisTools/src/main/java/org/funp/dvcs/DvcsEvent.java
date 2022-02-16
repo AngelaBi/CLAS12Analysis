@@ -831,7 +831,7 @@ public class DvcsEvent {
         IsAPion=true;
       }
     }
-    return IsAPion;
+    return !IsAPion;
   }
 
   public boolean Exclusivitycut(int runNumber) {

@@ -42,15 +42,12 @@ public class DcoDe {
   static DvcsHisto hDCFT;// DVCS cuts conf 1
   static DvcsHisto hDCFD;// DVCS cuts conf 2
 
-  static DvcsHisto hPC;// pion cuts
   static DvcsHisto hPCFT;// pion cuts conf 1
   static DvcsHisto hPCFD;// pion cuts conf 2
 
-  static DvcsHisto hCC;// coneangle MM 2d cut
   static DvcsHisto hCCFT;// coneangle MM 2d cut conf 1
   static DvcsHisto hCCFD;// coneangle MM 2d cut conf 2
 
-  static DvcsHisto hAC;// All cuts
   static DvcsHisto hACFT;// All cuts conf 1
   static DvcsHisto hACFD;// All cuts conf 2
 
@@ -112,22 +109,16 @@ public class DcoDe {
     hDCFD = new DvcsHisto();// All cuts conf 2
     hDCFD.setOutputDir(inputParam.getOutputDir());
     // PION CUT
-    hPC = new DvcsHisto();// DVCS cuts
-    hPC.setOutputDir(inputParam.getOutputDir());
     hPCFT = new DvcsHisto();// DVCS cuts conf 1
     hPCFT.setOutputDir(inputParam.getOutputDir());
     hPCFD = new DvcsHisto();// All cuts conf 2
     hPCFD.setOutputDir(inputParam.getOutputDir());
     // Coneangle 2D cuts
-    hCC = new DvcsHisto();// DVCS cuts
-    hCC.setOutputDir(inputParam.getOutputDir());
     hCCFT = new DvcsHisto();// DVCS cuts conf 1
     hCCFT.setOutputDir(inputParam.getOutputDir());
     hCCFD = new DvcsHisto();// All cuts conf 2
     hCCFD.setOutputDir(inputParam.getOutputDir());
     // ALL CUTS
-    hAC = new DvcsHisto();// All cuts
-    hAC.setOutputDir(inputParam.getOutputDir());
     hACFT = new DvcsHisto();// DVCS cuts conf 1
     hACFT.setOutputDir(inputParam.getOutputDir());
     hACFD = new DvcsHisto();// All cuts conf 2
@@ -258,13 +249,16 @@ public class DcoDe {
     hNC.writeHipooutput(rootdir, "NC");
     hNCFD.writeHipooutput(rootdir, "NCFD");
     hNCFT.writeHipooutput(rootdir, "NCFT");
-    hCC.writeHipooutput(rootdir, "CC");
-    hCCFD.writeHipooutput(rootdir, "CCFD");
-    hCCFT.writeHipooutput(rootdir, "CCFT");
     hDC.writeHipooutput(rootdir, "DC");
     hDCFD.writeHipooutput(rootdir, "DCFD");
     hDCFT.writeHipooutput(rootdir, "DCFT");
-    hAC.writeHipooutput(rootdir, "AC");
+
+    hPCFD.writeHipooutput(rootdir, "PCFD");
+    hPCFT.writeHipooutput(rootdir, "PCFT");
+
+    hCCFD.writeHipooutput(rootdir, "CCFD");
+    hCCFT.writeHipooutput(rootdir, "CCFT");
+    
     hACFD.writeHipooutput(rootdir, "ACFD");
     hACFT.writeHipooutput(rootdir, "ACFT");
     rootdir.writeFile(inputParam.OutputLocation + "/" + inputParam.gethipoFile());
@@ -311,7 +305,6 @@ public class DcoDe {
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
         if(ev.ExcludePionsCut()){
-          hPC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
           hPCFT.fillBasicHisto(ev);
         } else if (ev.GetConf() == 2) {
@@ -325,12 +318,9 @@ public class DcoDe {
           }
           if (ev.Exclusivitycut(runNumber)) {
             // && (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
-            hAC.fillBasicHisto(ev);
-
             if (ev.GetConf() == 1) {
               hACFT.fillBasicHisto(ev);
               FTCounter++;
-
             } else if (ev.GetConf() == 2) {
               hACFD.fillBasicHisto(ev);
               FDCounter++;
