@@ -91,7 +91,6 @@ public class DcoDe
     int counter11 = 0;
     System.out.println("\n Processing arguments \n");
     processInput inputParam=new processInput(args);
-    System.out.println(processInput.getMCmode());
     //runUtil runInfo=new runUtil();
     
 
