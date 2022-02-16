@@ -68,7 +68,8 @@ public class DvcsEvent {
   // String columnNames = "dedx,momentum,particle" ;
   // builder.append(columnNames+"\n");
   double MNUC = 1.875612;
-  double MPION = 0.139570;
+  double MPIONP = 0.139570;
+  double MPION = 0.1349768;
   double MKAON = 0.4977;
   double MPROT = 0.93828;
   public double mpos;
@@ -222,59 +223,51 @@ public class DvcsEvent {
     }
 
   }
+  public void setPhoton(Bank particles, Bank calos, ArrayList<Integer> photonsNumber ) {
+ // double mass2MissingHadron = 1000.0;
+ double missingmass_chi2 = 0.0;
+ double chi2ofPhoton = 10000.0;
+ double coneangle_chi2 = 0.0;
+ int ng = -1;
+ // Photon Chi2 Selection hehe :)
 
-  public void setPhoton(Bank particles, Bank calos, int ng/* ArrayList<Integer> photonsNumber */) {
+ for (int i = 0; i < photonsNumber.size(); i++) {
+   LorentzVector tmp1 = new LorentzVector();
+   tmp1.copy(vBeam);
+   tmp1.add(vTarget);
+   tmp1.sub(velectron);
+   vphoton.setPxPyPzM(particles.getFloat("px", photonsNumber.get(i)),
+       particles.getFloat("py", photonsNumber.get(i)),
+       particles.getFloat("pz", photonsNumber.get(i)),
+       0.0);
+   tmp1.sub(vphoton);
+   tmp1.sub(vhadron);
 
-    // LorentzVector remainingVector = new LorentzVector();
-    // LorentzVector vtmp = new LorentzVector();
-    // double energyLeft = 100000;
-    // System.out.println(photonsNumber);
-    // remainingVector.copy(this.vBeam);
-    // remainingVector.add(this.vTarget).sub(this.velectron);
-    // remainingVector.sub(this.vhadron);
-    // double initialRemainingEnergy = remainingVector.e();
-    // boolean positiveMissing = false;
+   missingmass_chi2 = Math.abs(tmp1.mass());
+   // System.out.println("The missing mass of the everything is : " +
+   // missingmass_chi2);
+   LorentzVector temp = new LorentzVector();
+   temp.copy(this.X("eh"));
+   // coneangle_chi2 = Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+   coneangle_chi2 = this.vphoton.vect().theta(temp.vect());
+   // System.out.println("The cone angle of the photon is :" + coneangle_chi2);
+   if (chi2ofPhoton > coneangle_chi2 + missingmass_chi2) {
 
-    // if (initialRemainingEnergy < 0){
-    // return positiveMissing;
-    // }else{
+     chi2ofPhoton = coneangle_chi2 + missingmass_chi2;
+     ng = photonsNumber.get(i);
 
-    // vtmp.setPxPyPzM(particles.getFloat("px",photonsNumber.get(0)),
-    // particles.getFloat("py",photonsNumber.get(0)),
-    // particles.getFloat("pz",photonsNumber.get(0)),
-    // 0.0);
-    // energyLeft = Math.abs(remainingVector.e() - vtmp.e());
-    // System.out.println("the initial energy is "+ vtmp.e());
+   }
 
-    // ng = photonsNumber.get(0);
-    // for(int i = 1; i < photonsNumber.size(); i++){
-    // int pid = particles.getInt("pid", photonsNumber.get(i));
-    // int status = particles.getInt("status", photonsNumber.get(i));
-    // float beta = particles.getFloat("beta", photonsNumber.get(i));
+ }
+ 
+ int status = particles.getInt("status", ng);
+ if (Math.abs(status) < 2000)
+   conf = 1;
+ else if (Math.abs(status) >= 2000 && Math.abs(status) < 4000)
+   conf = 2;
 
-    // vtmp.setPxPyPzM(particles.getFloat("px",photonsNumber.get(i)),
-    // particles.getFloat("py",photonsNumber.get(i)),
-    // particles.getFloat("pz",photonsNumber.get(i)),
-    // 0.0);
 
-    // System.out.println("The energy for this photon is " + Math.abs(vtmp.e()));
-    // if(energyLeft > Math.abs(remainingVector.e()-vtmp.e())){
-    // ng=photonsNumber.get(i);
-    // energyLeft = Math.abs(remainingVector.e()-vtmp.e());
-    // status = particles.getInt("status", photonsNumber.get(i));
-    // beta = particles.getFloat("beta", photonsNumber.get(i));
-
-    // if(status<2000)conf=1;
-    // else if(status>=2000 && status<4000)conf=2;
-
-    // }
-
-    // }
-    // positiveMissing = true;
-    // }
-
-    // System.out.println("end of event");
-
+    
     // System.out.println("The end lowest energy is " + initialRemainingEnergy);
     vphoton.setPxPyPzM(particles.getFloat("px", ng),
         particles.getFloat("py", ng),
@@ -321,6 +314,62 @@ public class DvcsEvent {
     }
 
   }
+  public void setPion(Bank particles, Bank calos, ArrayList<Integer> photonsNumber ) {
+    //System.out.println(photonsNumber.size());
+    LorentzVector tmpphoton1=new LorentzVector();
+    LorentzVector tmpphoton2=new LorentzVector();
+    LorentzVector pair=new LorentzVector();
+    LorentzVector pairtmp=new LorentzVector();
+    // tmpphoton1.setPxPyPzM(particles.getFloat("px", photonsNumber.get(0)),
+    //   particles.getFloat("py", photonsNumber.get(0)),
+    //   particles.getFloat("pz", photonsNumber.get(0)),0.0);
+    // tmpphoton2.setPxPyPzM(particles.getFloat("px", photonsNumber.get(1)),
+    //   particles.getFloat("py", photonsNumber.get(1)),
+    //   particles.getFloat("pz", photonsNumber.get(1)),0.0);
+    // pair.copy(tmpphoton1);
+    // pair.add(tmpphoton2);
+    //pair.print();
+    
+    // double masspair=pair.mass2();
+    // double diff=Math.abs(masspair-MPION*MPION);
+    double diff=100000;
+    //System.out.println(pair.mass2()+" "+diff);
+    for (int i = 0; i < photonsNumber.size(); i++) {
+      for (int j = 0; j < photonsNumber.size(); j++) {
+       //&&( !(i==0 && j==1))
+        if(i<j ){
+          tmpphoton1.setPxPyPzM(particles.getFloat("px", photonsNumber.get(i)),
+          particles.getFloat("py", photonsNumber.get(i)),
+          particles.getFloat("pz", photonsNumber.get(i)),0.0);
+          tmpphoton2.setPxPyPzM(particles.getFloat("px", photonsNumber.get(j)),
+          particles.getFloat("py", photonsNumber.get(j)),
+          particles.getFloat("pz", photonsNumber.get(j)),0.0);
+          
+          pairtmp.copy(tmpphoton1);
+          pairtmp.add(tmpphoton2);
+          //pairtmp.print();
+          double difftmp=Math.abs(pairtmp.mass2()-MPION*MPION);
+          //System.out.println(pairtmp.mass2()+" "+difftmp);
+          if(difftmp<diff ){
+            //System.out.println("i="+i+" j="+j+" "+difftmp);
+            
+            pair.copy(pairtmp);
+            //vpion.setPxPyPzE(pairtmp.px(), pairtmp.py(), pairtmp.pz(), pairtmp.e());;
+            diff=difftmp;
+            //pairtmp.print();
+            //pair.print();
+            //vpion.print();
+            //System.out.println("better");
+          }
+        }
+      }
+    }
+    //System.out.println("out");
+    //pair.print();
+    vpion.setPxPyPzE(pair.px(), pair.py(), pair.pz(), pair.e());;
+    //vpion.print();
+  }
+  
 
   public void setHadron(Bank particles, Bank scint, Bank scintExtras, int nh) {
     tmpdeut++;
@@ -495,6 +544,7 @@ public class DvcsEvent {
     ne = -1;
     ng = -1;
     nd = -1;
+    vpion.setPxPyPzM(99, 99, 99, 99);
 
     double ctofen = -10;
 
@@ -528,6 +578,9 @@ public class DvcsEvent {
         else if (pid == 22 && Math.abs(status) < 4000) {
           photonsNumber.add(npart);
           nphot++;
+          //Postponing the choice of the photon since instead of picking up the most energentic 
+          //We want to keep the one that fits best the DVCS channel
+
           // vtmp.setPxPyPzM(particles.getFloat("px",npart),
           // particles.getFloat("py",npart),
           // particles.getFloat("pz",npart),
@@ -630,43 +683,7 @@ public class DvcsEvent {
               this.d_en_max = vtmp.e();
             }
 
-            // if(dedxDeutCND>0){
-            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
-            // particles.getFloat("py",npart),
-            // particles.getFloat("pz",npart),
-            // this.MNUC);
-            // double value = dedxDeutCTOF* 0.486 + dedxDeutCND * 0.469 + vtmp.p() * 6.87
-            // -12.22;
-            // if (1/(1+Math.exp(-value)) > 0.5){
-            // ndeut++;
-            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
-            // particles.getFloat("py",npart),
-            // particles.getFloat("pz",npart),
-            // this.MNUC);
-            // if(vtmp.e()>this.d_en_max){
-            // nd=npart;
-            // this.d_en_max=vtmp.e();
-            // }
-            // }
-            // }else{//this is the condition if there is only CTOF dedx
 
-            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
-            // particles.getFloat("py",npart),
-            // particles.getFloat("pz",npart),
-            // this.MNUC);
-            // double value = dedxDeutCTOF* 0.3241 + vtmp.p() * 2.2909 - 4.58;
-            // if (1/(1+Math.exp( -value)) > 0.5){
-            // ndeut++;
-            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
-            // particles.getFloat("py",npart),
-            // particles.getFloat("pz",npart),
-            // this.MNUC);
-            // if(vtmp.e()>this.d_en_max){
-            // nd=npart;
-            // this.d_en_max=vtmp.e();
-            // }
-            // }
-            // }
 
           }
 
@@ -682,65 +699,9 @@ public class DvcsEvent {
       if (ndeut >= 1 && nelec >= 1 && nphot >= 1) {
         this.setElectron(particles, calos, ne);
         this.setHadron(particles, scint, scintExtras, nd);
-
-        // double mass2MissingHadron = 1000.0;
-        double missingmass_chi2 = 0.0;
-        double chi2ofPhoton = 10000.0;
-        double coneangle_chi2 = 0.0;
-        int ng = -1;
-        // Photon Chi2 Selection hehe :)
-
-        for (int i = 0; i < photonsNumber.size(); i++) {
-          LorentzVector tmp1 = new LorentzVector();
-          tmp1.copy(vBeam);
-          tmp1.add(vTarget);
-          tmp1.sub(velectron);
-          vphoton.setPxPyPzM(particles.getFloat("px", photonsNumber.get(i)),
-              particles.getFloat("py", photonsNumber.get(i)),
-              particles.getFloat("pz", photonsNumber.get(i)),
-              0.0);
-          tmp1.sub(vphoton);
-          tmp1.sub(vhadron);
-          // System.out.println(photonsNumber.size());
-          // System.out.println(tmp1.mass2()- (1.87* 1.87));
-          // if (Math.abs(tmp1.mass2() - (1.87* 1.87)) < mass2MissingHadron){
-          // //Math.abs(tmp1.mass2() - (MNUC*MNUC))
-          // mass2MissingHadron = Math.abs(tmp1.mass2() - (1.87*1.87));//
-          // Math.abs(tmp1.mass2() - MNUC**2);
-          // ng = photonsNumber.get(i);
-
-          // }
-
-          missingmass_chi2 = Math.abs(tmp1.mass());
-          // System.out.println("The missing mass of the everything is : " +
-          // missingmass_chi2);
-          LorentzVector temp = new LorentzVector();
-          temp.copy(this.X("eh"));
-          // coneangle_chi2 = Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
-          coneangle_chi2 = this.vphoton.vect().theta(temp.vect());
-          // System.out.println("The cone angle of the photon is :" + coneangle_chi2);
-          if (chi2ofPhoton > coneangle_chi2 + missingmass_chi2) {
-
-            chi2ofPhoton = coneangle_chi2 + missingmass_chi2;
-            ng = photonsNumber.get(i);
-
-          }
-
-        }
-        // System.out.println("FFFFFFFFFFFFFFFFFFFF The missing mass of the everything
-        // is : " + missingmass_chi2);
-        // System.out.println("FFFFFFFFFFFFFFFFFFFFFThe cone angle of the photon is :" +
-        // coneangle_chi2);
-        // System.out.println(" FFFFFFFFFFFFFFFFFFFFFFFThe total chi2 used to select the
-        // photon is "+ chi2ofPhoton);
-        status = particles.getInt("status", ng);
-        if (Math.abs(status) <= 2000)
-          conf = 1;
-        else if (Math.abs(status) > 2000 && Math.abs(status) < 4000)
-          conf = 2;
-
-        this.setPhoton(particles, calos, ng/* photonsNumber */);
-
+        this.setPhoton(particles, calos, photonsNumber);
+        if(nphot>=2) this.setPion(particles, calos, photonsNumber);
+        //vpion.print();
         this.setHelicity(hel, runNumber);
         FoundEvent = true;
 
@@ -749,79 +710,6 @@ public class DvcsEvent {
     // NewEvent=true;
     return FoundEvent;
   }
-
-  // public boolean FilterPositives(Bank particles, Bank scint){
-  // Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
-
-  // LorentzVector vtmp = new LorentzVector();
-  // double ctofenpos=-10;
-  // FoundPositives = false;
-
-  // if(particles.getRows()>0){
-  // for(int npart=0; npart<particles.getRows(); npart++){
-  // int pid = particles.getInt("pid", npart);
-  // //int status = particles.getInt("status", npart);
-  // float beta = particles.getFloat("beta", npart);
-  // int charge = particles.getInt("charge",npart);
-
-  // if(charge >= 0){
-  // FoundPositives = true;
-  // FoundDeuteron = false;
-  // FoundProton = false;
-  // FoundKaon = false;
-  // FoundPion = false;
-  // FoundProton = false;
-  // npositives++;
-  // np = npart;
-  // if(Math.abs(pid)==45){
-  // mpos = this.MNUC;
-  // FoundDeuteron = true;
-  // }
-  // else if(Math.abs(pid)==211){
-  // mpos = this.MPION;
-  // FoundPion = true;
-  // }
-  // else if(Math.abs(pid)==321){
-  // mpos = this.MKAON;
-  // FoundKaon = true;
-  // }
-  // else if(Math.abs(pid)==2212){
-  // mpos = this.MPROT;
-  // FoundProton = true;
-  // }
-  // this.setPositives(particles,scint,np);
-  // }
-
-  // if(scintMap.get(npart)!=null){
-  // for (int iscint : scintMap.get(npart)) {
-  // //System.out.println(scintMap.get(nh));
-  // final byte layer = scint.getByte("layer",iscint);
-  // final byte detector = scint.getByte("detector",iscint);
-  // //System.out.println(detector);
-  // if(detector==4){
-  // if(FoundDeuteron==true){
-  // ctofenergydeut = scint.getFloat("energy",iscint);
-  // }
-  // if (FoundKaon==true){
-  // ctofenergykaon = scint.getFloat("energy",iscint);
-  // }
-  // if (FoundProton==true){
-  // ctofenergyprot = scint.getFloat("energy",iscint);
-  // }
-  // if (FoundPion==true){
-  // ctofenergypion = scint.getFloat("energy",iscint);
-  // }
-  // }
-  // }
-  // }
-  // }
-  // }
-  // if (FoundDeuteron==true || FoundProton==true || FoundKaon==true||
-  // FoundPion==true){
-  // FoundPositives = true;
-  // }
-  // return FoundPositives;
-  // }
 
   public LorentzVector W() {
     LorentzVector tmp = new LorentzVector();
@@ -908,7 +796,7 @@ public class DvcsEvent {
     // fiducialCutPhoton = true;
     // }
     // return fiducialCutElectron;
-    boolean cut = (-this.Q().mass2() > 1.5 // TEMP!!!!!!
+    boolean cut = (-this.Q().mass2() > 1.0 // TEMP!!!!!!
         && this.W().mass() > 2
         && this.vhadron.p() < 2
         && this.vphoton.e() > 1 // changed from 2//proton analysis was 1 not sure when we changed it to 2
@@ -1166,4 +1054,288 @@ public class DvcsEvent {
     }
     return map;
   }
-}
+
+
+
+
+
+  // public boolean FilterPositives(Bank particles, Bank scint){
+  // Map<Integer,List<Integer>> scintMap = loadMapByIndex(scint,"pindex");
+
+  // LorentzVector vtmp = new LorentzVector();
+  // double ctofenpos=-10;
+  // FoundPositives = false;
+
+  // if(particles.getRows()>0){
+  // for(int npart=0; npart<particles.getRows(); npart++){
+  // int pid = particles.getInt("pid", npart);
+  // //int status = particles.getInt("status", npart);
+  // float beta = particles.getFloat("beta", npart);
+  // int charge = particles.getInt("charge",npart);
+
+  // if(charge >= 0){
+  // FoundPositives = true;
+  // FoundDeuteron = false;
+  // FoundProton = false;
+  // FoundKaon = false;
+  // FoundPion = false;
+  // FoundProton = false;
+  // npositives++;
+  // np = npart;
+  // if(Math.abs(pid)==45){
+  // mpos = this.MNUC;
+  // FoundDeuteron = true;
+  // }
+  // else if(Math.abs(pid)==211){
+  // mpos = this.MPION;
+  // FoundPion = true;
+  // }
+  // else if(Math.abs(pid)==321){
+  // mpos = this.MKAON;
+  // FoundKaon = true;
+  // }
+  // else if(Math.abs(pid)==2212){
+  // mpos = this.MPROT;
+  // FoundProton = true;
+  // }
+  // this.setPositives(particles,scint,np);
+  // }
+
+  // if(scintMap.get(npart)!=null){
+  // for (int iscint : scintMap.get(npart)) {
+  // //System.out.println(scintMap.get(nh));
+  // final byte layer = scint.getByte("layer",iscint);
+  // final byte detector = scint.getByte("detector",iscint);
+  // //System.out.println(detector);
+  // if(detector==4){
+  // if(FoundDeuteron==true){
+  // ctofenergydeut = scint.getFloat("energy",iscint);
+  // }
+  // if (FoundKaon==true){
+  // ctofenergykaon = scint.getFloat("energy",iscint);
+  // }
+  // if (FoundProton==true){
+  // ctofenergyprot = scint.getFloat("energy",iscint);
+  // }
+  // if (FoundPion==true){
+  // ctofenergypion = scint.getFloat("energy",iscint);
+  // }
+  // }
+  // }
+  // }
+  // }
+  // }
+  // if (FoundDeuteron==true || FoundProton==true || FoundKaon==true||
+  // FoundPion==true){
+  // FoundPositives = true;
+  // }
+  // return FoundPositives;
+  // }
+
+  //BACKUP CODE
+  //this code was after setHadron
+
+
+        // double mass2MissingHadron = 1000.0;
+        // double missingmass_chi2 = 0.0;
+        // double chi2ofPhoton = 10000.0;
+        // double coneangle_chi2 = 0.0;
+        // int ng = -1;
+        // // Photon Chi2 Selection hehe :)
+
+        // for (int i = 0; i < photonsNumber.size(); i++) {
+        //   LorentzVector tmp1 = new LorentzVector();
+        //   tmp1.copy(vBeam);
+        //   tmp1.add(vTarget);
+        //   tmp1.sub(velectron);
+        //   vphoton.setPxPyPzM(particles.getFloat("px", photonsNumber.get(i)),
+        //       particles.getFloat("py", photonsNumber.get(i)),
+        //       particles.getFloat("pz", photonsNumber.get(i)),
+        //       0.0);
+        //   tmp1.sub(vphoton);
+        //   tmp1.sub(vhadron);
+        //   // System.out.println(photonsNumber.size());
+        //   // System.out.println(tmp1.mass2()- (1.87* 1.87));
+        //   // if (Math.abs(tmp1.mass2() - (1.87* 1.87)) < mass2MissingHadron){
+        //   // //Math.abs(tmp1.mass2() - (MNUC*MNUC))
+        //   // mass2MissingHadron = Math.abs(tmp1.mass2() - (1.87*1.87));//
+        //   // Math.abs(tmp1.mass2() - MNUC**2);
+        //   // ng = photonsNumber.get(i);
+
+        //   // }
+
+        //   missingmass_chi2 = Math.abs(tmp1.mass());
+        //   // System.out.println("The missing mass of the everything is : " +
+        //   // missingmass_chi2);
+        //   LorentzVector temp = new LorentzVector();
+        //   temp.copy(this.X("eh"));
+        //   // coneangle_chi2 = Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+        //   coneangle_chi2 = this.vphoton.vect().theta(temp.vect());
+        //   // System.out.println("The cone angle of the photon is :" + coneangle_chi2);
+        //   if (chi2ofPhoton > coneangle_chi2 + missingmass_chi2) {
+
+        //     chi2ofPhoton = coneangle_chi2 + missingmass_chi2;
+        //     ng = photonsNumber.get(i);
+
+        //   }
+
+        // }
+        // // System.out.println("FFFFFFFFFFFFFFFFFFFF The missing mass of the everything
+        // // is : " + missingmass_chi2);
+        // // System.out.println("FFFFFFFFFFFFFFFFFFFFFThe cone angle of the photon is :" +
+        // // coneangle_chi2);
+        // // System.out.println(" FFFFFFFFFFFFFFFFFFFFFFFThe total chi2 used to select the
+        // // photon is "+ chi2ofPhoton);
+        // status = particles.getInt("status", ng);
+        // if (Math.abs(status) <= 2000)
+        //   conf = 1;
+        // else if (Math.abs(status) > 2000 && Math.abs(status) < 4000)
+        //   conf = 2;
+
+        // this.setPhoton_old(particles, calos, ng/* photonsNumber */);
+
+
+
+
+
+
+
+
+        //MACHINE LEARNING CODE
+                    // if(dedxDeutCND>0){
+            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+            // particles.getFloat("py",npart),
+            // particles.getFloat("pz",npart),
+            // this.MNUC);
+            // double value = dedxDeutCTOF* 0.486 + dedxDeutCND * 0.469 + vtmp.p() * 6.87
+            // -12.22;
+            // if (1/(1+Math.exp(-value)) > 0.5){
+            // ndeut++;
+            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+            // particles.getFloat("py",npart),
+            // particles.getFloat("pz",npart),
+            // this.MNUC);
+            // if(vtmp.e()>this.d_en_max){
+            // nd=npart;
+            // this.d_en_max=vtmp.e();
+            // }
+            // }
+            // }else{//this is the condition if there is only CTOF dedx
+
+            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+            // particles.getFloat("py",npart),
+            // particles.getFloat("pz",npart),
+            // this.MNUC);
+            // double value = dedxDeutCTOF* 0.3241 + vtmp.p() * 2.2909 - 4.58;
+            // if (1/(1+Math.exp( -value)) > 0.5){
+            // ndeut++;
+            // vtmp.setPxPyPzM(particles.getFloat("px",npart),
+            // particles.getFloat("py",npart),
+            // particles.getFloat("pz",npart),
+            // this.MNUC);
+            // if(vtmp.e()>this.d_en_max){
+            // nd=npart;
+            // this.d_en_max=vtmp.e();
+            // }
+            // }
+            // }
+
+            public void setPhoton_old(Bank particles, Bank calos, int ng/* ArrayList<Integer> photonsNumber */) {
+
+              // LorentzVector remainingVector = new LorentzVector();
+              // LorentzVector vtmp = new LorentzVector();
+              // double energyLeft = 100000;
+              // System.out.println(photonsNumber);
+              // remainingVector.copy(this.vBeam);
+              // remainingVector.add(this.vTarget).sub(this.velectron);
+              // remainingVector.sub(this.vhadron);
+              // double initialRemainingEnergy = remainingVector.e();
+              // boolean positiveMissing = false;
+          
+              // if (initialRemainingEnergy < 0){
+              // return positiveMissing;
+              // }else{
+          
+              // vtmp.setPxPyPzM(particles.getFloat("px",photonsNumber.get(0)),
+              // particles.getFloat("py",photonsNumber.get(0)),
+              // particles.getFloat("pz",photonsNumber.get(0)),
+              // 0.0);
+              // energyLeft = Math.abs(remainingVector.e() - vtmp.e());
+              // System.out.println("the initial energy is "+ vtmp.e());
+          
+              // ng = photonsNumber.get(0);
+              // for(int i = 1; i < photonsNumber.size(); i++){
+              // int pid = particles.getInt("pid", photonsNumber.get(i));
+              // int status = particles.getInt("status", photonsNumber.get(i));
+              // float beta = particles.getFloat("beta", photonsNumber.get(i));
+          
+              // vtmp.setPxPyPzM(particles.getFloat("px",photonsNumber.get(i)),
+              // particles.getFloat("py",photonsNumber.get(i)),
+              // particles.getFloat("pz",photonsNumber.get(i)),
+              // 0.0);
+          
+              // System.out.println("The energy for this photon is " + Math.abs(vtmp.e()));
+              // if(energyLeft > Math.abs(remainingVector.e()-vtmp.e())){
+              // ng=photonsNumber.get(i);
+              // energyLeft = Math.abs(remainingVector.e()-vtmp.e());
+              // status = particles.getInt("status", photonsNumber.get(i));
+              // beta = particles.getFloat("beta", photonsNumber.get(i));
+          
+              // if(status<2000)conf=1;
+              // else if(status>=2000 && status<4000)conf=2;
+          
+              // }
+          
+              // }
+              // positiveMissing = true;
+              // }
+          
+              // System.out.println("end of event");
+          
+              // System.out.println("The end lowest energy is " + initialRemainingEnergy);
+              vphoton.setPxPyPzM(particles.getFloat("px", ng),
+                  particles.getFloat("py", ng),
+                  particles.getFloat("pz", ng),
+                  0.0);
+          
+              //
+              // This correction holds only for data
+              if (!processInput.getMCmode()) {
+                if (Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000) {
+                  // vphoton.print();
+                  // System.out.println("here");
+                  vphoton = Correct_FT_E(vphoton, 0.0);
+                  vphoton = Correct_FT_theta(vphoton);
+                  // vphoton.print();
+                } else {
+                  // System.out.println("here"+!processInput.getMCmode());
+                  vphoton = Correct_FD_E(vphoton, 0.0);
+                }
+              }
+              //
+          
+              Map<Integer, List<Integer>> caloMap = loadMapByIndex(calos, "pindex");
+              // photon_v = -10;
+              // photon_w = -10;
+              if (caloMap.get(ng) != null) {
+                for (int icalo : caloMap.get(ng)) {
+                  // System.out.println(scintMap.get(nh));
+                  photon_layer = calos.getByte("layer", icalo);
+                  final byte photon_detector = calos.getByte("detector", icalo);
+                  photon_sector = calos.getByte("sector", icalo);
+                  // System.out.println(electron_detector);
+                  // System.out.println(detector);
+                  if (photon_detector == 7 && photon_layer == 1) {// This is for ECAL in PCAL
+                    photon_w = calos.getFloat("lw", icalo);
+                    photon_v = calos.getFloat("lv", icalo);
+                    photon_x = calos.getFloat("x", icalo);
+                    photon_y = calos.getFloat("y", icalo);
+                    // beforeFidCut++;
+          
+                  }
+          
+                }
+              }
+          
+            }
+          }
