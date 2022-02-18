@@ -63,20 +63,10 @@ public class DcoDe {
   
   static HashMap<Integer, List<Double>> runMap;
 
-  static StringBuilder builder;
 
   public static void main(String[] args) throws FileNotFoundException, IOException {
 
-    // PrintWriter pw = null;
-    // try{
-    // pw = new PrintWriter(new File("Data.csv"));
-    // }catch (FileNotFoundException e){
-    // e.printStackTrace();
-    // }
 
-    // builder = new StringBuilder();
-    // String columnNames = "dedx,momentum,particle" ;
-    // builder.append(columnNames+"\n");
 
     int goodEvent;
     
@@ -281,7 +271,7 @@ public class DcoDe {
         hNCFD.fillBasicHisto(ev);
       }
       ndegamma++;
-      if (ev.DVCScut() && ev.FiducialCuts()) {
+      if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {
         ndvcs++;
         hDC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
@@ -306,7 +296,7 @@ public class DcoDe {
           } else if (ev.GetConf() == 2) {
             hCCFD.fillBasicHisto(ev);
           }
-          if (ev.Exclusivitycut() && ev.VertexCut(runNumber)) {
+          if (ev.Exclusivitycut() ) {
             // && (ev.X("ehg").e()<2) && (ev.X("ehg").pz()<0.8)
             if (ev.GetConf() == 1) {
               hACFT.fillBasicHisto(ev);
@@ -363,3 +353,18 @@ public class DcoDe {
       // }
           // if(counter==0)break;
     // counter--;
+
+
+
+  //static StringBuilder builder;
+
+        // PrintWriter pw = null;
+    // try{
+    // pw = new PrintWriter(new File("Data.csv"));
+    // }catch (FileNotFoundException e){
+    // e.printStackTrace();
+    // }
+
+    // builder = new StringBuilder();
+    // String columnNames = "dedx,momentum,particle" ;
+    // builder.append(columnNames+"\n");

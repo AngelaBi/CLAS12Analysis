@@ -46,9 +46,7 @@ public class DvcsEvent {
     builder.append(columnNames + "\n");
   }
 
-  // StringBuilder builder = new StringBuilder();
-  // String columnNames = "dedx,momentum,particle" ;
-  // builder.append(columnNames+"\n");
+
   double MNUC = 1.875612;
   double MPIONP = 0.139570;
   double MPION = 0.1349768;
@@ -361,38 +359,22 @@ public class DvcsEvent {
           dedxDeutCTOF = scintExtras.getFloat("dedx", iscint);
           tmpdeutctof++;
           inCTOF = true;
-          // builder.append(dedxDeutCTOF + ",");
+          
 
         }
         if (detectorHad == 3) {
           dedxDeutCND = scintExtras.getFloat("dedx", iscint);
-
-          // builder.append(dedxDeutCND + ",");
+         
 
           inCND = true;
 
           tmpdeutcnd++;
         }
-        // builder.append(vhadron.p() + ",");
-        // builder.append("1\n");
-        // else {
-        // tmpdeutnoctof++;
-        // //particles.show();
-        // //scint.show();
-        // }
+
       }
     }
 
-    // this iswhat i commneted out on jan 26
-    if (processInput.getMLmode()) {
-      builder.append(dedxDeutCTOF + ",");
-      builder.append(dedxDeutCND + ",");
-      builder.append(betahad + ",");
 
-      builder.append(vhadron.p() + ",");
-      builder.append(chi2pidhad + ",");
-      builder.append("1\n");
-    }
 
   }
 
@@ -561,13 +543,13 @@ public class DvcsEvent {
 
             }
           }
-
-          // builder.append(dedxDeutCTOF_prot + ",");
-          // builder.append(dedxDeutCND_prot + ",");
-          // builder.append(betaprot_ML + ",");
-          // builder.append(vtmp.p() + ",");
-          // builder.append("0\n");
-
+          if (processInput.getMLmode()) {
+          builder.append(dedxDeutCTOF_prot + ",");
+          builder.append(dedxDeutCND_prot + ",");
+          builder.append(betaprot_ML + ",");
+          builder.append(vtmp.p() + ",");
+          builder.append("0\n");
+          }
         }
         // status 4000 is FD
         // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
@@ -597,15 +579,17 @@ public class DvcsEvent {
 
             }
           }
-          // builder.append(dedxDeutCTOF + ",");
-          // builder.append(dedxDeutCND + ",");
-          // builder.append(betadeut_ML+ ",");
-          // vtmp.setPxPyPzM(particles.getFloat("px",npart),
-          // particles.getFloat("py",npart),
-          // particles.getFloat("pz",npart),
-          // this.MNUC);
-          // builder.append(vtmp.p() + ",");
-          // builder.append("1\n");
+          if (processInput.getMLmode()) {
+          builder.append(dedxDeutCTOF + ",");
+          builder.append(dedxDeutCND + ",");
+          builder.append(betadeut_ML+ ",");
+          vtmp.setPxPyPzM(particles.getFloat("px",npart),
+          particles.getFloat("py",npart),
+          particles.getFloat("pz",npart),
+          this.MNUC);
+          builder.append(vtmp.p() + ",");
+          builder.append("1\n");
+          }
 
           if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
             // THis is for no ML
@@ -1383,3 +1367,30 @@ public class DvcsEvent {
   // public double ctofenpos() {
   //   return ctofenergypos;
   // }
+
+
+
+          // builder.append(vhadron.p() + ",");
+        // builder.append("1\n");
+        // else {
+        // tmpdeutnoctof++;
+        // //particles.show();
+        // //scint.show();
+        // }
+          // StringBuilder builder = new StringBuilder();
+  // String columnNames = "dedx,momentum,particle" ;
+  // builder.append(columnNames+"\n");
+   // builder.append(dedxDeutCTOF + ",");
+          // builder.append(dedxDeutCND + ",");
+
+          //was inside setHadron
+    //           // this iswhat i commneted out on jan 26
+    // if (processInput.getMLmode()) {
+    //   builder.append(dedxDeutCTOF + ",");
+    //   builder.append(dedxDeutCND + ",");
+    //   builder.append(betahad + ",");
+
+    //   builder.append(vhadron.p() + ",");
+    //   builder.append(chi2pidhad + ",");
+    //   builder.append("1\n");
+    // }
