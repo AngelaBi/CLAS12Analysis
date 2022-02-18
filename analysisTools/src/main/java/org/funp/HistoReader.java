@@ -73,33 +73,49 @@ public class HistoReader {
     hACFT = new DvcsHisto(hipobasedir, "AC", "FT");
     hACFD = new DvcsHisto(hipobasedir, "AC", "FD");
 
-    TCanvas ec = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    displayExcCuts(ec, hDCFT);
-    TCanvas ec2 = new TCanvas("Exclusivity cuts for selection of edg FT after coneangle cuts", 1200, 1000);
-    displayExcCuts(ec2, hCCFT);
-    TCanvas ec3 = new TCanvas("Exclusivity cuts for selection of edg FT", 1200, 1000);
-    displayExcCuts(ec3, hACFT);
-    TCanvas ec4 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
-    displayExcCuts(ec4, hDCFD);
-    TCanvas ec5 = new TCanvas("Exclusivity cuts for selection of edg FD  after coneangle cuts", 1200, 1000);
-    displayExcCuts(ec5, hCCFD);
-    TCanvas ec6 = new TCanvas("Exclusivity cuts for selection of edg FD", 1200, 1000);
-    displayExcCuts(ec6, hACFD);
+    TCanvas ec = new TCanvas("ExclDCFT", 1200, 1000);
+    displayExcCuts(ec, hDCFT,"FT");
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".png");
+    TCanvas ec2 = new TCanvas("ExclCCFT", 1200, 1000);
+    displayExcCuts(ec2, hCCFT,"FT");
+    ec2.getCanvas().save(inputParam.getOutputDir()+"/"+ec2.getTitle()+".png");
+    TCanvas ec3 = new TCanvas("ExclACFT", 1200, 1000);
+    displayExcCuts(ec3, hACFT,"FT");
+    ec3.getCanvas().save(inputParam.getOutputDir()+"/"+ec3.getTitle()+".png");
+    TCanvas ec4 = new TCanvas("ExclDCFD", 1200, 1000);
+    displayExcCuts(ec4, hDCFD,"FD");
+    ec4.getCanvas().save(inputParam.getOutputDir()+"/"+ec4.getTitle()+".png");
+    TCanvas ec5 = new TCanvas("ExclCCFD", 1200, 1000);
+    displayExcCuts(ec5, hCCFD,"FD");
+    ec5.getCanvas().save(inputParam.getOutputDir()+"/"+ec5.getTitle()+".png");
+    TCanvas ec6 = new TCanvas("ExclACFD", 1200, 1000);
+    displayExcCuts(ec6, hACFD,"FD");
+    ec6.getCanvas().save(inputParam.getOutputDir()+"/"+ec6.getTitle()+".png");
     //TCanvas ecA = new TCanvas("Asym FT", 1200, 1000);
     //drawAsym(ecA, hACFT);
     //TCanvas ecA2 = new TCanvas("Asym FD", 1200, 1000);
     //drawAsym(ecA2, hACFD);
-    TCanvas ect1 = new TCanvas("Asym FT t dep", 1200, 500);
+    TCanvas ect1 = new TCanvas("AsymtFT", 1200, 500);
     drawAsymtbins(ect1, hACFT);
-    TCanvas ect2 = new TCanvas("Asym FD t dep", 1200, 500);
+    ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
+    TCanvas ect2 = new TCanvas("AsymtFD", 1200, 500);
     drawAsymtbins(ect2, hACFD);
-    TCanvas ecQ1 = new TCanvas("Asym FT Q2 dep", 1200, 500);
+    ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
+    TCanvas ecQ1 = new TCanvas("Asymq2FT", 1200, 500);
     drawAsymQ2bins(ecQ1, hACFT);
-    TCanvas ecQ2 = new TCanvas("Asym FD Q2 dep", 1200, 500);
+    ecQ1.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ1.getTitle()+".png");
+    TCanvas ecQ2 = new TCanvas("Asymq2FD", 1200, 500);
     drawAsymQ2bins(ecQ2, hACFD);
+    ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
 
     TCanvas oc = new TCanvas("other cuts", 1200, 500);
     displayOthercuts(oc,hDCFT);
+
+    TCanvas bc = new TCanvas("binning FT",1200,500);
+    ShowBinning(bc,hACFT);
+
+    TCanvas bc2 = new TCanvas("binning FD",1200,500);
+    ShowBinning(bc2,hACFD);
   }
   
   public static void displayOthercuts(TCanvas c, DvcsHisto h){
@@ -110,7 +126,7 @@ public class HistoReader {
 
     c.cd(1).draw(h.vertexElecVSvertexDeut);
   }
-  public static void displayExcCuts(TCanvas ec, DvcsHisto h) {
+  public static void displayExcCuts(TCanvas ec, DvcsHisto h,String detector) {
 
     ec.divide(3, 3);
     ec.cd(0).draw(h.coneanglevsedXM2);
@@ -119,14 +135,18 @@ public class HistoReader {
     drawCut(-1., h.edXmissingM2, ec, 1);
 
     ec.cd(2).draw(h.edgXmissingE);
+    if(detector =="FT")
     drawCut(1, h.edgXmissingE, ec, 2);
+    else
     drawCut(2, h.edgXmissingE, ec, 2);
 
     ec.cd(3).draw(h.pPerphisto);
     drawCut(0.5, h.pPerphisto, ec, 3);
 
     ec.cd(4).draw(h.edgXmissingP);
+    if(detector =="FT")
     drawCut(0.5, h.edgXmissingP, ec, 4);
+    else
     drawCut(0.8, h.edgXmissingP, ec, 4);
 
     ec.cd(5).draw(h.edXmissingM);
@@ -137,6 +157,8 @@ public class HistoReader {
     ec.cd(7).draw(h.DeltaPhiPlaneHist);
 
     ec.cd(8).draw(h.egXmissingM2);
+
+
 
     
 
@@ -264,6 +286,18 @@ public class HistoReader {
       DataFitter.fit(Asymfunc, buildAsym(totPhip,totPhim), "");
       ec.draw(Asymfunc, "same");
     }
+
+  }
+  public static void ShowBinning(TCanvas c, DvcsHisto h){
+    c.divide(2, 1);
+    c.cd(0).draw(h.tfxhisto);
+    drawCut(h.tbins[1], h.tfxhisto, c, 0);
+    drawCut(h.tbins[2], h.tfxhisto, c, 0);
+    drawCut(h.tbins[3], h.tfxhisto, c, 0);
+    c.cd(1).draw(h.Q2);
+    drawCut(h.q2bins[1], h.Q2, c,1);
+    drawCut(h.q2bins[2], h.Q2, c, 1);
+    drawCut(h.q2bins[3], h.Q2, c, 1);
 
   }
 }

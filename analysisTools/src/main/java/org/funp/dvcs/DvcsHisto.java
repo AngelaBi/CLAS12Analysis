@@ -23,9 +23,9 @@ import org.jlab.groot.ui.TCanvas;
 public class DvcsHisto {
 
   
-  double[] q2bins={0,1.75,2.5,10};
-  double[] tbins={0,0.3,0.6,10};//{0,0.39,0.57,10}
-  double[] xbbin={0,0.128,0.182,10};
+  public double[] q2bins={0,1.75,2.5,10};
+  public double[] tbins={0,0.3,0.6,10};//{0,0.39,0.57,10}
+  public double[] xbbin={0,0.128,0.182,10};
 
   public H1F Xbj;
   public H1F W; //invariant mass of e target -> e' X
