@@ -731,14 +731,18 @@ public class DvcsEvent {
 
   public boolean PrelimExclusivitycut() {
     boolean cut = false;
+    String missingpart="g";
+    if(processInput.getPi0mode()){
+      missingpart="m";
+    }
     if (conf == 1) {
       cut =
           // (this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when
           // i do tag evetns
-          (this.X("eh").mass2() < (-1.5 * this.coneangle() + 2)
+          (this.X("eh").mass2() < (-1.5 * this.coneangle(missingpart) + 2)
               && this.X("eh").mass2() > -1);
     } else if (conf == 2) {
-      cut = (this.X("eh").mass2() < (-1 * this.coneangle() + 2)
+      cut = (this.X("eh").mass2() < (-1 * this.coneangle(missingpart) + 2)
           && this.X("eh").mass2() > -1
       // && this.X("eg").mass2()< +12-1.5*this.coneangle()
       );
@@ -887,19 +891,26 @@ public class DvcsEvent {
       deltaphiplane = -1 * deltaphiplane;
     return deltaphiplane;
   }
-
-  public double coneangle() {
+  public double coneangle() {//default with no arguments is dvcs gamma
+    return coneangle("g");
+  }
+  public double coneangle(String particle) {//particle can be "g" or "m" meson)
     LorentzVector temp = new LorentzVector();
     temp.copy(this.X("eh"));
     // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
-    return this.vphoton.vect().theta(temp.vect());
+    double result=0;
+    if(particle == "m")
+      result=this.vpion.vect().theta(temp.vect());
+    else if(particle =="g")
+      result= this.vphoton.vect().theta(temp.vect());
+    return result;
   }
-  public double coneanglepi0() {
-    LorentzVector temp = new LorentzVector();
-    temp.copy(this.X("eh"));
-    // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
-    return this.vpion.vect().theta(temp.vect());
-  }
+  // public double coneanglepi0() {
+  //   LorentzVector temp = new LorentzVector();
+  //   temp.copy(this.X("eh"));
+  //   // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+  //   return this.vpion.vect().theta(temp.vect());
+  // }
 
   public double angleBetweenElectronPhoton() {
 
@@ -937,10 +948,10 @@ public class DvcsEvent {
     if (listpart.equals("egh")) { //e hadron gamma
       tmp.sub(vphoton);
       tmp.sub(vhadron);
-    } else if(listpart.equals("ehp")){//e hadron pion
+    } else if(listpart.equals("ehm")){//e hadron meson
       tmp.sub(vpion);
       tmp.sub(vhadron);
-    } else if (listpart.equals("ep")) {//e pion
+    } else if (listpart.equals("em")) {//e meson
       tmp.sub(vpion);
     } else if (listpart.equals("eg")) {//e gamma
       tmp.sub(vphoton);

@@ -335,45 +335,37 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
     Xbj.fill(ev.Xb());
+
+    String excl3part="egh";
+    String excl2part="eg";
+    String excl1part="g";
+    if(processInput.getPi0mode()){//swtich to pion
+      excl3part="emh";
+      excl2part="em";
+      excl1part=excl1part;
+    }
+
     //missing quantities of a complete DVCS final state e hadron gamma
-    if(processInput.getPi0mode()){
-      edgXmissingE.fill(ev.X("eph").e());
-      edgXmissingM2.fill(ev.X("eph").mass2());
-      edgXmissingP.fill(ev.X("eph").p());
-      edgXmissingPx.fill(ev.X("eph").px());
-      edgXmissingPy.fill(ev.X("eph").py());
-      edgXmissingPz.fill(ev.X("eph").pz());
 
-      egXmissingM2.fill(ev.X("ep").mass2());
-      egXmissingM.fill(ev.X("ep").mass());
+      edgXmissingE.fill(ev.X(excl3part).e());
+      edgXmissingM2.fill(ev.X(excl3part).mass2());
+      edgXmissingP.fill(ev.X(excl3part).p());
+      edgXmissingPx.fill(ev.X(excl3part).px());
+      edgXmissingPy.fill(ev.X(excl3part).py());
+      edgXmissingPz.fill(ev.X(excl3part).pz());
 
-      egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("ep").mass2());
-      coneanglevsedgXM2.fill(ev.coneanglepi0(),ev.X("eph").mass2());
-      coneanglevsegXM2.fill(ev.coneanglepi0(),ev.X("ep").mass2());
-      coneanglevsedXM2.fill(ev.coneanglepi0(),ev.X("eh").mass2());
+      egXmissingM2.fill(ev.X(excl2part).mass2());
+      egXmissingM.fill(ev.X(excl2part).mass());
+
+      egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X(excl2part).mass2());
+      coneanglevsedgXM2.fill(ev.coneangle(excl1part),ev.X(excl3part).mass2());
+      coneanglevsegXM2.fill(ev.coneangle(excl1part),ev.X(excl2part).mass2());
+      coneanglevsedXM2.fill(ev.coneangle(excl1part),ev.X("eh").mass2());
     
-      coneanglevspperp.fill(ev.coneanglepi0(),ev.pPerp() );
-      ConeAngleHist.fill(ev.coneanglepi0());
-    }
-    else{
-    edgXmissingE.fill(ev.X("egh").e());
-    edgXmissingM2.fill(ev.X("egh").mass2());
-    edgXmissingP.fill(ev.X("egh").p());
-    edgXmissingPx.fill(ev.X("egh").px());
-    edgXmissingPy.fill(ev.X("egh").py());
-    edgXmissingPz.fill(ev.X("egh").pz());
-
-    egXmissingM2.fill(ev.X("eg").mass2());
-    egXmissingM.fill(ev.X("eg").mass());
-
-    egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("eg").mass2());
-    coneanglevsedgXM2.fill(ev.coneangle(),ev.X("egh").mass2());
-    coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
-    coneanglevsedXM2.fill(ev.coneangle(),ev.X("eh").mass2());
+      coneanglevspperp.fill(ev.coneangle(excl1part),ev.pPerp() );
+      ConeAngleHist.fill(ev.coneangle(excl1part));
     
-    coneanglevspperp.fill(ev.coneangle(),ev.pPerp() );
-    ConeAngleHist.fill(ev.coneangle());
-    }
+
 
     edXmissingE.fill(ev.X("eh").e());
     edXmissingM2.fill(ev.X("eh").mass2());
