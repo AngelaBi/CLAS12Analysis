@@ -34,11 +34,11 @@ public class DcoDe {
 
   static DvcsEvent ev;
 
-  static DvcsHisto hNC;// No cuts
+  //static DvcsHisto hNC;// No cuts
   static DvcsHisto hNCFT;// No cuts FT
   static DvcsHisto hNCFD;// No cuts FD
 
-  static DvcsHisto hDC;// DVCS cuts
+  //static DvcsHisto hDC;// DVCS cuts
   static DvcsHisto hDCFT;// DVCS cuts conf 1
   static DvcsHisto hDCFD;// DVCS cuts conf 2
 
@@ -82,8 +82,8 @@ public class DcoDe {
       ev.makecsv();
     
     // NO CUTS
-    hNC = new DvcsHisto();// No cuts
-    hNC.setOutputDir(inputParam.getOutputDir());
+    //hNC = new DvcsHisto();// No cuts
+    //hNC.setOutputDir(inputParam.getOutputDir());
     hNCFT = new DvcsHisto();// No cuts
     hNCFT.setOutputDir(inputParam.getOutputDir());
     hNCFD = new DvcsHisto();// No cuts
@@ -91,8 +91,8 @@ public class DcoDe {
     dir = new TDirectory();
     rootdir = new TDirectory();
     // DVCS CUTS
-    hDC = new DvcsHisto();// DVCS cuts
-    hDC.setOutputDir(inputParam.getOutputDir());
+    //hDC = new DvcsHisto();// DVCS cuts
+    //hDC.setOutputDir(inputParam.getOutputDir());
     hDCFT = new DvcsHisto();// DVCS cuts conf 1
     hDCFT.setOutputDir(inputParam.getOutputDir());
     hDCFD = new DvcsHisto();// All cuts conf 2
@@ -234,10 +234,10 @@ public class DcoDe {
     System.out.println("total events after excl cuts in FT: " + FTCounter);
     System.out.println("total events after excl cuts in FD: " + FDCounter);
    
-    hNC.writeHipooutput(rootdir, "NC");
+    //hNC.writeHipooutput(rootdir, "NC");
     hNCFD.writeHipooutput(rootdir, "NCFD");
     hNCFT.writeHipooutput(rootdir, "NCFT");
-    hDC.writeHipooutput(rootdir, "DC");
+    //hDC.writeHipooutput(rootdir, "DC");
     hDCFD.writeHipooutput(rootdir, "DCFD");
     hDCFT.writeHipooutput(rootdir, "DCFT");
 
@@ -260,10 +260,12 @@ public class DcoDe {
 
   public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,
       int runNumber) {
-
+        boolean pionCut= false;
+        
     if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber)) {
-      hNC.fillBasicHisto(ev);
-
+      //hNC.fillBasicHisto(ev);
+      if(processInput.getPi0mode())pionCut=ev.SelectPion();
+      else pionCut=!ev.SelectPion();
 
       if (ev.GetConf() == 1) {
         hNCFT.fillBasicHisto(ev);
@@ -273,7 +275,7 @@ public class DcoDe {
       ndegamma++;
       if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {
         ndvcs++;
-        hDC.fillBasicHisto(ev);
+        //hDC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
           hDCFT.fillBasicHisto(ev);
         } else if (ev.GetConf() == 2) {
@@ -284,7 +286,7 @@ public class DcoDe {
         // (Math.toDegrees(ev.vphoton.theta())<5) Math.abs(ev.deltaPhiPlane2())<20
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
-        if(!ev.SelectPion() ||true){
+        if(pionCut ){
         if (ev.GetConf() == 1) {
           hPCFT.fillBasicHisto(ev);
         } else if (ev.GetConf() == 2) {

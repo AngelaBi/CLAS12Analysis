@@ -26,6 +26,7 @@ public class processInput {
 	private static boolean nTmode=false;
 	private static boolean MLmode=false;
 	private static boolean pass0=false;
+	private static boolean pi0mode=false;
 	public processInput(String[] args) {
 
 		this.args = args;
@@ -39,6 +40,7 @@ public class processInput {
 		options.addOption("pass0", "Pass0Files", false, "Pass0");
 		options.addOption("ML", "CreateMLfiles", false, "Create ML files");
 		options.addOption("nT", "noTags", false, "Enable analysis on files without tags");
+		options.addOption("pi0","pion0",false,"Enable pi0 analysis");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -79,6 +81,10 @@ public class processInput {
 			if (cmd.hasOption("pass0")){
 				System.out.println("This is pass 0 run");
 				pass0 = true;
+			}
+			if (cmd.hasOption("pi0")){
+				System.out.println("pi0 analysis");
+				pi0mode = true;
 			}
 			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
@@ -191,6 +197,9 @@ public class processInput {
 
 	public static boolean getPass0(){
 		return pass0;
+	}
+	public static boolean getPi0mode(){
+		return pi0mode;
 	}
 	public String getFileName(int i){
 		//String tmp=new String();

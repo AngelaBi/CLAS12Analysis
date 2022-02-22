@@ -212,11 +212,15 @@ public class HistoReader {
     ec.draw(Asymfunc, "same");
   }
   public static void drawAsymtbins(TCanvas ec, DvcsHisto h) {
+    
+    
     ec.divide(3,1);
     for(int i=0;i<3;i++){
+      H1F hp=h.phiplustbin[i];
+      H1F hm=h.phiminustbin[i];
       ec.cd(i);
       ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
-    ec.draw((buildAsym(h.phiplustbin[i],h.phiminustbin[i])), "E");
+    ec.draw(buildAsym(hp,hm), "E");
 
     F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
     // Asymfunc.setParameter(0,0.1);
@@ -225,7 +229,7 @@ public class HistoReader {
     Asymfunc.setParameter(0, 0.1);
     // Asymfunc.setParameter(1,0.01);
     // Asymfunc.setParameter(2,-0.01);
-    DataFitter.fit(Asymfunc, buildAsym(h.phiplustbin[i],h.phiminustbin[i]), "");
+    DataFitter.fit(Asymfunc, buildAsym(hp,hm), "");
     ec.draw(Asymfunc, "same");
     }
   }

@@ -616,7 +616,9 @@ public class DvcsEvent {
       // beginning of new way to select photon
 
       //
-      if (ndeut >= 1 && nelec >= 1 && nphot >= 1) {
+      int mingamma=1;
+      if(processInput.getPi0mode())mingamma=2;
+      if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {
         this.setElectron(particles, calos, ne);
         this.setHadron(particles, scint, scintExtras, nd);
         this.setPhoton(particles, calos, photonsNumber);
@@ -892,6 +894,12 @@ public class DvcsEvent {
     // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
     return this.vphoton.vect().theta(temp.vect());
   }
+  public double coneanglepi0() {
+    LorentzVector temp = new LorentzVector();
+    temp.copy(this.X("eh"));
+    // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+    return this.vpion.vect().theta(temp.vect());
+  }
 
   public double angleBetweenElectronPhoton() {
 
@@ -926,13 +934,17 @@ public class DvcsEvent {
     tmp.copy(W());
     // tmp.add(vTarget);
     // tmp.sub(velectron);
-    if (listpart.equals("egh")) {
+    if (listpart.equals("egh")) { //e hadron gamma
       tmp.sub(vphoton);
       tmp.sub(vhadron);
-    } else if (listpart.equals("eg")) {
+    } else if(listpart.equals("ehp")){//e hadron pion
+      tmp.sub(vpion);
+      tmp.sub(vhadron);
+    } else if (listpart.equals("ep")) {//e pion
+      tmp.sub(vpion);
+    } else if (listpart.equals("eg")) {//e gamma
       tmp.sub(vphoton);
-
-    } else if (listpart.equals("eh")) {
+    } else if (listpart.equals("eh")) {//e hadron
       tmp.sub(vhadron);
     } else {
       System.out

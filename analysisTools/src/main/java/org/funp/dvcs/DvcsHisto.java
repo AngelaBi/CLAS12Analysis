@@ -12,6 +12,7 @@ import org.jlab.groot.math.*;
 
 import java.util.ArrayList;
 
+import org.funp.utilities.processInput;
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
@@ -335,6 +336,26 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
     Xbj.fill(ev.Xb());
     //missing quantities of a complete DVCS final state e hadron gamma
+    if(processInput.getPi0mode()){
+      edgXmissingE.fill(ev.X("eph").e());
+      edgXmissingM2.fill(ev.X("eph").mass2());
+      edgXmissingP.fill(ev.X("eph").p());
+      edgXmissingPx.fill(ev.X("eph").px());
+      edgXmissingPy.fill(ev.X("eph").py());
+      edgXmissingPz.fill(ev.X("eph").pz());
+
+      egXmissingM2.fill(ev.X("ep").mass2());
+      egXmissingM.fill(ev.X("ep").mass());
+
+      egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("ep").mass2());
+      coneanglevsedgXM2.fill(ev.coneanglepi0(),ev.X("eph").mass2());
+      coneanglevsegXM2.fill(ev.coneanglepi0(),ev.X("ep").mass2());
+      coneanglevsedXM2.fill(ev.coneanglepi0(),ev.X("eh").mass2());
+    
+      coneanglevspperp.fill(ev.coneanglepi0(),ev.pPerp() );
+      ConeAngleHist.fill(ev.coneanglepi0());
+    }
+    else{
     edgXmissingE.fill(ev.X("egh").e());
     edgXmissingM2.fill(ev.X("egh").mass2());
     edgXmissingP.fill(ev.X("egh").p());
@@ -342,13 +363,23 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     edgXmissingPy.fill(ev.X("egh").py());
     edgXmissingPz.fill(ev.X("egh").pz());
 
+    egXmissingM2.fill(ev.X("eg").mass2());
+    egXmissingM.fill(ev.X("eg").mass());
+
+    egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("eg").mass2());
+    coneanglevsedgXM2.fill(ev.coneangle(),ev.X("egh").mass2());
+    coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
+    coneanglevsedXM2.fill(ev.coneangle(),ev.X("eh").mass2());
+    
+    coneanglevspperp.fill(ev.coneangle(),ev.pPerp() );
+    ConeAngleHist.fill(ev.coneangle());
+    }
+
     edXmissingE.fill(ev.X("eh").e());
     edXmissingM2.fill(ev.X("eh").mass2());
     edXmissingM.fill(ev.X("eh").mass());
 
-    egXmissingM2.fill(ev.X("eg").mass2());
-    egXmissingM.fill(ev.X("eg").mass());
-    egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X("eg").mass2());
+    
 
     ThvsPhi.fill(Math.toDegrees(ev.vhadron.phi()),Math.toDegrees(ev.vhadron.theta()));
     elecThvsPhi.fill(Math.toDegrees(ev.velectron.phi()),Math.toDegrees(ev.velectron.theta()));
@@ -365,7 +396,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     hgTh.fill(Math.toDegrees(ev.vphoton.theta()));
     hgEn.fill(ev.vphoton.e());
     //DAngleGammaHist.fill(ev.DTheta());
-    ConeAngleHist.fill(ev.coneangle());
+    
     MissThetaHist.fill(Math.toDegrees(ev.X("eh").theta()));
     PhiPlaneHist.fill(ev.PhiPlane());
     DPhiHist.fill(ev.DPhi());
@@ -373,10 +404,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     DeltaPhiPlaneMattHist.fill(ev.deltaPhiPlane2());
     dphiPlanevsdphiPlane2.fill(ev.deltaPhiPlane2(),ev.deltaPhiPlane());
 
-    coneanglevsedgXM2.fill(ev.coneangle(),ev.X("egh").mass2());
-    coneanglevsedXM2.fill(ev.coneangle(),ev.X("eh").mass2());
-    coneanglevsegXM2.fill(ev.coneangle(),ev.X("eg").mass2());
-    coneanglevspperp.fill(ev.coneangle(),ev.pPerp() );
+    
 
     ConeAngleBtElectronPhotonFD.fill(ev.angleBetweenElectronPhoton()); 
 
