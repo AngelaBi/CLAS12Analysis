@@ -743,7 +743,7 @@ public class DvcsEvent {
     }
     return cut;
   }
-  public boolean ExcludePionsCut(){
+  public boolean SelectPion(){
     boolean IsAPion=false;
     double mean=1.703491e-02;
     double sigma=3.581490e-03;
@@ -752,7 +752,7 @@ public class DvcsEvent {
         IsAPion=true;
       }
     }
-    return !IsAPion;
+    return IsAPion;
   }
   public boolean VertexCut(int runNumber){
     boolean vertexCut = false;

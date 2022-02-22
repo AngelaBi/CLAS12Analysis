@@ -429,13 +429,13 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       if(-1*ev.tFX()>tbins[i] && -1*ev.tFX()<tbins[i+1]){
       if(ev.helicity==1){       
         phiplustbin[i].fill(ev.PhiPlane()); 
-        if(!ev.ExcludePionsCut()){
+        if(ev.SelectPion()){
           phipluspi0tbin[i].fill(ev.PhiPlanePi0()); 
         }   
       }
       else if (ev.helicity==-1){
         phiminustbin[i].fill(ev.PhiPlane());
-        if(!ev.ExcludePionsCut()){
+        if(ev.SelectPion()){
           phiminuspi0tbin[i].fill(ev.PhiPlanePi0()); 
         } 
       }

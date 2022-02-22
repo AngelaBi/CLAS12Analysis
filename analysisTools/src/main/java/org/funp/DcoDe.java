@@ -284,7 +284,7 @@ public class DcoDe {
         // (Math.toDegrees(ev.vphoton.theta())<5) Math.abs(ev.deltaPhiPlane2())<20
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
-        if(ev.ExcludePionsCut() ||true){
+        if(!ev.SelectPion() ||true){
         if (ev.GetConf() == 1) {
           hPCFT.fillBasicHisto(ev);
         } else if (ev.GetConf() == 2) {
