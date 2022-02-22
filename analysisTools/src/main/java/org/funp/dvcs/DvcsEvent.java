@@ -844,20 +844,23 @@ public class DvcsEvent {
     double Phi;
     Vector3 leptonicPlane = vBeam.vect().cross(velectron.vect());
     Vector3 hadronicPlane = vhadron.vect().cross(vphoton.vect());
-    // Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
+    
     Phi = leptonicPlane.theta(hadronicPlane);
-    // Vector3 leptonicPlane = new Vector3();
-    // leptonicPlane.copy(vBeam.vect().cross(velectron.vect()));
-    // Vector3 hadronicPlane = new Vector3();
-    // hadronicPlane.copy(vhadron.vect().cross(vphoton.vect()));
-    // Phi = Math.toDegrees(leptonicPlane.angle(hadronicPlane));
-    // System.out.println("Angle = " + Phi);
     if (leptonicPlane.dot(vphoton.vect()) < 0) {
       return 360 - Phi;
     } else
       return Phi;
   }
-
+  public double PhiPlanePi0() {
+    double Phi;
+    Vector3 leptonicPlane = vBeam.vect().cross(velectron.vect());
+    Vector3 hadronicPlane = vhadron.vect().cross(vpion.vect());
+    Phi = leptonicPlane.theta(hadronicPlane);
+    if (leptonicPlane.dot(vphoton.vect()) < 0) {
+      return 360 - Phi;
+    } else
+    return Phi;
+  }
   public double deltaPhiPlane() {
     double deltaphi;
     // LorentzVector tmp=new LorentzVector();

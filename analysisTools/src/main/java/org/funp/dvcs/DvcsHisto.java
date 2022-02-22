@@ -114,6 +114,9 @@ public class DvcsHisto {
   public H1F[] phiplustbin;
   public H1F[] phiminustbin;
 
+  public H1F[] phipluspi0tbin;
+  public H1F[] phiminuspi0tbin;
+
   public H2F thgvsthe;
   ArrayList<Object> kinehistos;
   ArrayList<Object> exclhistos;
@@ -245,6 +248,13 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     for (int i=0;i<q2bins.length-1;i++){
       phiplustbin[i]=createHisto("Phiplustbin"+i, "Phiplust", "", 10, 0, 360, "Asym");
       phiminustbin[i]=createHisto("Phiminustbin"+i, "Phiminust", "", 10, 0, 360, "Asym");
+    }
+    //pi0 asymm
+    phipluspi0tbin=new H1F[tbins.length-1];
+    phiminuspi0tbin=new H1F[tbins.length-1];
+    for (int i=0;i<q2bins.length-1;i++){
+      phipluspi0tbin[i]=createHisto("Phiplustpi0bin"+i, "Phipluspi0t", "", 10, 0, 360, "Asym");
+      phiminuspi0tbin[i]=createHisto("Phiminustpi0bin"+i, "Phiminuspi0t", "", 10, 0, 360, "Asym");
     }
     //System.out.println("creating histograms"  );
   }
@@ -418,10 +428,16 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       //old t value (-1*ev.t().mass2()>tbins[i] && -1*ev.t().mass2()<tbins[i+1])
       if(-1*ev.tFX()>tbins[i] && -1*ev.tFX()<tbins[i+1]){
       if(ev.helicity==1){       
-        phiplustbin[i].fill(ev.PhiPlane());    
+        phiplustbin[i].fill(ev.PhiPlane()); 
+        if(!ev.ExcludePionsCut()){
+          phipluspi0tbin[i].fill(ev.PhiPlanePi0()); 
+        }   
       }
       else if (ev.helicity==-1){
         phiminustbin[i].fill(ev.PhiPlane());
+        if(!ev.ExcludePionsCut()){
+          phiminuspi0tbin[i].fill(ev.PhiPlanePi0()); 
+        } 
       }
     }
     }
