@@ -84,34 +84,44 @@ public class DcoDe {
     // NO CUTS
     //hNC = new DvcsHisto();// No cuts
     //hNC.setOutputDir(inputParam.getOutputDir());
-    hNCFT = new DvcsHisto();// No cuts
-    hNCFT.setOutputDir(inputParam.getOutputDir());
-    hNCFD = new DvcsHisto();// No cuts
-    hNCFD.setOutputDir(inputParam.getOutputDir());
+    hNCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
+    //hNCFT.setOutputDir();
+    
+    hNCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
+    //hNCFD.setOutputDir(inputParam.getOutputDir());
+    
     dir = new TDirectory();
     rootdir = new TDirectory();
     // DVCS CUTS
     //hDC = new DvcsHisto();// DVCS cuts
     //hDC.setOutputDir(inputParam.getOutputDir());
-    hDCFT = new DvcsHisto();// DVCS cuts conf 1
-    hDCFT.setOutputDir(inputParam.getOutputDir());
-    hDCFD = new DvcsHisto();// All cuts conf 2
-    hDCFD.setOutputDir(inputParam.getOutputDir());
+    hDCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
+    //hDCFT.setOutputDir(inputParam.getOutputDir());
+    
+    hDCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
+    //hDCFD.setOutputDir(inputParam.getOutputDir());
+    
     // PION CUT
-    hPCFT = new DvcsHisto();// DVCS cuts conf 1
-    hPCFT.setOutputDir(inputParam.getOutputDir());
-    hPCFD = new DvcsHisto();// All cuts conf 2
-    hPCFD.setOutputDir(inputParam.getOutputDir());
+    hPCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
+    //hPCFT.setOutputDir(inputParam.getOutputDir());
+    
+    hPCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
+    //hPCFD.setOutputDir(inputParam.getOutputDir());
+    
     // Coneangle 2D cuts
-    hCCFT = new DvcsHisto();// DVCS cuts conf 1
-    hCCFT.setOutputDir(inputParam.getOutputDir());
-    hCCFD = new DvcsHisto();// All cuts conf 2
-    hCCFD.setOutputDir(inputParam.getOutputDir());
+    hCCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
+    //hCCFT.setOutputDir(inputParam.getOutputDir());
+    
+    hCCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
+    //hCCFD.setOutputDir(inputParam.getOutputDir());
+    
     // ALL CUTS
-    hACFT = new DvcsHisto();// DVCS cuts conf 1
-    hACFT.setOutputDir(inputParam.getOutputDir());
-    hACFD = new DvcsHisto();// All cuts conf 2
-    hACFD.setOutputDir(inputParam.getOutputDir());
+    hACFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
+    //hACFT.setOutputDir(inputParam.getOutputDir());
+    
+    hACFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
+    //hACFD.setOutputDir(inputParam.getOutputDir());
+    
 
     ndvcs = 0;
     ndegamma = 0;
