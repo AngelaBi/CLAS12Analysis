@@ -276,7 +276,7 @@ public class DcoDe {
       //hNC.fillBasicHisto(ev);
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
-
+      if(ev.MLSelection()){
       if (ev.GetConf() == 1) {
         hNCFT.fillBasicHisto(ev);
       } else if (ev.GetConf() == 2) {
@@ -296,7 +296,7 @@ public class DcoDe {
         // (Math.toDegrees(ev.vphoton.theta())<5) Math.abs(ev.deltaPhiPlane2())<20
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
-        if(pionCut ){
+        if(pionCut ||true ){
         if (ev.GetConf() == 1) {
           hPCFT.fillBasicHisto(ev);
         } else if (ev.GetConf() == 2) {
@@ -322,7 +322,7 @@ public class DcoDe {
         }
       }
       }
-
+      }
     }
   }// end of goodEventFilterParticle
 
