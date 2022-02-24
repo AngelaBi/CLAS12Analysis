@@ -54,12 +54,12 @@ public class HistoReader {
   
   static DvcsHisto hACFD;
   static processInput inputParam;
-
+  private static double corr=1;
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
-    onefilePlots();
+    //onefilePlots();
     
-    //mergeThreeRunperiods();
+    mergeThreeRunperiods();
 
   }
   public static void onefilePlots(){
@@ -99,6 +99,7 @@ public class HistoReader {
     drawAsymtbins(ect1, hACFT);
     ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
     TCanvas ect2 = new TCanvas("AsymtFD", 1200, 500);
+    //HistoReader.corr=0.69;
     drawAsymtbins(ect2, hACFD);
     ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
     TCanvas ecQ1 = new TCanvas("Asymq2FT", 1200, 500);
@@ -190,6 +191,7 @@ public class HistoReader {
 
     Asym = H1F.divide(num, denom);
     Asym.divide(0.85);
+    Asym.divide(HistoReader.corr);
     Asym.setTitleX("#phi [deg.]");
     Asym.setTitleY("A_LU(#phi)");
 
@@ -268,6 +270,7 @@ public class HistoReader {
     TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
     drawAsymtbins3runperiods(ect1, hACFT1,hACFT2,hACFT3);
     TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
+    HistoReader.corr=0.69;
     drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
   }
   public static void drawAsymtbins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
