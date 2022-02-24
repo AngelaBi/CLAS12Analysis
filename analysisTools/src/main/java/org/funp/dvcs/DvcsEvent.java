@@ -729,6 +729,29 @@ public class DvcsEvent {
     return cut;
   }
 
+  public boolean MLSelection(){
+    boolean cut = true;
+    double value = 0.0;
+    value =  -0.5840943 + -0.1449291 * dedxDeutCTOF +  4.02766262 * this.vhadron.p() ;
+    value = -5.58524383 + 0.08681531 * dedxDeutCTOF +  8.99244494 * this.vhadron.p();
+    value = -6.37328647 + 0.210012661 * dedxDeutCTOF + 6.960000 * this.vhadron.p();
+    // value = -6.81325828 + 0.26339882 * dedxDeutCTOF +  6.4551572 *  this.vhadron.p();
+    // value = -12.23304327 - 0.00530526205  * dedxDeutCTOF + 23.9827928 *this.vhadron.p();
+
+    value = 1/(1+ Math.pow(Math.exp(1),-1*value));
+      if (value < 0.3){
+        cut = false;
+      }
+    if (this.vhadron.p() > 0.8) {
+      value = -1.43514474 - 1.43125974 * 1 -.339326333 * dedxDeutCTOF -1.50607950 * this.vhadron.p()  -0.000460865322  *Math.pow(dedxDeutCTOF,2) + 1.18195972 * dedxDeutCTOF * this.vhadron.p() -.00666171502 * Math.pow(this.vhadron.p(),2);
+      value = 1/(1+ Math.pow(Math.exp(1),-1*value));
+      if (value < 0.5){
+        cut = false;
+      }
+    }
+    return cut;
+  }
+
   public boolean PrelimExclusivitycut() {
     boolean cut = false;
     String missingpart="g";

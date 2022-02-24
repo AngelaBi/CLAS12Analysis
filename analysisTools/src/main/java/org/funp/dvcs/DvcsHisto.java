@@ -12,7 +12,6 @@ import org.jlab.groot.math.*;
 
 import java.util.ArrayList;
 
-import org.funp.utilities.processInput;
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
@@ -127,6 +126,11 @@ public class DvcsHisto {
   private TDirectory rootDirfile;
   private String baseDir;//NC DC AC
   private String Config;//FT,FT or nothing
+  private boolean pi0analysis=false;
+  private String excl3part;
+  private String excl2part;
+  private String excl1part;
+  private String gm;
 
   //binning
   
@@ -134,10 +138,27 @@ public class DvcsHisto {
 
   private String outputdir=new String(".");
 
-  public void setOutputDir(String otherdir){
-    this.outputdir=otherdir;
-    //System.out.println("**** setting out dir for plots to" + this.outputdir);
-}
+//   public void setOutputDir(String otherdir){
+//     this.outputdir=otherdir;
+//     //System.out.println("**** setting out dir for plots to" + this.outputdir);
+// }
+  // public void setAnalysisType(boolean pi0mode){
+  //   this.pi0analysis=pi0mode;
+  //   setAnalysisStrings();
+  // }
+  public void setAnalysisStrings(){
+    if(pi0analysis){//swtich to pion
+      excl3part="emh";
+      excl2part="em";
+      excl1part="m";
+      gm="pion";
+    }
+    else {excl3part="egh";
+    excl2part="eg";
+    excl1part="g";
+    gm="gamma";
+    }
+  }
 public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   readMode=true;
   rootDirfile=rootdir;
@@ -148,7 +169,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 }
   
 
-  public DvcsHisto() {
+  public DvcsHisto(boolean pi0mode,String otherdir) {
+    this.outputdir=otherdir;
+    this.pi0analysis=pi0mode;
+    setAnalysisStrings();
     SetHisto();
   }
   public void SetHisto(){
@@ -177,7 +201,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     ThvsP=createHisto("Deuteronpvsth", "Deuteron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
     elecThvsP=createHisto("Electronpvstheta", "Electron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
     photThvsP=createHisto("Photonpvstheta", "Photon p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
-    hgTh=createHisto("hgTh", "Photon Theta", "#theta_#gamma",100,0,50,"Kine");
+    hgTh=createHisto("hgTh", gm+" Theta", "#theta "+gm,100,0,50,"Kine");
     hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,50,"Kine");
     PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
     DPhiHist=createHisto("DPhiHist", "DPhi", "", 100,-10,10, "Kine");
@@ -336,14 +360,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
     Xbj.fill(ev.Xb());
 
-    String excl3part="egh";
-    String excl2part="eg";
-    String excl1part="g";
-    if(processInput.getPi0mode()){//swtich to pion
-      excl3part="emh";
-      excl2part="em";
-      excl1part=excl1part;
-    }
+    
+
 
     //missing quantities of a complete DVCS final state e hadron gamma
 
