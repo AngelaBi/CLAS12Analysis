@@ -276,7 +276,7 @@ public class DcoDe {
       //hNC.fillBasicHisto(ev);
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
-      if(ev.MLSelection()){
+      if(ev.MLSelection() ||true){
       if (ev.GetConf() == 1) {
         hNCFT.fillBasicHisto(ev);
       } else if (ev.GetConf() == 2) {
