@@ -23,7 +23,7 @@ public class tagevents
     static Event     event;
     static DvcsEvent ev;
     static HipoWriterSorted writer;
-static int ndegamma;
+    static int ndegamma;
 
     static HashMap<Integer, List<Double>> runMap; 
   static StringBuilder builder;
@@ -44,6 +44,8 @@ static int ndegamma;
     int totalcounter=0;
     ndegamma=0;
     //int dvcscounter=0;
+
+    boolean first=1;
 
  
 
@@ -71,10 +73,13 @@ static int ndegamma;
 
       //map beam energies
       if(runMap.get(runNumber)!=null){
+        if(first){
         writer = new HipoWriterSorted();
       String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
       writer.getSchemaFactory().copy(reader.getSchemaFactory());
       writer.open(outfilename);
+          first=false;
+        }
 	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
       System.out.println(outfilename);
         ev.BeamEnergy = runMap.get(runNumber).get(2);
