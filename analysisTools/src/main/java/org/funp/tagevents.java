@@ -45,7 +45,7 @@ public class tagevents
     ndegamma=0;
     //int dvcscounter=0;
 
-    boolean first=1;
+    boolean first=true;
 
  
 
