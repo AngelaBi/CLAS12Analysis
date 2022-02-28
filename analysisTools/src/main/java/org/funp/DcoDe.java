@@ -276,7 +276,7 @@ public class DcoDe {
       //hNC.fillBasicHisto(ev);
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
-      if(ev.MLSelection() ||true){
+      if(ev.MLSelection()){
       if (ev.GetConf() == 1) {
         hNCFT.fillBasicHisto(ev);
       } else if (ev.GetConf() == 2) {
@@ -380,3 +380,4 @@ public class DcoDe {
     // builder = new StringBuilder();
     // String columnNames = "dedx,momentum,particle" ;
     // builder.append(columnNames+"\n");
+    
