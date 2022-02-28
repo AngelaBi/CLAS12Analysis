@@ -45,8 +45,8 @@ public class tagevents
     ndegamma=0;
     //int dvcscounter=0;
 
-    boolean first=true;
-
+    
+    writer = new HipoWriterSorted();
  
 
 
@@ -73,14 +73,14 @@ public class tagevents
 
       //map beam energies
       if(runMap.get(runNumber)!=null){
-        if(first){
-        writer = new HipoWriterSorted();
+        
+       // writer = new HipoWriterSorted();
       String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
       writer.getSchemaFactory().copy(reader.getSchemaFactory());
       writer.open(outfilename);
       System.out.println(outfilename);
-          first=false;
-        }
+      
+        
 	    //writer.open("/home/justind/DATA/dst_edeut_006467_trimmed.hipo");
       
         ev.BeamEnergy = runMap.get(runNumber).get(2);
