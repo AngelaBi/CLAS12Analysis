@@ -46,7 +46,7 @@ public class tagevents
     //int dvcscounter=0;
 
     
-    writer = new HipoWriterSorted();
+    
  
 
 
@@ -74,7 +74,7 @@ public class tagevents
       //map beam energies
       if(runMap.get(runNumber)!=null){
         
-       // writer = new HipoWriterSorted();
+      writer = new HipoWriterSorted();
       String outfilename = new String(inputParam.OutputLocation+ "/dst_edeut_" + Integer.toString(runNumber) + "_trimmed.hipo");
       writer.getSchemaFactory().copy(reader.getSchemaFactory());
       writer.open(outfilename);
