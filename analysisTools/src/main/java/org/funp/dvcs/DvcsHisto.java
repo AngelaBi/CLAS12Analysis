@@ -25,7 +25,7 @@ public class DvcsHisto {
   
   public double[] q2bins={0,1.75,2.5,10};
   public double[] tbins={0,0.3,0.6,10};//{0,0.39,0.57,10}
-  public double[] xbbin={0,0.128,0.182,10};
+  public double[] xbbins={0,0.128,0.182,10};
 
   public H1F Xbj;
   public H1F W; //invariant mass of e target -> e' X
@@ -113,6 +113,8 @@ public class DvcsHisto {
   public H1F[] phiminusQ2bin;
   public H1F[] phiplustbin;
   public H1F[] phiminustbin;
+  public H1F[] phiplusxbbin;
+  public H1F[] phiminusxbbin;
 
   public H1F[] phipluspi0tbin;
   public H1F[] phiminuspi0tbin;
@@ -270,9 +272,15 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     phiplustbin=new H1F[tbins.length-1];
     phiminustbin=new H1F[tbins.length-1];
-    for (int i=0;i<q2bins.length-1;i++){
+    for (int i=0;i<tbins.length-1;i++){
       phiplustbin[i]=createHisto("Phiplustbin"+i, "Phiplust", "", 10, 0, 360, "Asym");
       phiminustbin[i]=createHisto("Phiminustbin"+i, "Phiminust", "", 10, 0, 360, "Asym");
+    }
+    phiplusxbbin=new H1F[xbbins.length-1];
+    phiminusxbbin=new H1F[xbbins.length-1];
+    for (int i=0;i<xbbins.length-1;i++){
+      phiplusxbbin[i]=createHisto("Phiplusxbbin"+i, "Phiplusxb", "", 10, 0, 360, "Asym");
+      phiminusxbbin[i]=createHisto("Phiminusxbbin"+i, "Phiminusxb", "", 10, 0, 360, "Asym");
     }
     //pi0 asymm
     phipluspi0tbin=new H1F[tbins.length-1];
@@ -459,6 +467,16 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       }
       else if (ev.helicity==-1){
         phiminusQ2bin[i].fill(ev.PhiPlane());
+      }
+    }
+    }
+    for (int i=0;i<xbbins.length-1;i++){
+      if(-ev.Q().mass2()>xbbins[i] && -ev.Q().mass2()<xbbins[i+1]){
+      if(ev.helicity==1){       
+        phiplusxbbin[i].fill(ev.PhiPlane());    
+      }
+      else if (ev.helicity==-1){
+        phiminusxbbin[i].fill(ev.PhiPlane());
       }
     }
     }
