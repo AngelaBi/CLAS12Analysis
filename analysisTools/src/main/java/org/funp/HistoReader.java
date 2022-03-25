@@ -108,6 +108,12 @@ public class HistoReader {
     TCanvas ecQ2 = new TCanvas("Asymq2FD", 1200, 500);
     drawAsymQ2bins(ecQ2, hACFD);
     ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
+    TCanvas ecxb1 = new TCanvas("AsymxbFT", 1200, 500);
+    drawAsymxbbins(ecxb1, hACFT);
+    ecxb1.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ1.getTitle()+".png");
+    TCanvas ecxb2 = new TCanvas("AsymxbFD", 1200, 500);
+    drawAsymxbbins(ecxb2, hACFD);
+    ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
 
     TCanvas oc = new TCanvas("other cuts", 1200, 500);
     displayOthercuts(oc,hDCFT);
@@ -253,6 +259,24 @@ public class HistoReader {
     ec.draw(Asymfunc, "same");
     }
   }
+  public static void drawAsymxbbins(TCanvas ec, DvcsHisto h) {
+    ec.divide(3,1);
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+    ec.draw((buildAsym(h.phiplusxbbin[i],h.phiminusxbbin[i])), "E");
+
+    F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+    // Asymfunc.setParameter(0,0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.1);
+    Asymfunc.setParameter(0, 0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.01);
+    DataFitter.fit(Asymfunc, buildAsym(h.phiplusQ2bin[i],h.phiminusQ2bin[i]), "");
+    ec.draw(Asymfunc, "same");
+    }
+  }
   //BAD programming to quickly merge run periods
   public static void mergeThreeRunperiods(){
     TDirectory hipobasedir1 = new TDirectory();
@@ -296,7 +320,7 @@ public class HistoReader {
 
   }
   public static void ShowBinning(TCanvas c, DvcsHisto h){
-    c.divide(2, 1);
+    c.divide(3, 1);
     c.cd(0).draw(h.tfxhisto);
     drawCut(h.tbins[1], h.tfxhisto, c, 0);
     drawCut(h.tbins[2], h.tfxhisto, c, 0);
@@ -305,6 +329,11 @@ public class HistoReader {
     drawCut(h.q2bins[1], h.Q2, c,1);
     drawCut(h.q2bins[2], h.Q2, c, 1);
     drawCut(h.q2bins[3], h.Q2, c, 1);
+    
+    c.cd(2).draw(h.Xbj);
+    drawCut(h.xbbins[1], h.Xbj, c,2);
+    drawCut(h.xbbins[2], h.Xbj, c, 2);
+    drawCut(h.xbbins[3], h.Xbj, c, 2);
 
   }
 }

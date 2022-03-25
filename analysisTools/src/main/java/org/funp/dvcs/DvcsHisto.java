@@ -471,7 +471,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     }
     for (int i=0;i<xbbins.length-1;i++){
-      if(-ev.Q().mass2()>xbbins[i] && -ev.Q().mass2()<xbbins[i+1]){
+      if(ev.Xb()>xbbins[i] && ev.Xb()<xbbins[i+1]){
       if(ev.helicity==1){       
         phiplusxbbin[i].fill(ev.PhiPlane());    
       }
