@@ -198,11 +198,11 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     vertexElecVSvertexDeut=createHisto("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron", "", "", 100,-10,10,100,-10,10, "Kine");
     
     ThvsPhi=createHisto("Deuteronthvsphi","Deuteron #theta vs #phi", "#phi [Degrees", "#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
-    photThvsPhi=createHisto("Photonthvsphi","Photon #theta vs #phi", "#phi [Degrees]", "#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
+    photThvsPhi=createHisto("Photonthvsphi","Photon #theta vs #phi", "#phi [Degrees]", "#theta [Degrees]", 100,-180,180,100,0,50, "Kine");
     elecThvsPhi=createHisto("Electronthvsphi","Electron #theta vs #phi", "#phi [Degrees]" ,"#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
     ThvsP=createHisto("Deuteronpvsth", "Deuteron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
     elecThvsP=createHisto("Electronpvstheta", "Electron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
-    photThvsP=createHisto("Photonpvstheta", "Photon p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
+    photThvsP=createHisto("Photonpvstheta", "#theta vs Photon p", "p [GeV/c]", "#theta [Degrees]", 100,0,10.6,100,0,50, "Kine");
     hgTh=createHisto("hgTh", gm+" Theta", "#theta "+gm,100,0,50,"Kine");
     hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,12,"Kine");
     PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
@@ -404,7 +404,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     photThvsPhi.fill(Math.toDegrees(ev.vphoton.phi()),Math.toDegrees(ev.vphoton.theta()));
     ThvsP.fill(Math.toDegrees(ev.vhadron.theta()),ev.vhadron.p());
     elecThvsP.fill(Math.toDegrees(ev.velectron.theta()),ev.velectron.p());
-    photThvsP.fill(Math.toDegrees(ev.vphoton.p()),ev.vphoton.theta());
+    photThvsP.fill(ev.vphoton.p(),Math.toDegrees(ev.vphoton.theta()));
 
     thgvsthe.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
     pionmass2.fill(ev.vpion.mass2());

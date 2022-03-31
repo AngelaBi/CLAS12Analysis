@@ -61,9 +61,9 @@ public class HistoReader {
   private static double corr=1;
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
-    onefilePlots("FT");
+    //onefilePlots("FD");
     
-    //mergeThreeRunperiods();
+    mergeThreeRunperiods();
 
   }
   public static void onefilePlots(String detector){
@@ -331,29 +331,29 @@ public class HistoReader {
     TCanvas ect1 = new TCanvas("AsymFTbinnedt", 1200, 500);
     drawAsymtbins3runperiods(ect1, hACFT1,hACFT2,hACFT3);
     ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
-    //TCanvas ect2 = new TCanvas("AsymFDbinnedt", 1200, 500);
-    //HistoReader.corr=0.69;
-    // drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
-    // ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
+    TCanvas ect2 = new TCanvas("AsymFDbinnedt", 1200, 500);
+   
+    drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
+    ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
 
-
+ //HistoReader.corr=0.69;
 
 
     TCanvas ect3 = new TCanvas("AsymFTbinnedQ2", 1200, 500);
     drawAsymQ2bins3runperiods(ect3, hACFT1,hACFT2,hACFT3);
     ect3.getCanvas().save(inputParam.getOutputDir()+"/"+ect3.getTitle()+".png");
-    //TCanvas ect4 = new TCanvas("AsymFDbinnedQ2", 1200, 500);
-    //HistoReader.corr=0.69;
-    // drawAsymQ2bins3runperiods(ect4, hACFD1, hACFD2, hACFD3);
-    // ect4.getCanvas().save(inputParam.getOutputDir()+"/"+ect4.getTitle()+".png");
+    TCanvas ect4 = new TCanvas("AsymFDbinnedQ2", 1200, 500);
+    
+    drawAsymQ2bins3runperiods(ect4, hACFD1, hACFD2, hACFD3);
+    ect4.getCanvas().save(inputParam.getOutputDir()+"/"+ect4.getTitle()+".png");
 
     TCanvas ect5 = new TCanvas("AsymFTbinnedxb", 1200, 500);
     drawAsymxbbins3runperiods(ect5, hACFT1,hACFT2,hACFT3);
     ect5.getCanvas().save(inputParam.getOutputDir()+"/"+ect5.getTitle()+".png");
-    //TCanvas ect6 = new TCanvas("AsymFDbinnedxb", 1200, 500);
-    //HistoReader.corr=0.69;
-    // drawAsymxbbins3runperiods(ect6, hACFD1, hACFD2, hACFD3);
-    // ect6.getCanvas().save(inputParam.getOutputDir()+"/"+ect6.getTitle()+".png");
+    TCanvas ect6 = new TCanvas("AsymFDbinnedxb", 1200, 500);
+    
+    drawAsymxbbins3runperiods(ect6, hACFD1, hACFD2, hACFD3);
+    ect6.getCanvas().save(inputParam.getOutputDir()+"/"+ect6.getTitle()+".png");
     TCanvas ect7 = new TCanvas("Asym", 1200, 500);
     drawAsym3runperiods(ect7, hACFT1,hACFT2,hACFT3);
     ect7.getCanvas().save(inputParam.getOutputDir()+"/"+ect7.getTitle()+".png");
