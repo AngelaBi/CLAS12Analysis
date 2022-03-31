@@ -110,10 +110,22 @@ public class HistoReader {
     ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
     TCanvas ecxb1 = new TCanvas("AsymxbFT", 1200, 500);
     drawAsymxbbins(ecxb1, hACFT);
-    ecxb1.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ1.getTitle()+".png");
+    ecxb1.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb1.getTitle()+".png");
     TCanvas ecxb2 = new TCanvas("AsymxbFD", 1200, 500);
     drawAsymxbbins(ecxb2, hACFD);
-    ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
+    ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb2.getTitle()+".png");
+
+
+    TCanvas ect1pi0 = new TCanvas("AsymtFTpi0", 1200, 500);
+    drawAsymtbinspi0(ect1pi0, hACFT);
+    ect1pi0.getCanvas().save(inputParam.getOutputDir()+"/"+ect1pi0.getTitle()+".png");
+
+    TCanvas ect2pi0 = new TCanvas("AsymtFDpi0", 1200, 500);
+    drawAsymtbinspi0(ect2pi0, hACFD);
+    ect2pi0.getCanvas().save(inputParam.getOutputDir()+"/"+ect2pi0.getTitle()+".png");
+    //HistoReader.corr=0.69;
+    drawAsymtbinspi0(ect2pi0, hACFD);
+
 
     TCanvas oc = new TCanvas("other cuts", 1200, 500);
     displayOthercuts(oc,hDCFT);
@@ -277,6 +289,28 @@ public class HistoReader {
     ec.draw(Asymfunc, "same");
     }
   }
+  public static void drawAsymtbinspi0(TCanvas ec, DvcsHisto h) {
+    
+    
+    ec.divide(3,1);
+    for(int i=0;i<3;i++){
+      H1F hp=h.phipluspi0tbin[i];
+      H1F hm=h.phiminuspi0tbin[i];
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+    ec.draw(buildAsym(hp,hm), "E");
+
+    F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+    // Asymfunc.setParameter(0,0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.1);
+    Asymfunc.setParameter(0, 0.1);
+    // Asymfunc.setParameter(1,0.01);
+    // Asymfunc.setParameter(2,-0.01);
+    DataFitter.fit(Asymfunc, buildAsym(hp,hm), "");
+    ec.draw(Asymfunc, "same");
+    }
+  }
   //BAD programming to quickly merge run periods
   public static void mergeThreeRunperiods(){
     TDirectory hipobasedir1 = new TDirectory();
@@ -291,34 +325,146 @@ public class HistoReader {
     DvcsHisto hACFD2 = new DvcsHisto(hipobasedir2, "AC", "FD");
     DvcsHisto hACFT3= new DvcsHisto(hipobasedir3, "AC", "FT");
     DvcsHisto hACFD3 = new DvcsHisto(hipobasedir3, "AC", "FD");
-    TCanvas ect1 = new TCanvas("Asym FT", 1200, 500);
+    TCanvas ect1 = new TCanvas("AsymFTbinnedt", 1200, 500);
     drawAsymtbins3runperiods(ect1, hACFT1,hACFT2,hACFT3);
-    TCanvas ect2 = new TCanvas("Asym FD", 1200, 500);
-    HistoReader.corr=0.69;
-    drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
+    ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
+    //TCanvas ect2 = new TCanvas("AsymFDbinnedt", 1200, 500);
+    //HistoReader.corr=0.69;
+    // drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
+    // ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
+
+
+
+
+    TCanvas ect3 = new TCanvas("AsymFTbinnedQ2", 1200, 500);
+    drawAsymQ2bins3runperiods(ect3, hACFT1,hACFT2,hACFT3);
+    ect3.getCanvas().save(inputParam.getOutputDir()+"/"+ect3.getTitle()+".png");
+    //TCanvas ect4 = new TCanvas("AsymFDbinnedQ2", 1200, 500);
+    //HistoReader.corr=0.69;
+    // drawAsymQ2bins3runperiods(ect4, hACFD1, hACFD2, hACFD3);
+    // ect4.getCanvas().save(inputParam.getOutputDir()+"/"+ect4.getTitle()+".png");
+
+    TCanvas ect5 = new TCanvas("AsymFTbinnedxb", 1200, 500);
+    drawAsymxbbins3runperiods(ect5, hACFT1,hACFT2,hACFT3);
+    ect5.getCanvas().save(inputParam.getOutputDir()+"/"+ect5.getTitle()+".png");
+    //TCanvas ect6 = new TCanvas("AsymFDbinnedxb", 1200, 500);
+    //HistoReader.corr=0.69;
+    // drawAsymxbbins3runperiods(ect6, hACFD1, hACFD2, hACFD3);
+    // ect6.getCanvas().save(inputParam.getOutputDir()+"/"+ect6.getTitle()+".png");
+    TCanvas ect7 = new TCanvas("Asym", 1200, 500);
+    drawAsym3runperiods(ect7, hACFT1,hACFT2,hACFT3);
+    ect7.getCanvas().save(inputParam.getOutputDir()+"/"+ect7.getTitle()+".png");
   }
   public static void drawAsymtbins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
     ec.divide(3,1);
-    H1F totPhip= new H1F("totPhip", 10, 0, 360);
-    H1F totPhim= new H1F("totPhim", 10, 0, 360);
+    H1F[] totPhip=new H1F[3];;
+    H1F[] totPhim=new H1F[3];;
+    for(int i=0;i<3;i++){
+    totPhip[i]= new H1F("totPhip"+i, 10, 0, 360);
+    totPhim[i]= new H1F("totPhim"+i, 10, 0, 360);
+    }
     for(int i=0;i<3;i++){
       ec.cd(i);
       ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
-      totPhip.add(h1.phiplustbin[i]);
-      totPhip.add(h2.phiplustbin[i]);
-      totPhip.add(h3.phiplustbin[i]);
-      totPhim.add(h1.phiminustbin[i]);
-      totPhim.add(h2.phiminustbin[i]);
-      totPhim.add(h3.phiminustbin[i]);
+      totPhip[i].add(h1.phiplustbin[i]);
+      totPhip[i].add(h2.phiplustbin[i]);
+      totPhip[i].add(h3.phiplustbin[i]);
+      totPhim[i].add(h1.phiminustbin[i]);
+      totPhim[i].add(h2.phiminustbin[i]);
+      totPhim[i].add(h3.phiminustbin[i]);
+
+      System.out.println(totPhip[i].integral()+" "+totPhim[i].integral());
+      ec.draw((buildAsym(totPhip[i],totPhim[i])), "E");
+      F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+      Asymfunc.setParameter(0, 0.1);
+      DataFitter.fit(Asymfunc, buildAsym(totPhip[i],totPhim[i]), "");
+      ec.draw(Asymfunc, "same");
+    }
+
+  }
+
+  public static void drawAsymQ2bins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
+    ec.divide(3,1);
+    H1F[] totPhip=new H1F[3];;
+    H1F[] totPhim=new H1F[3];;
+    for(int i=0;i<3;i++){
+    totPhip[i]= new H1F("totPhip"+i, 10, 0, 360);
+    totPhim[i]= new H1F("totPhim"+i, 10, 0, 360);
+    }
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+      totPhip[i].add(h1.phiplusQ2bin[i]);
+      totPhip[i].add(h2.phiplusQ2bin[i]);
+      totPhip[i].add(h3.phiplusQ2bin[i]);
+      totPhim[i].add(h1.phiminusQ2bin[i]);
+      totPhim[i].add(h2.phiminusQ2bin[i]);
+      totPhim[i].add(h3.phiminusQ2bin[i]);
+
+      System.out.println(totPhip[i].integral()+" "+totPhim[i].integral());
+      ec.draw((buildAsym(totPhip[i],totPhim[i])), "E");
+      F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+      Asymfunc.setParameter(0, 0.1);
+      DataFitter.fit(Asymfunc, buildAsym(totPhip[i],totPhim[i]), "");
+      ec.draw(Asymfunc, "same");
+    }
+
+  }
+  public static void drawAsymxbbins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
+    ec.divide(3,1);
+    H1F[] totPhip=new H1F[3];;
+    H1F[] totPhim=new H1F[3];;
+    for(int i=0;i<3;i++){
+    totPhip[i]= new H1F("totPhip"+i, 10, 0, 360);
+    totPhim[i]= new H1F("totPhim"+i, 10, 0, 360);
+    }
+    for(int i=0;i<3;i++){
+      ec.cd(i);
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+      totPhip[i].add(h1.phiplusxbbin[i]);
+      totPhip[i].add(h2.phiplusxbbin[i]);
+      totPhip[i].add(h3.phiplusxbbin[i]);
+      totPhim[i].add(h1.phiminusxbbin[i]);
+      totPhim[i].add(h2.phiminusxbbin[i]);
+      totPhim[i].add(h3.phiminusxbbin[i]);
+
+      System.out.println(totPhip[i].integral()+" "+totPhim[i].integral());
+      ec.draw((buildAsym(totPhip[i],totPhim[i])), "E");
+      F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
+      Asymfunc.setParameter(0, 0.1);
+      DataFitter.fit(Asymfunc, buildAsym(totPhip[i],totPhim[i]), "");
+      ec.draw(Asymfunc, "same");
+    }
+
+  }
+
+  public static void drawAsym3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
+    
+    H1F totPhip=new H1F("totPhip", 10, 0, 360);
+    H1F totPhim=new H1F("totPhim", 10, 0, 360);;
+    
+   
+      
+      ec.getPad().setAxisRange(0, 360, -0.8, 0.8);
+      totPhip.add(h1.Phiplus);
+      totPhip.add(h2.Phiplus);
+      totPhip.add(h3.Phiplus);
+      totPhim.add(h1.Phiminus);
+      totPhim.add(h2.Phiminus);
+      totPhim.add(h3.Phiminus);
+      
+
       System.out.println(totPhip.integral()+" "+totPhim.integral());
       ec.draw((buildAsym(totPhip,totPhim)), "E");
       F1D Asymfunc = new F1D("Asymfunc", "[A]*sin(x * 2 * 3.14 /360)  ", 0, 360);
       Asymfunc.setParameter(0, 0.1);
       DataFitter.fit(Asymfunc, buildAsym(totPhip,totPhim), "");
       ec.draw(Asymfunc, "same");
-    }
+    
 
   }
+
+
   public static void ShowBinning(TCanvas c, DvcsHisto h){
     c.divide(3, 1);
     c.cd(0).draw(h.tfxhisto);
