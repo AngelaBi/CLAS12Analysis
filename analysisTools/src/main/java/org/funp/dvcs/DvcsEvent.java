@@ -58,6 +58,7 @@ public class DvcsEvent {
   public double BeamEnergy = 10.1998;
   public LorentzVector vBeam = new LorentzVector(0.0, 0.0, BeamEnergy, BeamEnergy);
   public LorentzVector vTarget = new LorentzVector(0.0, 0.0, 0.0, MNUC);
+  public LorentzVector vTargetP = new LorentzVector(0.0, 0.0, 0.0, MPROT);
   public LorentzVector velectron = new LorentzVector();
   public LorentzVector vphoton = new LorentzVector();
   public LorentzVector vhadron = new LorentzVector();
@@ -633,10 +634,18 @@ public class DvcsEvent {
     return FoundEvent;
   }
 
-  public LorentzVector W() {
+  public LorentzVector W() { //does not make any sense?
     LorentzVector tmp = new LorentzVector();
     tmp.copy(vBeam);
     tmp.add(vTarget);
+    tmp.sub(velectron);
+    return tmp;
+
+  }
+  public LorentzVector Wp() {
+    LorentzVector tmp = new LorentzVector();
+    tmp.copy(vBeam);
+    tmp.add(vTargetP);
     tmp.sub(velectron);
     return tmp;
 
@@ -680,7 +689,7 @@ public class DvcsEvent {
   }
 
   public boolean TagEventsDVCScut() {
-    return -this.Q().mass2() > 1 && this.W().mass() > 2;
+    return -this.Q().mass2() > 1 && this.Wp().mass() > 2;
   }
 
   public boolean TagEventsExclusivityCut() {
@@ -720,7 +729,7 @@ public class DvcsEvent {
   public boolean DVCScut() {
     
     boolean cut = (-this.Q().mass2() > 1.0 // TEMP!!!!!!
-        && this.W().mass() > 2
+        && this.Wp().mass() > 2
         && this.vhadron.p() < 2
         && this.vphoton.e() > 2 // changed from 1//proton analysis was 1 not sure when we changed it to 2
         && this.angleBetweenElectronPhoton() > 8

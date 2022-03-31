@@ -204,7 +204,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     elecThvsP=createHisto("Electronpvstheta", "Electron p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
     photThvsP=createHisto("Photonpvstheta", "Photon p vs #theta ", "p [GeV/c]", "#theta [Degrees]", 100,0,180,100,0,10.6, "Kine");
     hgTh=createHisto("hgTh", gm+" Theta", "#theta "+gm,100,0,50,"Kine");
-    hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,50,"Kine");
+    hgEn=createHisto("Photonenergy", "Photon energy","E_#gamma",100,0,12,"Kine");
     PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
     DPhiHist=createHisto("DPhiHist", "DPhi", "", 100,-10,10, "Kine");
     ConeAngleBtElectronPhotonFD=createHisto("ConeAngleBtElectronandPhoton", "Cone Angle Between Electron and Photon", "", 100,0,80, "Kine");
@@ -360,10 +360,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     
     XvsY_electron.fill(ev.elec_x,ev.elec_y);
    // XvsY_electron_after.fill(ev.elec_x,ev.elec_y);
-    W.fill(ev.W().mass());
+    W.fill(ev.Wp().mass());
     Q2.fill(-ev.Q().mass2());
     hadmom.fill(ev.vhadron.p());
-    WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
+    WvsQ2.fill(ev.Wp().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
     Xbj.fill(ev.Xb());
@@ -404,7 +404,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     photThvsPhi.fill(Math.toDegrees(ev.vphoton.phi()),Math.toDegrees(ev.vphoton.theta()));
     ThvsP.fill(Math.toDegrees(ev.vhadron.theta()),ev.vhadron.p());
     elecThvsP.fill(Math.toDegrees(ev.velectron.theta()),ev.velectron.p());
-    photThvsP.fill(Math.toDegrees(ev.vphoton.theta()),ev.vphoton.p());
+    photThvsP.fill(Math.toDegrees(ev.vphoton.p()),ev.vphoton.theta());
 
     thgvsthe.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
     pionmass2.fill(ev.vpion.mass2());
