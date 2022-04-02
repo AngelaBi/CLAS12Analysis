@@ -75,7 +75,7 @@ public class DcoDe {
     processInput inputParam = new processInput(args);
     
     event = new Event();
-    ev = new DvcsEvent(0.93828);
+    ev = new DvcsEvent();
 
     //MAKING CSV FILE
     if (processInput.getMLmode())

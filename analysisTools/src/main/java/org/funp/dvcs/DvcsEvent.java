@@ -48,6 +48,8 @@ public class DvcsEvent {
 
 
   double MNUC = 1.875612;
+  //TMP
+  //double MNUC =0.93828;
   double MPIONP = 0.139570;
   double MPION = 0.1349768;
   double MKAON = 0.4977;
@@ -62,6 +64,7 @@ public class DvcsEvent {
   public LorentzVector velectron = new LorentzVector();
   public LorentzVector vphoton = new LorentzVector();
   public LorentzVector vhadron = new LorentzVector();
+  public LorentzVector vhadron_mis = new LorentzVector();
   //public LorentzVector vdeuteron = new LorentzVector();
   //public LorentzVector vproton = new LorentzVector();
   public LorentzVector vpion = new LorentzVector();
@@ -346,6 +349,10 @@ public class DvcsEvent {
         particles.getFloat("py", nh),
         particles.getFloat("pz", nh),
         this.MNUC);
+    vhadron_mis.setPxPyPzM(particles.getFloat("px", nh),
+        particles.getFloat("py", nh),
+        particles.getFloat("pz", nh),
+        this.MPROT);
     betahad = particles.getFloat("beta", nh);
     chi2pidhad = particles.getFloat("chi2pid", nh);
     vertexDeuteron = particles.getFloat("vz", nh);
@@ -937,6 +944,17 @@ public class DvcsEvent {
       result= this.vphoton.vect().theta(temp.vect());
     return result;
   }
+  public double coneangle_mis(String particle) {//particle can be "g" or "m" meson)
+    LorentzVector temp = new LorentzVector();
+    temp.copy(this.X_mis("eh"));
+    // return Math.toDegrees(this.vphoton.vect().angle(temp.vect()));
+    double result=0;
+    if(particle == "m")
+      result=this.vpion.vect().theta(temp.vect());
+    else if(particle =="g")
+      result= this.vphoton.vect().theta(temp.vect());
+    return result;
+  }
   // public double coneanglepi0() {
   //   LorentzVector temp = new LorentzVector();
   //   temp.copy(this.X("eh"));
@@ -989,6 +1007,43 @@ public class DvcsEvent {
       tmp.sub(vphoton);
     } else if (listpart.equals("eh")) {//e hadron
       tmp.sub(vhadron);
+    } else {
+      System.out
+          .println(listpart + " combination of particle to calculate the missing particle is not supported, use e,g,h");
+    }
+    return tmp;
+  }
+
+
+  public LorentzVector X_mis(String listpart) {//Calculate X quantities  assumming proton for target and final particle
+    // System.out.println(listpart);
+    // String newlistpart=Stream.of("cda").sorted(Comparator.comparingInt(o ->
+    // Character.toLowerCase(o.charAt(0)))).collect(Collectors.joining());
+
+    listpart = Stream.of(listpart.split(""))
+        .sorted()
+        .collect(Collectors.joining());
+
+    // System.out.println(listpart);
+
+    LorentzVector tmp = new LorentzVector();
+    tmp.copy(vBeam);
+    tmp.add(vTargetP);
+    tmp.sub(velectron);
+    // tmp.add(vTarget);
+    // tmp.sub(velectron);
+    if (listpart.equals("egh")) { //e hadron gamma
+      tmp.sub(vphoton);
+      tmp.sub(vhadron_mis);
+    } else if(listpart.equals("ehm")){//e hadron meson
+      tmp.sub(vpion);
+      tmp.sub(vhadron_mis);
+    } else if (listpart.equals("em")) {//e meson
+      tmp.sub(vpion);
+    } else if (listpart.equals("eg")) {//e gamma
+      tmp.sub(vphoton);
+    } else if (listpart.equals("eh")) {//e hadron
+      tmp.sub(vhadron_mis);
     } else {
       System.out
           .println(listpart + " combination of particle to calculate the missing particle is not supported, use e,g,h");

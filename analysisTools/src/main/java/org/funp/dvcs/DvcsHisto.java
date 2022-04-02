@@ -39,6 +39,9 @@ public class DvcsHisto {
   public H1F VertexDuetron;
   public H2F vertexElecVSvertexDeut;
 
+  public H1F targetmass;
+  public H1F hadronmass;
+
   public H2F ThvsPhi;//Theta vs phi for hadron
   public H2F elecThvsPhi;
   public H2F photThvsPhi;
@@ -77,9 +80,15 @@ public class DvcsHisto {
   public H1F edgXmissingPz;// missing pz of a complete DVCS final state e hadron gamma
   public H1F pPerphisto;
 
+  public H1F edgXmissingE_mis; // missing mass of a complete DVCS final state e hadron gamma
+  public H2F edgXmissingE_D_vs_miss;
+
   public H1F edXmissingE;
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
   public H1F edXmissingM;
+
+  public H1F edXmissingM2_mis; // missing mass of hadron electron final state (to be compared with gamma)
+ 
   
   public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
   public H1F egXmissingM;
@@ -95,6 +104,9 @@ public class DvcsHisto {
   public H2F coneanglevspperp;
   public H2F coneanglevsegXM2;
   public H2F dphiPlanevsdphiPlane2;
+
+  public H2F coneanglevsedXM2_mis;//angle between gamma vector and missing hadron+e vector vs missin mass square ehgX
+ 
   //pid id histos 
   public H2F betacalcvsP;//y
   public H1F betahadhisto;//y
@@ -197,6 +209,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     VertexDuetron=createHisto("VertexDeuteron","Vertex Dueteron", "z",  100,-10.0,10.0, "Kine");
     vertexElecVSvertexDeut=createHisto("VertexElectronvsVertexDeuteron","Vertex Electron vs Vertex Deuteron", "", "", 100,-10,10,100,-10,10, "Kine");
     
+    targetmass=createHisto("targetmass","target mass","",100,0,3,"Kine");
+    hadronmass=createHisto("hadronmass","target mass","",100,0,3,"Kine");
+
     ThvsPhi=createHisto("Deuteronthvsphi","Deuteron #theta vs #phi", "#phi [Degrees", "#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
     photThvsPhi=createHisto("Photonthvsphi","Photon #theta vs #phi", "#phi [Degrees]", "#theta [Degrees]", 100,-180,180,100,0,50, "Kine");
     elecThvsPhi=createHisto("Electronthvsphi","Electron #theta vs #phi", "#phi [Degrees]" ,"#theta [Degrees]", 100,-180,180,100,0,180, "Kine");
@@ -229,10 +244,15 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
     edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
     pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,3, "Excl");
+
+    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eD#gammaX Missing Energy mis proton", "E_e_D_#gamma_X [GeV]", 100,-3,7, "Excl");
+    edgXmissingE_D_vs_miss=createHisto("edgXmissingE_D_vs_miss","edgXmissingE_D_vs_miss","","",100,-8,8,100,-8,8,"Excl");
     //edX
     edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-1,10, "Excl");
     edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
     edXmissingM=createHisto("edXmissingM", "edX Missing Mass", "", 100,-0,5, "Excl");
+
+    edXmissingM2_mis=createHisto("edXmissingM2_mis", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
     //egX
     egXmissingM2=createHisto("egXmissingM2","e#gammaX Missing Mass2","",100,-0,10, "Excl");//M_e_#gamma_X^2 [GeV/c^2]^2
     egXmissingM=createHisto("egXmissingM","e#gammaX Mass","",100,-0,5, "Excl");//M_e_#gamma_X [GeV/c^2]
@@ -248,6 +268,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     coneanglevsedXM2=createHisto("coneanglevsedXM2","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_#gamma_x","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,15,100,-10,10, "Excl");
     coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs #theta_#gamma_x","#theta_#gamma_x","Pperp", 100,0,15,100,0,3,"Excl");
     coneanglevsegXM2=createHisto("coneanglevsegXM2","egX M^2_x vs #theta_#gamma_x","#theta_#gamma_x","egX M^2_x (GeV)",100,0,15,100,0,7,"Excl");
+    
+    coneanglevsedXM2_mis=createHisto("coneanglevsedXM2_mis","M^2_x (ed#rarrow edX) vs #theta_#gamma_x","#theta#_#gamma_x","(M_x)^2(ed#rarrowed#X) [GeV/c^2]",100,0,15,100,-10,10, "Excl");
+   
+    
     //Pid histograms
     betahadhisto=createHisto("beta","#beta","Measured #beta",100,0,1,"Pid");
     betacalchisto=createHisto("betacalc","#beta_calc","#beta calculated from relativistic momentum",100,0,1,"Pid");
@@ -380,6 +404,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       edgXmissingPy.fill(ev.X(excl3part).py());
       edgXmissingPz.fill(ev.X(excl3part).pz());
 
+      edgXmissingE_mis.fill(ev.X_mis(excl3part).e());
+
       egXmissingM2.fill(ev.X(excl2part).mass2());
       egXmissingM.fill(ev.X(excl2part).mass());
 
@@ -387,6 +413,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       coneanglevsedgXM2.fill(ev.coneangle(excl1part),ev.X(excl3part).mass2());
       coneanglevsegXM2.fill(ev.coneangle(excl1part),ev.X(excl2part).mass2());
       coneanglevsedXM2.fill(ev.coneangle(excl1part),ev.X("eh").mass2());
+
+      coneanglevsedXM2_mis.fill(ev.coneangle(excl1part),ev.X_mis("eh").mass2());
     
       coneanglevspperp.fill(ev.coneangle(excl1part),ev.pPerp() );
       ConeAngleHist.fill(ev.coneangle(excl1part));
@@ -396,6 +424,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     edXmissingE.fill(ev.X("eh").e());
     edXmissingM2.fill(ev.X("eh").mass2());
     edXmissingM.fill(ev.X("eh").mass());
+
+    edXmissingM2_mis.fill(ev.X_mis("eh").mass2());
+    edgXmissingE_D_vs_miss.fill(ev.X_mis("eh").mass2(),ev.X("eh").mass2());
 
     
 
@@ -437,6 +468,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     VertexDuetron.fill(ev.getVertexDeuteron());
     VertexElectron.fill(ev.getVertexElectron());
     vertexElecVSvertexDeut.fill(ev.getVertexElectron(),ev.getVertexDeuteron());
+
+
+    targetmass.fill(ev.vTarget.mass());
+    hadronmass.fill(ev.vhadron.mass());
     dedxDeutvsP.fill(ev.vhadron.p(),ev.getDedxDeut());
     chisqHad.fill(ev.chi2pid());
     deltabetavschi2.fill(ev.chi2pid(),ev.beta()-ev.BetaCalc());
