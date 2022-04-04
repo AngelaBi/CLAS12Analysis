@@ -61,7 +61,7 @@ public class HistoReader {
   private static double corr=1;
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
-    onefilePlots("FT");
+    onefilePlots("FD");
     
     //mergeThreeRunperiods();
 
@@ -171,7 +171,7 @@ public class HistoReader {
     else
     drawCut(0.8, h.edgXmissingP, ec, 4);
 
-    ec.cd(5).draw(h.edXmissingM);
+    //ec.cd(5).draw(h.edgXmissingM2);
     //drawCut(0.7, h.edXmissingM, ec, 5);
 
     ec.cd(6).draw(h.edgXmissingPz);
