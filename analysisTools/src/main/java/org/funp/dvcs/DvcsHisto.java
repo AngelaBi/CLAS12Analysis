@@ -81,19 +81,24 @@ public class DvcsHisto {
   public H1F pPerphisto;
 
   public H1F edgXmissingE_mis; // missing mass of a complete DVCS final state e hadron gamma
-  
+  public H1F edgXmissingM2_mis ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingP_mis ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F pPerphisto_mis;
 
   public H1F edXmissingE;
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
   //public H1F edXmissingM;
 
   public H1F edXmissingM2_mis; // missing mass of hadron electron final state (to be compared with gamma)
+  
   public H2F edgXmissingE_D_vs_mis;
   public H2F edXmissingM2_D_vs_mis;
   
   public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
   public H1F egXmissingM;
   public H2F egXmissingM2vsTh;
+  
+  public H1F egXmissingM2_mis;
   public H2F egXmissingM_D_vs_mis;
 
   public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
@@ -239,21 +244,24 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
    
     //START OF EXC POTS
     //edgX
-    edgXmissingE =createHisto("edgXmissingE", "eD#gammaX Missing Energy", "E_e_D_#gamma_X [GeV]", 100,-3,7, "Excl");
-    edgXmissingM2=createHisto("edgXmissingM2", "", "", 100,-4,4, "Excl");
-    edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "p_x [GeV/c]", 100,0,4, "Excl");
+    edgXmissingE =createHisto("edgXmissingE", "eDgammaX Missing Energy", "", 100,-3,7, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "edgammaX Missing Mass^2", "", 100,-1,1, "Excl");
+    edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "", 100,0,4, "Excl");
     edgXmissingPx=createHisto("MMomx", "Missing X Momentum", "", 100,-1,1, "Excl");
     edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
     edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
-    pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,3, "Excl");
+    pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,1.5, "Excl");
 
-    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy mis proton", "", 100,-3,7, "Excl");
+    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy with proton", "", 100,-3,7, "Excl");
+    edgXmissingM2_mis=createHisto("edgXmissingM2_mis", "edgammaX Missing Mass^2 with proton", "", 100,-1,1, "Excl");
+    edgXmissingP_mis=createHisto("edgXmissingP_mis", "eDgammaX Missing p with proton", "", 100,0,4, "Excl");
+    pPerphisto_mis=createHisto("pPerp_mis", "pPerp with proton", "", 100,0,1.5, "Excl");
      //edX
     edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-1,10, "Excl");
     edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
     //edXmissingM=createHisto("edXmissingM", "edX Missing Mass", "", 100,-0,5, "Excl");
 
-    edXmissingM2_mis=createHisto("edXmissingM2_mis", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+    edXmissingM2_mis=createHisto("edXmissingM2_mis", "eDX Missing Mass^2 with proton", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
     edgXmissingE_D_vs_mis=createHisto("edgXE_vs_mis","edXmissingE_D_vs_miss","","",100,-8,8,100,-8,8,"Excl");
     edXmissingM2_D_vs_mis=createHisto("edXM2_vs_mis","edXmissingM2_D_vs_miss","","",100,-8,8,100,-8,8,"Excl");
    //egX
@@ -262,6 +270,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//egammaX MM^2 vs th
 
     egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM_D_vs_mis","","",100,0,5,100,0,5,"Excl");
+    egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     //Phi planes
     DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi Plane", "", 100,-10,10, "Excl");
     DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi Plane Hattawy", "", 100,-10,10, "Excl");
@@ -274,7 +283,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs thgammaX","","", 100,0,15,100,0,3,"Excl");
     coneanglevsegXM2=createHisto("coneanglevsegXM2","egX MM2 vs thgammaX","","",100,0,15,100,0,7,"Excl");
     
-    coneanglevsedXM2_mis=createHisto("coneanglevsedXM2_mis","MM2 edX vs thgammaX","","",100,0,15,100,-10,10, "Excl");
+    coneanglevsedXM2_mis=createHisto("coneanglevsedXM2_mis","MM2 edX vs thgammaX with proton","","",100,0,15,100,-10,10, "Excl");
    
     
     //Pid histograms
@@ -410,10 +419,14 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       edgXmissingPz.fill(ev.X(excl3part).pz());
 
       edgXmissingE_mis.fill(ev.X_mis(excl3part).e());
+      edgXmissingM2_mis.fill(ev.X_mis(excl3part).mass2());
+      edgXmissingP_mis.fill(ev.X_mis(excl3part).p());
+    
 
       egXmissingM2.fill(ev.X(excl2part).mass2());
       egXmissingM.fill(ev.X(excl2part).mass());
 
+      egXmissingM2_mis.fill(ev.X_mis(excl2part).mass2());
       egXmissingM_D_vs_mis.fill(ev.X_mis(excl2part).mass(),ev.X(excl2part).mass());
 
       egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X(excl2part).mass2());
@@ -491,6 +504,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     tfxhisto.fill(-1*ev.tFX());
     tvstfx.fill(-1*ev.tFX(),-1*ev.t().mass2());
     pPerphisto.fill(ev.pPerp());
+    pPerphisto_mis.fill(ev.pPerp_mis());
 
 
     

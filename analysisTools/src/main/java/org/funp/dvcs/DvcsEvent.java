@@ -694,6 +694,12 @@ public class DvcsEvent {
     double py = (this.vBeam.py() - this.velectron.py() - this.vhadron.py() - this.vphoton.py());
     return Math.sqrt(px * px + py * py);
   }
+  public double pPerp_mis() {
+    double px = (this.vBeam.px() - this.velectron.px() - this.vhadron_mis.px() - this.vphoton.px());
+    double py = (this.vBeam.py() - this.velectron.py() - this.vhadron_mis.py() - this.vphoton.py());
+    return Math.sqrt(px * px + py * py);
+  }
+
 
   public boolean TagEventsDVCScut() {
     return -this.Q().mass2() > 1 && this.Wp().mass() > 2;

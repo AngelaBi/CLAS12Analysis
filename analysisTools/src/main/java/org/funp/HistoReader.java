@@ -72,11 +72,9 @@ public class HistoReader {
     hipobasedir = new TDirectory();
     hipobasedir.readFile(inputParam.gethipoFile());
     hDC = new DvcsHisto(hipobasedir, "DC", detector);
-    //hDCFD = new DvcsHisto(hipobasedir, "DC", "FD");
     hCC = new DvcsHisto(hipobasedir, "CC", detector);
-    //hCCFD = new DvcsHisto(hipobasedir, "CC", "FD");
     hAC = new DvcsHisto(hipobasedir, "AC", detector);
-    //hACFD = new DvcsHisto(hipobasedir, "AC", "FD");
+    
     TCanvas cprelim = new TCanvas("ExcCutPrelim"+detector,1000,500);
     displayPrelim(cprelim, hDC,hCC,detector);
     TCanvas cexclDC=new TCanvas("ExcCutsDC"+detector,500,500);
@@ -84,24 +82,23 @@ public class HistoReader {
     TCanvas cexclDC2=new TCanvas("ExcCutsDC2"+detector,500,500);
     displayExcCuts2(cexclDC2, hDC,detector);
 
-    TCanvas cexclCC=new TCanvas("ExcCutsDC"+detector,500,500);
+    TCanvas cexclCC=new TCanvas("ExcCutsCC"+detector,500,500);
     displayExcCuts(cexclCC, hDC,detector);
-    TCanvas cexclCC2=new TCanvas("ExcCutsDC2"+detector,500,500);
+    TCanvas cexclCC2=new TCanvas("ExcCutsCC2"+detector,500,500);
     displayExcCuts2(cexclCC2, hDC,detector);
 
-    TCanvas cexclAC=new TCanvas("ExcCutsDC"+detector,500,500);
+    TCanvas cexclAC=new TCanvas("ExcCutsAC"+detector,500,500);
     displayExcCuts(cexclAC, hDC,detector);
-    TCanvas cexclAC2=new TCanvas("ExcCutsDC2"+detector,500,500);
+    TCanvas cexclAC2=new TCanvas("ExcCutsAC2"+detector,500,500);
     displayExcCuts2(cexclAC2, hDC,detector);
+    
 
-  // TCanvas ec = new TCanvas("ExclDC"+detector, 1400, 1200);
-  // displayExcCuts(ec, hDC,detector);
-
-  // TCanvas ec2 = new TCanvas("ExclCC"+detector, 1400, 1200);
-  // displayExcCuts(ec2, hCC,detector);
-  
-  // TCanvas ec3 = new TCanvas("ExclAC"+detector, 1400, 1200);
-  // displayExcCuts(ec3, hAC,detector);
+    TCanvas cprotDC=new TCanvas("ExclPlotwithProtDC"+detector,800,500);
+    displayExclPlotProt(cprotDC, hDC,detector);
+    TCanvas cprotCC=new TCanvas("ExclPlotwithProtCC"+detector,800,500);
+    displayExclPlotProt(cprotCC, hCC,detector);
+    TCanvas cprotAC=new TCanvas("ExclPlotwithProtAC"+detector,800,500);
+    displayExclPlotProt(cprotAC, hAC,detector);
   
   // TCanvas ec4 = new TCanvas("ExclDCFD", 1400, 1200);
   // displayExcCuts(ec4, hDCFD,"FD");
@@ -264,6 +261,29 @@ public class HistoReader {
     ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
 
     
+
+  }
+  public static void displayExclPlotProt(TCanvas ec, DvcsHisto h,String detector){
+    ec.divide(3, 3);
+    ec.cd(0).draw(h.edgXmissingE_mis);
+    ec.cd(1).draw(h.edgXmissingM2_mis);
+    ec.cd(2).draw(h.edgXmissingP_mis);
+    ec.cd(3).draw(h.pPerphisto_mis);
+    ec.cd(4).draw(h.edXmissingM2_mis);
+    ec.cd(5).draw(h.egXmissingM2_mis);
+    ec.cd(6).draw(h.coneanglevsedXM2_mis);
+
+
+
+    
+
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e6) {
+      // TODO Auto-generated catch block
+      e6.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
 
   }
 
