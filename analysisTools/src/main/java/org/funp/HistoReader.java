@@ -77,58 +77,72 @@ public class HistoReader {
     //hCCFD = new DvcsHisto(hipobasedir, "CC", "FD");
     hAC = new DvcsHisto(hipobasedir, "AC", detector);
     //hACFD = new DvcsHisto(hipobasedir, "AC", "FD");
-    TCanvas cprelim = new TCanvas("PrelimExcCut"+detector,1000,500);
+    TCanvas cprelim = new TCanvas("ExcCutPrelim"+detector,1000,500);
     displayPrelim(cprelim, hDC,hCC,detector);
-  TCanvas ec = new TCanvas("ExclDC"+detector, 1400, 1200);
-  displayExcCuts(ec, hDC,detector);
-  ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".png");
-  TCanvas ec2 = new TCanvas("ExclCC"+detector, 1400, 1200);
-  displayExcCuts(ec2, hCC,detector);
-  ec2.getCanvas().save(inputParam.getOutputDir()+"/"+ec2.getTitle()+".png");
-  TCanvas ec3 = new TCanvas("ExclAC"+detector, 1400, 1200);
-  displayExcCuts(ec3, hAC,detector);
-  ec3.getCanvas().save(inputParam.getOutputDir()+"/"+ec3.getTitle()+".png");
+    TCanvas cexclDC=new TCanvas("ExcCutsDC"+detector,500,500);
+    displayExcCuts(cexclDC, hDC,detector);
+    TCanvas cexclDC2=new TCanvas("ExcCutsDC2"+detector,500,500);
+    displayExcCuts2(cexclDC2, hDC,detector);
+
+    TCanvas cexclCC=new TCanvas("ExcCutsDC"+detector,500,500);
+    displayExcCuts(cexclCC, hDC,detector);
+    TCanvas cexclCC2=new TCanvas("ExcCutsDC2"+detector,500,500);
+    displayExcCuts2(cexclCC2, hDC,detector);
+
+    TCanvas cexclAC=new TCanvas("ExcCutsDC"+detector,500,500);
+    displayExcCuts(cexclAC, hDC,detector);
+    TCanvas cexclAC2=new TCanvas("ExcCutsDC2"+detector,500,500);
+    displayExcCuts2(cexclAC2, hDC,detector);
+
+  // TCanvas ec = new TCanvas("ExclDC"+detector, 1400, 1200);
+  // displayExcCuts(ec, hDC,detector);
+
+  // TCanvas ec2 = new TCanvas("ExclCC"+detector, 1400, 1200);
+  // displayExcCuts(ec2, hCC,detector);
+  
+  // TCanvas ec3 = new TCanvas("ExclAC"+detector, 1400, 1200);
+  // displayExcCuts(ec3, hAC,detector);
+  
   // TCanvas ec4 = new TCanvas("ExclDCFD", 1400, 1200);
   // displayExcCuts(ec4, hDCFD,"FD");
-  // ec4.getCanvas().save(inputParam.getOutputDir()+"/"+ec4.getTitle()+".png");
+  // ec4.getCanvas().save(inputParam.getOutputDir()+"/"+ec4.getTitle()+".pdf");
   // TCanvas ec5 = new TCanvas("ExclCCFD", 1400, 1200);
   // displayExcCuts(ec5, hCCFD,"FD");
-  // ec5.getCanvas().save(inputParam.getOutputDir()+"/"+ec5.getTitle()+".png");
+  // ec5.getCanvas().save(inputParam.getOutputDir()+"/"+ec5.getTitle()+".pdf");
   // TCanvas ec6 = new TCanvas("ExclACFD", 1400, 1200);
   // displayExcCuts(ec6, hACFD,"FD");
-  // ec6.getCanvas().save(inputParam.getOutputDir()+"/"+ec6.getTitle()+".png");
+  // ec6.getCanvas().save(inputParam.getOutputDir()+"/"+ec6.getTitle()+".pdf");
   //TCanvas ecA = new TCanvas("Asym FT", 1400, 1200);
   //drawAsym(ecA, hACFT);
   //TCanvas ecA2 = new TCanvas("Asym FD", 1400, 1200);
   //drawAsym(ecA2, hACFD);
   TCanvas ect1 = new TCanvas("Asymt"+detector, 1200, 500);
   drawAsymtbins(ect1, hAC);
-  ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
+ 
   // TCanvas ect2 = new TCanvas("AsymtFD", 1200, 500);
   //HistoReader.corr=0.69;
   // drawAsymtbins(ect2, hACFD);
-  // ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
+  // ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".pdf");
   TCanvas ecQ1 = new TCanvas("Asymq2"+detector, 1200, 500);
   drawAsymQ2bins(ecQ1, hAC);
-  ecQ1.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ1.getTitle()+".png");
+
   // TCanvas ecQ2 = new TCanvas("Asymq2FD", 1200, 500);
   // drawAsymQ2bins(ecQ2, hACFD);
-  // ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".png");
+  // ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".pdf");
   TCanvas ecxb1 = new TCanvas("Asymxb"+detector, 1200, 500);
   drawAsymxbbins(ecxb1, hAC);
-  ecxb1.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb1.getTitle()+".png");
+
   // TCanvas ecxb2 = new TCanvas("AsymxbFD", 1200, 500);
   // drawAsymxbbins(ecxb2, hACFD);
-  // ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb2.getTitle()+".png");
+  // ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb2.getTitle()+".pdf");
 
 
   TCanvas ect1pi0 = new TCanvas("AsymtFTpi0", 1200, 500);
   drawAsymtbinspi0(ect1pi0, hAC);
-  ect1pi0.getCanvas().save(inputParam.getOutputDir()+"/"+ect1pi0.getTitle()+".png");
-
+ 
   // TCanvas ect2pi0 = new TCanvas("AsymtFDpi0", 1200, 500);
   // drawAsymtbinspi0(ect2pi0, hACFD);
-  // ect2pi0.getCanvas().save(inputParam.getOutputDir()+"/"+ect2pi0.getTitle()+".png");
+  // ect2pi0.getCanvas().save(inputParam.getOutputDir()+"/"+ect2pi0.getTitle()+".pdf");
   // //HistoReader.corr=0.69;
 
 
@@ -149,50 +163,111 @@ public class HistoReader {
     drawCut(0., h.VertexElectron, c, 7);
 
     c.cd(1).draw(h.vertexElecVSvertexDeut);
+
   }
   public static void displayPrelim(TCanvas ec, DvcsHisto hDC,DvcsHisto hCC,String detector){
     ec.divide(2, 1);
     ec.cd(0).draw(hDC.coneanglevsedXM2);
     ec.cd(1).draw(hCC.coneanglevsedXM2);
-    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".png");
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
   }
   public static void displayExcCuts(TCanvas ec, DvcsHisto h,String detector) {
 
-    ec.divide(3, 3);
-    ec.cd(0).draw(h.coneanglevsedXM2);
+    ec.divide(2, 2);
+    // ec.cd(0).draw(h.coneanglevsedXM2);
 
-    ec.cd(1).draw(h.edXmissingM2);
-    drawCut(-1., h.edXmissingM2, ec, 1);
+    ec.cd(0).draw(h.edXmissingM2);
+    drawCut(-1., h.edXmissingM2, ec, 0);
 
-    ec.cd(2).draw(h.edgXmissingE);
+    ec.cd(1).draw(h.edgXmissingE);
     if(detector =="FT")
-    drawCut(1, h.edgXmissingE, ec, 2);
+    drawCut(1, h.edgXmissingE, ec, 1);
     else
-    drawCut(2, h.edgXmissingE, ec, 2);
+    drawCut(2, h.edgXmissingE, ec, 1);
 
-    ec.cd(3).draw(h.pPerphisto);
-    drawCut(0.5, h.pPerphisto, ec, 3);
+    ec.cd(2).draw(h.pPerphisto);
+    drawCut(0.5, h.pPerphisto, ec, 2);
 
-    ec.cd(4).draw(h.edgXmissingP);
+    ec.cd(3).draw(h.edgXmissingP);
     if(detector =="FT")
-    drawCut(0.5, h.edgXmissingP, ec, 4);
+    drawCut(0.5, h.edgXmissingP, ec, 3);
     else
-    drawCut(0.8, h.edgXmissingP, ec, 4);
+    drawCut(0.8, h.edgXmissingP, ec, 3);
 
-    ec.cd(5).draw(h.edgXmissingM2);
-    //drawCut(0.7, h.edXmissingM, ec, 5);
+    // ec.cd(5).draw(h.edgXmissingM2);
+    // //drawCut(0.7, h.edXmissingM, ec, 5);
 
-    ec.cd(6).draw(h.edgXmissingPz);
+    // ec.cd(6).draw(h.edgXmissingPz);
 
-    ec.cd(7).draw(h.DeltaPhiPlaneHist);
+    // ec.cd(7).draw(h.DeltaPhiPlaneHist);
 
-    ec.cd(8).draw(h.egXmissingM2);
+    // ec.cd(8).draw(h.egXmissingM2);
 
-
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e6) {
+      // TODO Auto-generated catch block
+      e6.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
 
     
 
   }
+
+  public static void displayExcCuts2(TCanvas ec, DvcsHisto h,String detector) {
+
+    ec.divide(2, 2);
+ 
+
+    // ec.cd(0).draw(h.coneanglevsedXM2);
+
+    // ec.cd(0).draw(h.edXmissingM2);
+    // drawCut(-1., h.edXmissingM2, ec, 0);
+
+    // ec.cd(1).draw(h.edgXmissingE);
+    // if(detector =="FT")
+    // drawCut(1, h.edgXmissingE, ec, 1);
+    // else
+    // drawCut(2, h.edgXmissingE, ec, 1);
+
+    // ec.cd(2).draw(h.pPerphisto);
+    // drawCut(0.5, h.pPerphisto, ec, 2);
+
+    // ec.cd(3).draw(h.edgXmissingP);
+    // if(detector =="FT")
+    // drawCut(0.5, h.edgXmissingP, ec, 3);
+    // else
+    // drawCut(0.8, h.edgXmissingP, ec, 3);
+
+    ec.cd(0).draw(h.edgXmissingM2);
+    //drawCut(0.7, h.edXmissingM, ec, 5);
+
+    ec.cd(1).draw(h.edgXmissingPz);
+
+    ec.cd(2).draw(h.DeltaPhiPlaneHist);
+
+    ec.cd(3).draw(h.egXmissingM2);
+
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e6) {
+      // TODO Auto-generated catch block
+      e6.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
+
+    
+
+  }
+
+ 
 
   public static void drawCut(double cut, H1F histo, TCanvas canvas, int pad) {
     DataLine line = new DataLine(cut, 0, cut, histo.getMax());
@@ -262,6 +337,13 @@ public class HistoReader {
     // Asymfunc.setParameter(2,-0.01);
     DataFitter.fit(Asymfunc, buildAsym(hp,hm), "");
     ec.draw(Asymfunc, "same");
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e3) {
+      // TODO Auto-generated catch block
+      e3.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
     }
   }
   public static void drawAsymQ2bins(TCanvas ec, DvcsHisto h) {
@@ -280,6 +362,13 @@ public class HistoReader {
     // Asymfunc.setParameter(2,-0.01);
     DataFitter.fit(Asymfunc, buildAsym(h.phiplusQ2bin[i],h.phiminusQ2bin[i]), "");
     ec.draw(Asymfunc, "same");
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e3) {
+      // TODO Auto-generated catch block
+      e3.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
     }
   }
   public static void drawAsymxbbins(TCanvas ec, DvcsHisto h) {
@@ -298,6 +387,13 @@ public class HistoReader {
     // Asymfunc.setParameter(2,-0.01);
     DataFitter.fit(Asymfunc, buildAsym(h.phiplusQ2bin[i],h.phiminusQ2bin[i]), "");
     ec.draw(Asymfunc, "same");
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e3) {
+      // TODO Auto-generated catch block
+      e3.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
     }
   }
   public static void drawAsymtbinspi0(TCanvas ec, DvcsHisto h) {
@@ -320,6 +416,13 @@ public class HistoReader {
     // Asymfunc.setParameter(2,-0.01);
     DataFitter.fit(Asymfunc, buildAsym(hp,hm), "");
     ec.draw(Asymfunc, "same");
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e3) {
+      // TODO Auto-generated catch block
+      e3.printStackTrace();
+    }
+    ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
     }
   }
   //BAD programming to quickly merge run periods
@@ -338,34 +441,34 @@ public class HistoReader {
     DvcsHisto hACFD3 = new DvcsHisto(hipobasedir3, "AC", "FD");
     TCanvas ect1 = new TCanvas("AsymFTbinnedt", 1200, 500);
     drawAsymtbins3runperiods(ect1, hACFT1,hACFT2,hACFT3);
-    ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".png");
+    ect1.getCanvas().save(inputParam.getOutputDir()+"/"+ect1.getTitle()+".pdf");
     TCanvas ect2 = new TCanvas("AsymFDbinnedt", 1200, 500);
    
     drawAsymtbins3runperiods(ect2, hACFD1, hACFD2, hACFD3);
-    ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".png");
+    ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".pdf");
 
  //HistoReader.corr=0.69;
 
 
     TCanvas ect3 = new TCanvas("AsymFTbinnedQ2", 1200, 500);
     drawAsymQ2bins3runperiods(ect3, hACFT1,hACFT2,hACFT3);
-    ect3.getCanvas().save(inputParam.getOutputDir()+"/"+ect3.getTitle()+".png");
+    ect3.getCanvas().save(inputParam.getOutputDir()+"/"+ect3.getTitle()+".pdf");
 
     TCanvas ect4 = new TCanvas("AsymFDbinnedQ2", 1200, 500);
     drawAsymQ2bins3runperiods(ect4, hACFD1, hACFD2, hACFD3);
-    ect4.getCanvas().save(inputParam.getOutputDir()+"/"+ect4.getTitle()+".png");
+    ect4.getCanvas().save(inputParam.getOutputDir()+"/"+ect4.getTitle()+".pdf");
 
     TCanvas ect5 = new TCanvas("AsymFTbinnedxb", 1200, 500);
     drawAsymxbbins3runperiods(ect5, hACFT1,hACFT2,hACFT3);
-    ect5.getCanvas().save(inputParam.getOutputDir()+"/"+ect5.getTitle()+".png");
+    ect5.getCanvas().save(inputParam.getOutputDir()+"/"+ect5.getTitle()+".pdf");
     TCanvas ect6 = new TCanvas("AsymFDbinnedxb", 1200, 500);
     
     drawAsymxbbins3runperiods(ect6, hACFD1, hACFD2, hACFD3);
-    ect6.getCanvas().save(inputParam.getOutputDir()+"/"+ect6.getTitle()+".png");
+    ect6.getCanvas().save(inputParam.getOutputDir()+"/"+ect6.getTitle()+".pdf");
 
     TCanvas ect7 = new TCanvas("Asym", 500, 500);
     drawAsym3runperiods(ect7, hACFT1,hACFT2,hACFT3);
-    ect7.getCanvas().save(inputParam.getOutputDir()+"/"+ect7.getTitle()+".png");
+    ect7.getCanvas().save(inputParam.getOutputDir()+"/"+ect7.getTitle()+".pdf");
   }
   public static void drawAsymtbins3runperiods(TCanvas ec, DvcsHisto h1, DvcsHisto h2, DvcsHisto h3){
     ec.divide(3,1);
