@@ -47,9 +47,9 @@ public class DvcsEvent {
   }
 
 
-  double MNUC = 1.875612;
+  //double MNUC = 1.875612;
   //TMP
-  //double MNUC =0.93828;
+  double MNUC =0.93828;
   double MPIONP = 0.139570;
   double MPION = 0.1349768;
   double MKAON = 0.4977;
