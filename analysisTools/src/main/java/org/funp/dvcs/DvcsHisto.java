@@ -70,6 +70,8 @@ public class DvcsHisto {
 
   public H1F Phiplus;
   public H1F Phiminus;
+  public H1F Phi;
+  public H2F tvsPhi;
 
   //Exclusivity plots - All these are in Missing quant folder
   public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
@@ -241,6 +243,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     tvstfx=createHisto("tvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
     Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
+    Phi=createHisto("Phi","Phi","",10,0,360,"Asym");
+    tvsPhi=createHisto("Phi","Phi","","",10,0,360,10,0,2,"Asym");
    
     //START OF EXC POTS
     //edgX
@@ -508,7 +512,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 
 
     
-
+    Phi.fill(ev.PhiPlane());
+    tvsPhi.fill(ev.PhiPlane(),-1*ev.t().mass2());
     if(ev.helicity==1){
       Phiplus.fill(ev.PhiPlane());
       phivshelicityPlus.fill(ev.PhiPlane(), ev.helicity);
