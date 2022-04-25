@@ -62,12 +62,13 @@ public class HistoReader {
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
     
-    onefilePlots(inputParam.detectorType);
+    //onefilePlots(inputParam.detectorType,inputParam.cutType);
     
     //mergeThreeRunperiods();
+    mergePlot(inputParam.detectorType,inputParam.cutType);
 
   }
-  public static void onefilePlots(String detector){
+  public static void onefilePlots(String detector,String cut){
     
     hipobasedir = new TDirectory();
     hipobasedir.readFile(inputParam.gethipoFile());
@@ -78,27 +79,27 @@ public class HistoReader {
     TCanvas cprelim = new TCanvas("ExcCutPrelim"+detector,1000,500);
     displayPrelim(cprelim, hDC,hCC,detector);
     TCanvas cexclDC=new TCanvas("ExcCutsDC"+detector,500,500);
-    displayExcCuts(cexclDC, hDC,detector);
+    displayExcCuts(cexclDC, hDC,detector,cut);
     TCanvas cexclDC2=new TCanvas("ExcCutsDC2"+detector,500,500);
-    displayExcCuts2(cexclDC2, hDC,detector);
+    displayExcCuts2(cexclDC2, hDC,detector,cut);
 
     TCanvas cexclCC=new TCanvas("ExcCutsCC"+detector,500,500);
-    displayExcCuts(cexclCC, hDC,detector);
+    displayExcCuts(cexclCC, hCC,detector ,cut);
     TCanvas cexclCC2=new TCanvas("ExcCutsCC2"+detector,500,500);
-    displayExcCuts2(cexclCC2, hDC,detector);
+    displayExcCuts2(cexclCC2, hCC,detector,cut);
 
     TCanvas cexclAC=new TCanvas("ExcCutsAC"+detector,500,500);
-    displayExcCuts(cexclAC, hDC,detector);
+    displayExcCuts(cexclAC, hAC,detector,cut);
     TCanvas cexclAC2=new TCanvas("ExcCutsAC2"+detector,500,500);
-    displayExcCuts2(cexclAC2, hDC,detector);
+    displayExcCuts2(cexclAC2, hAC,detector,cut);
     
 
     TCanvas cprotDC=new TCanvas("ExclPlotwithProtDC"+detector,800,500);
-    displayExclPlotProt(cprotDC, hDC,detector);
+    displayExclPlotProt(cprotDC, hDC,detector,cut);
     TCanvas cprotCC=new TCanvas("ExclPlotwithProtCC"+detector,800,500);
-    displayExclPlotProt(cprotCC, hCC,detector);
+    displayExclPlotProt(cprotCC, hCC,detector,cut);
     TCanvas cprotAC=new TCanvas("ExclPlotwithProtAC"+detector,800,500);
-    displayExclPlotProt(cprotAC, hAC,detector);
+    displayExclPlotProt(cprotAC, hAC,detector,cut);
   
   // TCanvas ec4 = new TCanvas("ExclDCFD", 1400, 1200);
   // displayExcCuts(ec4, hDCFD,"FD");
@@ -174,29 +175,33 @@ public class HistoReader {
     }
     ec.getCanvas().save(inputParam.getOutputDir()+"/"+ec.getTitle()+".pdf");
   }
-  public static void displayExcCuts(TCanvas ec, DvcsHisto h,String detector) {
+  public static void displayExcCuts(TCanvas ec, DvcsHisto h,String detector,String cut) {
 
     ec.divide(2, 2);
     // ec.cd(0).draw(h.coneanglevsedXM2);
 
     ec.cd(0).draw(h.edXmissingM2);
-    drawCut(-1., h.edXmissingM2, ec, 0);
+    if(cut=="CC")drawCut(-1., h.edXmissingM2, ec, 0);
 
     ec.cd(1).draw(h.edgXmissingE);
+    
+    if(cut=="CC"){
     if(detector =="FT")
     drawCut(1, h.edgXmissingE, ec, 1);
     else
     drawCut(2, h.edgXmissingE, ec, 1);
-
+    }
     ec.cd(2).draw(h.pPerphisto);
+    if(cut=="CC"){
     drawCut(0.5, h.pPerphisto, ec, 2);
-
+    }
     ec.cd(3).draw(h.edgXmissingP);
+    if(cut=="CC"){
     if(detector =="FT")
     drawCut(0.5, h.edgXmissingP, ec, 3);
     else
     drawCut(0.8, h.edgXmissingP, ec, 3);
-
+    }
     // ec.cd(5).draw(h.edgXmissingM2);
     // //drawCut(0.7, h.edXmissingM, ec, 5);
 
@@ -218,7 +223,7 @@ public class HistoReader {
 
   }
 
-  public static void displayExcCuts2(TCanvas ec, DvcsHisto h,String detector) {
+  public static void displayExcCuts2(TCanvas ec, DvcsHisto h,String detector,String cut) {
 
     ec.divide(2, 2);
  
@@ -263,7 +268,7 @@ public class HistoReader {
     
 
   }
-  public static void displayExclPlotProt(TCanvas ec, DvcsHisto h,String detector){
+  public static void displayExclPlotProt(TCanvas ec, DvcsHisto h,String detector,String cut){
     ec.divide(3, 3);
     ec.cd(0).draw(h.edgXmissingE_mis);
     ec.cd(1).draw(h.edgXmissingM2_mis);
@@ -617,4 +622,72 @@ public class HistoReader {
     drawCut(h.xbbins[3], h.Xbj, c, 2);
 
   }
+
+
+
+
+ //BAD programming to quickly merge run periods
+ public static void mergePlot(String detector,String cut){
+
+  TDirectory[] hipobasedir=new TDirectory[3];
+  String[] namefile=new String[] {"S19.hipo","F19.hipo","S20.hipo"};
+  DvcsHisto h[]=new DvcsHisto[3];
+  TCanvas cc = new TCanvas("Plotkine", 1200, 400);
+  cc.divide(3, 1);
+  H1F ttot=new H1F();
+  H1F qtot=new H1F();
+  H1F xtot=new H1F();
+ 
+  for(int i=0;i<3;i++){
+    hipobasedir[i]=new TDirectory();
+    hipobasedir[i].readFile(namefile[i]);
+    
+    h[i]= new DvcsHisto(hipobasedir[i], cut, detector);
+    if(i==0) {
+      //ttot.set(h[0].thisto.getXaxis().getNBins(),h[0].thisto.getXaxis().getLimits()[0],h[0].thisto.getXaxis().getLimits()[1]);
+      ttot.set(100,0,2);
+
+      ttot.setName("-t");
+    }
+    ttot.add(h[i].thisto);
+    ttot.setOptStat(101);
+    ttot.setTitle("");
+    //cc.cd(i);
+    //cc.draw(h[i].Xbj);
+
+
+  
+  
+    if(i==0) {
+      //qtot.set(h[0].Q2.getXaxis().getNBins(),h[0].Q2.getXaxis().getLimits()[0],h[0].Q2.getXaxis().getLimits()[1]);
+      qtot.set(100,0.1,4);
+      qtot.setName("Q^2");
+      qtot.setTitle("");
+    }
+    qtot.add(h[i].Q2);
+    qtot.setOptStat(101);
+
+
+    if(i==0) {
+      //xtot.set(h[0].Xbj.getXaxis().getNBins(),h[0].Xbj.getXaxis().getLimits()[0],h[0].Xbj.getXaxis().getLimits()[1]);
+      xtot.set(100,0,1);
+      xtot.setName("X_b");
+      xtot.setTitle("");
+    }
+    xtot.add(h[i].Xbj);
+    xtot.setOptStat(101);
+  }
+  
+  cc.cd(0);
+  cc.draw(ttot);
+  cc.cd(1);
+  cc.draw(qtot);
+  cc.cd(2);
+  cc.draw(xtot);
+  
+  
+ 
+  
+}
+
 }

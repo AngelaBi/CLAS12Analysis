@@ -42,8 +42,8 @@ public class DcoDe {
   static DvcsHisto hDCFT;// DVCS cuts conf 1
   static DvcsHisto hDCFD;// DVCS cuts conf 2
 
-  static DvcsHisto hPCFT;// pion cuts conf 1
-  static DvcsHisto hPCFD;// pion cuts conf 2
+  // static DvcsHisto hPCFT;// pion cuts conf 1
+  // static DvcsHisto hPCFD;// pion cuts conf 2
 
   static DvcsHisto hCCFT;// coneangle MM 2d cut conf 1
   static DvcsHisto hCCFD;// coneangle MM 2d cut conf 2
@@ -102,11 +102,9 @@ public class DcoDe {
     //hDCFD.setOutputDir(inputParam.getOutputDir());
     
     // PION CUT
-    hPCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
-    //hPCFT.setOutputDir(inputParam.getOutputDir());
+    // hPCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
     
-    hPCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
-    //hPCFD.setOutputDir(inputParam.getOutputDir());
+    // hPCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
     
     // Coneangle 2D cuts
     hCCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
@@ -251,8 +249,8 @@ public class DcoDe {
     hDCFD.writeHipooutput(rootdir, "DCFD");
     hDCFT.writeHipooutput(rootdir, "DCFT");
 
-    hPCFD.writeHipooutput(rootdir, "PCFD");
-    hPCFT.writeHipooutput(rootdir, "PCFT");
+    // hPCFD.writeHipooutput(rootdir, "PCFD");
+    // hPCFT.writeHipooutput(rootdir, "PCFT");
 
     hCCFD.writeHipooutput(rootdir, "CCFD");
     hCCFT.writeHipooutput(rootdir, "CCFT");
@@ -297,11 +295,11 @@ public class DcoDe {
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
         if(pionCut  ){//XX add true if you don't want to exclude pions
-        if (ev.GetConf() == 1) {
-          hPCFT.fillBasicHisto(ev);
-        } else if (ev.GetConf() == 2) {
-          hPCFD.fillBasicHisto(ev);
-        }
+        // if (ev.GetConf() == 1) {
+        //   hPCFT.fillBasicHisto(ev);
+        // } else if (ev.GetConf() == 2) {
+        //   hPCFD.fillBasicHisto(ev);
+        // }
         if (ev.PrelimExclusivitycut()) {
           if (ev.GetConf() == 1) {
             hCCFT.fillBasicHisto(ev);

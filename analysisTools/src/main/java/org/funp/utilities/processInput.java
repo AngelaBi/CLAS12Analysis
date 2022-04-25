@@ -21,6 +21,7 @@ public class processInput {
 	public String FileListName=new String("fileslist.txt");
 	public String hipoFilename=new String("Angela.hipo");//input file name for HistoReader and for DcoDe
 	public String detectorType=new String("FT");
+	public String cutType=new String("DC");
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
 	private static boolean MCmode=false;
@@ -43,6 +44,7 @@ public class processInput {
 		options.addOption("nT", "noTags", false, "Enable analysis on files without tags");
 		options.addOption("pi0","pion0",false,"Enable pi0 analysis");
 		options.addOption("dt", "detectortype", true, "Set FT/FD in historeader");
+		options.addOption("ct", "cuttype", true, "Set DC/CC/AC in historeader");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -115,6 +117,16 @@ public class processInput {
 				// Whatever you want to do with the setting goes here
 			} else {
 				log.log(Level.INFO, "Using default file with list of data filename=" + detectorType);
+				//log.log(Level.SEVERE, "MIssing l option");
+				//help();
+			}
+			if (cmd.hasOption("ct")) {
+				//System.out.println("here"+cmd.getOptionValue("l"));
+				cutType=cmd.getOptionValue("ct");
+				log.log(Level.INFO, "Using processInput argument -ct=" + cutType);
+				// Whatever you want to do with the setting goes here
+			} else {
+				log.log(Level.INFO, "Using default file with list of data filename=" + cutType);
 				//log.log(Level.SEVERE, "MIssing l option");
 				//help();
 			}
