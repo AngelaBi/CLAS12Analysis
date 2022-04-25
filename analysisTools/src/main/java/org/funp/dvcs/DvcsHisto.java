@@ -244,7 +244,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
     Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
     Phi=createHisto("Phi","Phi","",10,0,360,"Asym");
-    tvsPhi=createHisto("Phi","Phi","","",10,0,360,10,0,2,"Asym");
+    tvsPhi=createHisto("tvsPhi","tvsPhi","","",10,0,360,10,0,2,"Asym");
    
     //START OF EXC POTS
     //edgX
