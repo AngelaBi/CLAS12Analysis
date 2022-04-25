@@ -62,10 +62,10 @@ public class HistoReader {
   public static void main(String[] args) throws FileNotFoundException, IOException {
     inputParam = new processInput(args);
     
-    //onefilePlots(inputParam.detectorType,inputParam.cutType);
+    onefilePlots(inputParam.detectorType,inputParam.cutType);
     
     //mergeThreeRunperiods();
-    mergePlot(inputParam.detectorType,inputParam.cutType);
+    //mergePlot(inputParam.detectorType,inputParam.cutType);
 
   }
   public static void onefilePlots(String detector,String cut){
@@ -100,6 +100,26 @@ public class HistoReader {
     displayExclPlotProt(cprotCC, hCC,detector,cut);
     TCanvas cprotAC=new TCanvas("ExclPlotwithProtAC"+detector,800,500);
     displayExclPlotProt(cprotAC, hAC,detector,cut);
+
+
+    // TCanvas ect1 = new TCanvas("Asymt"+detector, 1200, 500);
+    // drawAsymtbins(ect1, hAC);
+    // TCanvas ecQ1 = new TCanvas("Asymq2"+detector, 1200, 500);
+    // drawAsymQ2bins(ecQ1, hAC);
+    // TCanvas ecxb1 = new TCanvas("Asymxb"+detector, 1200, 500);
+    // drawAsymxbbins(ecxb1, hAC);
+    // TCanvas ect1pi0 = new TCanvas("AsymtFTpi0", 1200, 500);
+    // drawAsymtbinspi0(ect1pi0, hAC);
+
+    TCanvas ecasym = new TCanvas("Asym"+detector, 500, 500);
+    drawAsym(ecasym, hAC);
+    
+    TCanvas oc = new TCanvas("other cuts"+detector, 1200, 500);
+    displayOthercuts(oc,hAC);
+  
+    TCanvas bc = new TCanvas("binning"+detector,1200,500);
+    ShowBinning(bc,hAC);
+ 
   
   // TCanvas ec4 = new TCanvas("ExclDCFD", 1400, 1200);
   // displayExcCuts(ec4, hDCFD,"FD");
@@ -114,29 +134,23 @@ public class HistoReader {
   //drawAsym(ecA, hACFT);
   //TCanvas ecA2 = new TCanvas("Asym FD", 1400, 1200);
   //drawAsym(ecA2, hACFD);
-  TCanvas ect1 = new TCanvas("Asymt"+detector, 1200, 500);
-  drawAsymtbins(ect1, hAC);
- 
+  
   // TCanvas ect2 = new TCanvas("AsymtFD", 1200, 500);
   //HistoReader.corr=0.69;
   // drawAsymtbins(ect2, hACFD);
   // ect2.getCanvas().save(inputParam.getOutputDir()+"/"+ect2.getTitle()+".pdf");
-  TCanvas ecQ1 = new TCanvas("Asymq2"+detector, 1200, 500);
-  drawAsymQ2bins(ecQ1, hAC);
-
+  
   // TCanvas ecQ2 = new TCanvas("Asymq2FD", 1200, 500);
   // drawAsymQ2bins(ecQ2, hACFD);
   // ecQ2.getCanvas().save(inputParam.getOutputDir()+"/"+ecQ2.getTitle()+".pdf");
-  TCanvas ecxb1 = new TCanvas("Asymxb"+detector, 1200, 500);
-  drawAsymxbbins(ecxb1, hAC);
+  
 
   // TCanvas ecxb2 = new TCanvas("AsymxbFD", 1200, 500);
   // drawAsymxbbins(ecxb2, hACFD);
   // ecxb2.getCanvas().save(inputParam.getOutputDir()+"/"+ecxb2.getTitle()+".pdf");
 
 
-  TCanvas ect1pi0 = new TCanvas("AsymtFTpi0", 1200, 500);
-  drawAsymtbinspi0(ect1pi0, hAC);
+ 
  
   // TCanvas ect2pi0 = new TCanvas("AsymtFDpi0", 1200, 500);
   // drawAsymtbinspi0(ect2pi0, hACFD);
@@ -144,11 +158,7 @@ public class HistoReader {
   // //HistoReader.corr=0.69;
 
 
-  TCanvas oc = new TCanvas("other cuts"+detector, 1200, 500);
-  displayOthercuts(oc,hDC);
-
-  TCanvas bc = new TCanvas("binning"+detector,1200,500);
-  ShowBinning(bc,hAC);
+ 
 
   // TCanvas bc2 = new TCanvas("binning FD",1200,500);
   // ShowBinning(bc2,hACFD);
@@ -161,6 +171,9 @@ public class HistoReader {
     drawCut(0., h.VertexElectron, c, 7);
 
     c.cd(1).draw(h.vertexElecVSvertexDeut);
+
+    c.cd(2).draw(h.pionmass2);
+    h.pionmass2.setOptStat(10);
 
   }
   public static void displayPrelim(TCanvas ec, DvcsHisto hDC,DvcsHisto hCC,String detector){
@@ -184,6 +197,7 @@ public class HistoReader {
     if(cut=="CC")drawCut(-1., h.edXmissingM2, ec, 0);
 
     ec.cd(1).draw(h.edgXmissingE);
+    h.edgXmissingE.setOptStat(10);
     
     if(cut=="CC"){
     if(detector =="FT")
