@@ -855,7 +855,7 @@ public class DvcsEvent {
               this.X("ehg").e() < 1 // Was 2, not a big change of FT
               && this.pPerp() < 0.5
               && this.X("ehg").p() < 0.5// was 1.5
-              && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
+              //&& this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
               // && Math.abs(this.chi2pid()) < 3.5
               // && this.X("eh").mass() < 1.5//was 0.7
           // && dedxCut
@@ -872,7 +872,7 @@ public class DvcsEvent {
           && this.X("ehg").e() < 2// was 3 //was 2// probably removing pions
           && this.pPerp() < 0.5
           && this.X("ehg").p() < 0.8// was 1.5
-          && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
+          //&& this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
           && this.X("eh").mass() < 0.7// was 1.5//was nothing - desperate attempt to reduce pion background
