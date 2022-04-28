@@ -502,7 +502,6 @@ public class DvcsEvent {
         // status 1000-3999 is FT FD
         // else if(pid==22 && Math.abs(status)<4000){
         else if (pid == 22 && Math.abs(status) < 4000) {
-          //System.out.println("Found id 22");
           photonsNumber.add(npart);
           nphot++;
           //Postponing the choice of the photon since instead of picking up the most energentic 
@@ -563,7 +562,6 @@ public class DvcsEvent {
         // status 4000 is FD
         // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
         else if (pid == PIDNUC && Math.abs(status) >= 4000) {
-          System.out.println("Found id 45");
           dedxDeutCTOF = -999999;
           dedxDeutCND = -999999;
           ctofen = -10;
@@ -599,11 +597,13 @@ public class DvcsEvent {
           builder.append(vtmp.p() + ",");
           builder.append("1\n");
           }
-          System.out.println(beta);
-          System.out.println(ctofen);
-          System.out.println(dedxDeutCTOF);
-          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
-            System.out.println("good 45");
+          //System.out.println(beta);
+          //System.out.println(ctofen);
+          //System.out.println(dedxDeutCTOF);
+          //XXX TEMP removing dedx cut
+          //if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
+          if (beta > 0.16 && ctofen > 5  > 1) {
+            //System.out.println("good 45");
             // THis is for no ML
             ndeut++;
             vtmp.setPxPyPzM(particles.getFloat("px", npart),
