@@ -156,7 +156,7 @@ public static void goodEventFilterParticles(Bank particles, Bank scint, Bank run
  if(ev.FilterParticles(particles,scint,runEvent,scintExtras,calos,runNumber)){
           
           //if(((ev.beta()-ev.BetaCalc()) > (0.05*ev.chi2pid()-0.25))){
-            System.out.println("hello"); 
+            
             if (ev.TagEventsDVCScut() && ev.TagEventsExclusivityCut()){
                 event.setEventTag(11);
             }else if (ev.TagEventsDVCScut() && !ev.TagEventsExclusivityCut()){
