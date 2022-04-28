@@ -602,7 +602,7 @@ public class DvcsEvent {
           //System.out.println(dedxDeutCTOF);
           //XXX TEMP removing dedx cut
           //if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
-          if (beta > 0.16 && ctofen > 5  > 1) {
+          if (beta > 0.16 && ctofen > 5 ) {
             //System.out.println("good 45");
             // THis is for no ML
             ndeut++;
