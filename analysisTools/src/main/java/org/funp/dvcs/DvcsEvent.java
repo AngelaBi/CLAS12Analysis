@@ -599,7 +599,8 @@ public class DvcsEvent {
           builder.append(vtmp.p() + ",");
           builder.append("1\n");
           }
-
+          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
+          System.out.println(beta,ctofen,dedxDeutCTOF);
           if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
             System.out.println("good 45");
             // THis is for no ML
