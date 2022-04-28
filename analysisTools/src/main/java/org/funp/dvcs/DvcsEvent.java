@@ -502,7 +502,7 @@ public class DvcsEvent {
         // status 1000-3999 is FT FD
         // else if(pid==22 && Math.abs(status)<4000){
         else if (pid == 22 && Math.abs(status) < 4000) {
-          System.out.println("Found id 22");
+          //System.out.println("Found id 22");
           photonsNumber.add(npart);
           nphot++;
           //Postponing the choice of the photon since instead of picking up the most energentic 
@@ -601,6 +601,7 @@ public class DvcsEvent {
           }
 
           if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
+            System.out.println("good 45");
             // THis is for no ML
             ndeut++;
             vtmp.setPxPyPzM(particles.getFloat("px", npart),
