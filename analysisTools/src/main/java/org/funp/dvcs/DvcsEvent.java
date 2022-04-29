@@ -923,9 +923,13 @@ public class DvcsEvent {
     // LorentzVector tmp=new LorentzVector();
     // tmp.copy(vBeam);
     // tmp.sub(velectron);
+
+    //vector perp to hadron and the two electrons
     Vector3 norm_Had_VPho = (vhadron.vect().cross(Q().vect()));
+    //vector perp hadron and photon
     Vector3 norm_Had_Pho = (vhadron.vect().cross(vphoton.vect()));
     // deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
+    //angle between the plane containing electrons and hadron and plane containing hadron and photn
     deltaphi = norm_Had_Pho.theta(norm_Had_VPho);
     if (norm_Had_VPho.dot(vphoton.vect()) < 0)
       deltaphi = -1 * deltaphi;
@@ -933,8 +937,11 @@ public class DvcsEvent {
   }
 
   public double deltaPhiPlane2() {
+    //Different way to test coplanarity of the exclusive reaction
     double deltaphiplane;
+    //vector perp to hadron and the two electrons
     Vector3 norm_Had_VPho = (vhadron.vect().cross(this.Q().vect()));
+    //vector perp to two electrons and the photon (hadron is not used here!)
     Vector3 norm_VPho_Pho = (this.Q().vect().cross(vphoton.vect()));
     // deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
     deltaphiplane = norm_Had_VPho.theta(norm_VPho_Pho);
