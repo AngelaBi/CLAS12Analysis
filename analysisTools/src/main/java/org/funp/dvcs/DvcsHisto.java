@@ -250,11 +250,11 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     //START OF EXC POTS
     //edgX
     edgXmissingE =createHisto("edgXmissingE", "eDgammaX Missing Energy", "", 100,-3,7, "Excl");
-    edgXmissingM2=createHisto("edgXmissingM2", "edgammaX Missing Mass^2", "", 100,-1,1, "Excl");
-    edgXmissingP=createHisto("edgXmissingP", "eD#gammaX Missing p", "", 100,0,4, "Excl");
-    edgXmissingPx=createHisto("MMomx", "Missing X Momentum", "", 100,-1,1, "Excl");
-    edgXmissingPy=createHisto("MMomy", "Missing Y Momentum", "", 100,-1,1, "Excl");
-    edgXmissingPz=createHisto("MMomz", "Missing Z Momentum", "", 100,-5,5, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "eDgammaX Missing Mass^2", "", 100,-1,1, "Excl");
+    edgXmissingP=createHisto("edgXmissingP", "eDgammaX Missing p", "", 100,0,4, "Excl");
+    edgXmissingPx=createHisto("edgXmissingPx", "eDgammaX Missing px", "", 100,-1,1, "Excl");
+    edgXmissingPy=createHisto("edgXmissingPy", "eDgammaX Missing py", "", 100,-1,1, "Excl");
+    edgXmissingPz=createHisto("edgXmissingPz", "eDgammaX Missing pz", "", 100,-5,5, "Excl");
     pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,1.5, "Excl");
 
     edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy with proton", "", 100,-3,7, "Excl");
