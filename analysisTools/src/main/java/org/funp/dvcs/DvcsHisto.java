@@ -30,7 +30,22 @@ public class DvcsHisto {
   public H1F Xbj;
   public H1F W; //invariant mass of e target -> e' X
   public H1F Q2;//Momentum transfer squared  of e-e'
-  public H1F hadmom;
+
+  public H1F hadrP;
+  public H1F elecP;
+  public H1F photP;//momentum gamma
+  public H1F hadrTh;
+  public H1F elecTh;
+  public H1F photTh;//theta gamma
+
+  public H2F hadrThvsPhi;//Theta vs phi for hadron
+  public H2F elecThvsPhi;
+  public H2F photThvsPhi;
+
+  public H2F hadrThvsP;//Theta vs mom for hadron
+  public H2F elecThvsP;
+  public H2F photThvsP;
+
   public H2F WvsQ2;
   public H2F Q2vsXbj;
   public H2F tvsxb;
@@ -42,15 +57,6 @@ public class DvcsHisto {
   public H1F targetmass;
   public H1F hadronmass;
 
-  public H2F ThvsPhi;//Theta vs phi for hadron
-  public H2F elecThvsPhi;
-  public H2F photThvsPhi;
-  public H2F ThvsP;//Theta vs mom for hadron
-  public H2F elecThvsP;
-  public H2F photThvsP;
-
-  public H1F hgTh;//theta gamma
-  public H1F hgEn;//Energy gamma
   public H1F PhiPlaneHist ; //angle between electrons plane and hadron/gamma plane
   public H1F DPhiHist ;//phi gamma minus phi missing hadron+e vector
 
@@ -89,6 +95,7 @@ public class DvcsHisto {
 
   public H1F edXmissingE;
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
+  public H1F edXmissingTh;//theta missing hadron+e vector
   //public H1F edXmissingM;
 
   public H1F edXmissingM2_mis; // missing mass of hadron electron final state (to be compared with gamma)
@@ -106,7 +113,7 @@ public class DvcsHisto {
 
   public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
   public H1F DeltaPhiPlaneMattHist;//angle planes Q2/hadron and Q2/gamma
-  public H1F MissThetaHist;//theta missing hadron+e vector
+  
   public H1F ConeAngleHist;//angle between gamma vector and missing hadron+e vector
 
   public H2F coneanglevsedgXM2;//angle between gamma vector and missing hadron+e vector vs missin mass square ehgX
@@ -141,7 +148,7 @@ public class DvcsHisto {
   public H1F[] phipluspi0tbin;
   public H1F[] phiminuspi0tbin;
 
-  public H2F thgvsthe;
+  public H2F photThgvElecTh;
   ArrayList<Object> kinehistos;
   ArrayList<Object> exclhistos;
   ArrayList<Object> asymhistos;
@@ -211,7 +218,16 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Xbj=createHisto("Xbj","x_b_j", "", 100, 0., 1.,"Kine");
     W=createHisto("W","W","W [GeV]",100,0,10,"Kine");
     Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"Kine");
-    hadmom=createHisto("hadmom","Deuteron Momentum","p [GeV/c]",100,0,10.0,"Kine");
+
+    hadrP=createHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
+    photP=createHisto("photP", "Photon energy","E #gamma",100,0,12,"Kine");
+    elecP=createHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
+    hadrTh=createHisto("hadrTh", gm+" Deuteron Theta", "th "+gm,100,30,140,"Kine");
+    elecTh=createHisto("elecTh", gm+" Electron Theta", "th "+gm,100,0,35,"Kine");
+    photTh=createHisto("photTh", gm+" Photon Theta", "th "+gm,100,0,35,"Kine");
+    
+
+    
     WvsQ2=createHisto("Q2vsW", "Q2 vs W", "W [GeV]","Q^2 [GeV/c^2]", 100,0,7,100,0,10,"Kine");
     Q2vsXbj=createHisto("Q2vsXb","Q^2 vs X_b", "X_b", "Q^2 [GeV/c^2]", 100,0,1,100,0,10, "Kine");
     q2vst=createHisto("Q2vst",  "Q2 vs t", "t", "Q2", 100,0,2,100,0,4, "Kine");
@@ -222,16 +238,15 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     targetmass=createHisto("targetmass","target mass","",100,0,3,"Kine");
     hadronmass=createHisto("hadronmass","target mass","",100,0,3,"Kine");
 
-    ThvsPhi=createHisto("Deuteronthvsphi","Deuteron th vs phi", "phi [Degrees", "th [Degrees]", 100,-180,180,100,0,180, "Kine");
-    photThvsPhi=createHisto("Photonthvsphi","Photon th vs phi", "phi [Degrees]", "th [Degrees]", 100,-180,180,100,0,50, "Kine");
-    elecThvsPhi=createHisto("Electronthvsphi","Electron th vs phi", "phi [Degrees]" ,"th [Degrees]", 100,-180,180,100,0,180, "Kine");
-    ThvsP=createHisto("Deuteronpvsth", "Deuteron p vs th ", "p [GeV/c]", "th [Degrees]", 100,0,180,100,0,10.6, "Kine");
-    elecThvsP=createHisto("Electronpvstheta", "Electron p vs th ", "p [GeV/c]", "th [Degrees]", 100,0,180,100,0,10.6, "Kine");
-    photThvsP=createHisto("Photonpvstheta", "th vs Photon p", "p [GeV/c]", "th [Degrees]", 100,0,10.6,100,0,50, "Kine");
-    hgTh=createHisto("hgTh", gm+" Theta", "th "+gm,100,0,50,"Kine");
-    hgEn=createHisto("Photonenergy", "Photon energy","E_gamma",100,0,12,"Kine");
+    hadrThvsPhi=createHisto("hadrThvsPhi","Deuteron th vs phi", "", "", 100,-180,180,100,0,180, "Kine");
+    photThvsPhi=createHisto("photThvsPhi","Photon th vs phi", "", "", 100,-180,180,100,0,35, "Kine");
+    elecThvsPhi=createHisto("elecThvsPhi","Electron th vs phi", "" ,"", 100,-180,180,100,0,35, "Kine");
+    hadrThvsP=createHisto("hadrThvsP", "Deuteron th bs p", "", "", 100,0,3.00,100,0,180, "Kine");
+    elecThvsP=createHisto("elecThvsP", "Electron th vs p ", "", "",100,0,10.6,100,0,35, "Kine");
+    photThvsP=createHisto("photThvsP", "Photon th vs   p", "", "", 100,0,10.6,100,0,35, "Kine");
+    
     PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
-    DPhiHist=createHisto("DPhiHist", "DPhi", "", 100,-10,10, "Kine");
+    DPhiHist=createHisto("DPhiHist", "phi measured gamma minus phi of edX", "", 100,-180,180, "Excl");
     ConeAngleBtElectronPhotonFD=createHisto("ConeAngleBtElectronandPhoton", "Cone Angle Between Electron and Photon", "", 100,0,80, "Kine");
     phivshelicityPlus=createHisto("phivshelicityP", "phi vs helicity plus", "", "", 100,0,360,100,-4,4, "Kine");
     phivshelicityMinus=createHisto("phivshelicityM", "phi vs helicity minus", "", "", 100,0,360,100,-4,4, "Kine");
@@ -245,45 +260,45 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
     Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
     Phi=createHisto("Phi","Phi","",10,0,360,"Asym");
-    tvsPhi=createHisto("tvsPhi","tvsPhi","","",10,0,360,10,0,2,"Kine");
+    tvsPhi=createHisto("tvsPhi","tvsPhi","","",50,0,360,50,0,2,"Kine");
    
     //START OF EXC POTS
     //edgX
-    edgXmissingE =createHisto("edgXmissingE", "eDgammaX Missing Energy", "", 100,-3,7, "Excl");
-    edgXmissingM2=createHisto("edgXmissingM2", "eDgammaX Missing Mass^2", "", 100,-1,1, "Excl");
-    edgXmissingP=createHisto("edgXmissingP", "eDgammaX Missing p", "", 100,0,4, "Excl");
-    edgXmissingPx=createHisto("edgXmissingPx", "eDgammaX Missing px", "", 100,-1,1, "Excl");
-    edgXmissingPy=createHisto("edgXmissingPy", "eDgammaX Missing py", "", 100,-1,1, "Excl");
-    edgXmissingPz=createHisto("edgXmissingPz", "eDgammaX Missing pz", "", 100,-5,5, "Excl");
-    pPerphisto=createHisto("pPerp", "pPerp", "", 100,0,1.5, "Excl");
+    edgXmissingE =createHisto("edgXmissingE", "eDgammaX Missing Energy", "", 100,-3,3, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "eDgammaX Missing Mass^2", "", 100,-0.6,0.6, "Excl");
+    edgXmissingP=createHisto("edgXmissingP", "eDgammaX Missing p", "", 100,0,2, "Excl");
+    edgXmissingPx=createHisto("edgXmissingPx", "eDgammaX Missing px", "", 100,-0.6,0.6, "Excl");
+    edgXmissingPy=createHisto("edgXmissingPy", "eDgammaX Missing py", "", 100,-0.6,0.6, "Excl");
+    edgXmissingPz=createHisto("edgXmissingPz", "eDgammaX Missing pz", "", 100,-3,3, "Excl");
+    pPerphisto=createHisto("edgXmissingpPerp", "eDgammaX pPerp", "", 100,0,0.8, "Excl");
 
-    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy with proton", "", 100,-3,7, "Excl");
-    edgXmissingM2_mis=createHisto("edgXmissingM2_mis", "edgammaX Missing Mass^2 with proton", "", 100,-1,1, "Excl");
-    edgXmissingP_mis=createHisto("edgXmissingP_mis", "eDgammaX Missing p with proton", "", 100,0,4, "Excl");
-    pPerphisto_mis=createHisto("pPerp_mis", "pPerp with proton", "", 100,0,1.5, "Excl");
+    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy with proton", "", 100,-3,3, "Excl");
+    edgXmissingM2_mis=createHisto("edgXmissingM2_mis", "edgammaX Missing Mass^2 with proton", "", 100,-0.6,0.6, "Excl");
+    edgXmissingP_mis=createHisto("edgXmissingP_mis", "eDgammaX Missing p with proton", "", 100,0,2, "Excl");
+    pPerphisto_mis=createHisto("edgXmissingpPerp_mis", "eDgammaX pPerp with proton", "", 100,0,0.8, "Excl");
      //edX
-    edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,-1,10, "Excl");
-    edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+    edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,0,10, "Excl");
+    edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-6,6, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+    edXmissingTh=createHisto("edXmissingTh", "eDX missing Theta", "", 100,0,20, "Excl");
     //edXmissingM=createHisto("edXmissingM", "edX Missing Mass", "", 100,-0,5, "Excl");
 
-    edXmissingM2_mis=createHisto("edXmissingM2_mis", "eDX Missing Mass^2 with proton", "", 100,-10,10, "Excl");//M_e_D_X^2 [GeV/c^2]^2
-    edgXmissingE_D_vs_mis=createHisto("edgXE_vs_mis","edXmissingE_D_vs_miss","","",100,-8,8,100,-8,8,"Excl");
-    edXmissingM2_D_vs_mis=createHisto("edXM2_vs_mis","edXmissingM2_D_vs_miss","","",100,-8,8,100,-8,8,"Excl");
+    edXmissingM2_mis=createHisto("edXmissingM2_mis", "eDX Missing Mass^2 with proton", "", 100,-6,6, "Excl");//M_e_D_X^2 [GeV/c^2]^2
+    edgXmissingE_D_vs_mis=createHisto("edgXE_vs_mis","eDXmissingE D vs mis D","","",100,-8,8,100,-8,8,"Excl");
+    edXmissingM2_D_vs_mis=createHisto("edXM2_vs_mis","eDXmissingM2 D vs mis D","","",100,-8,8,100,-8,8,"Excl");
     edXmissingM2_misvsegXmissingM2=createHisto("edXprotvsegX", "edXprotvsegX", "", "", 100, 0, 10, 100, -4, 4, "Excl");
     //egX
     egXmissingM2=createHisto("egXmissingM2","egammaX Missing Mass2","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     egXmissingM=createHisto("egXmissingM","egammaX Mass","",100,-0,5, "Excl");//M_e_gamma_X [GeV/c^2]
     egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//egammaX MM^2 vs th
 
-    egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM_D_vs_mis","","",100,0,5,100,0,5,"Excl");
+    egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM D vs mis D","","",100,0,5,100,0,5,"Excl");
     egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     //Phi planes
-    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi Plane", "", 100,-10,10, "Excl");
-    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi Plane Hattawy", "", 100,-10,10, "Excl");
-    MissThetaHist=createHisto("MissThetaHist", "MissThetaHist", "", 100,0,40, "Excl");
+    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and Dgamma", "", 100,-8,8, "Excl");
+    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2gamma", "", 100,-8,8, "Excl");
     dphiPlanevsdphiPlane2=createHisto("phiPlanevsPhiPlane2", "phiPlane vs PhiPlane2", "", "", 100, -10, 10, 100, -10, 10, "Excl");
     //cone angles
-    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,0,15, "Excl");
+    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,0,10, "Excl");
     coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX MM2 vs thgammaX", "", ")", 100,0,15,100,-3,4, "Excl");
     coneanglevsedXM2=createHisto("coneanglevsedXM2","edX MM2 vs thgammaX","","",100,0,15,100,-10,10, "Excl");
     coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs thgammaX","","", 100,0,15,100,0,3,"Excl");
@@ -294,16 +309,16 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     
     //Pid histograms
     betahadhisto=createHisto("beta","beta","Measured beta",100,0,1,"Pid");
-    betacalchisto=createHisto("betacalc","beta_calc","beta calculated from relativistic momentum",100,0,1,"Pid");
-    betacalcvsP=createHisto("BetaCalcvsP","BetaCalc vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
+    betacalchisto=createHisto("betacalc","beta calc","beta calculated from relativistic momentum",100,0,1,"Pid");
+    betacalcvsP=createHisto("BetaCalcvsP","Beta calc vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
     betavsP=createHisto("BetavsP","Beta vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
-    deltabetavschi2=createHisto("Deltabeta_dvschi2PID","Deltabeta_d vs chi^2_PID", "chi^2_PID", "Deltabeta_d", 100,-30,30,100,-0.6,0., "Pid");
+    deltabetavschi2=createHisto("Deltabeta_dvschi2PID","Deltabeta_d vs chi^2 PID", "chi^2 PID", "Deltabeta_d", 100,-30,30,100,-0.6,0., "Pid");
     deltabeta=createHisto("BetamBetaCalc", "Beta - BetaCalc", "" ,100,-0.6,0., "Pid");
     ctofdedxvsp=createHisto("ctofdedxvsp", "ctofdedxvsp", "", "", 100,0,2,100,0,100, "Pid");
     dedxDeutvsP =createHisto("dedxDeutvsP","de/dx Deut vs P", "", "", 100,0,2,100,0,30, "Pid");
     dedxCTOFvsP= createHisto("dedxCTOFvsP", "de/dx CTOF vs P", "","",100,0,2,100,0,30, "Pid");
     dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "Pid");
-    thgvsthe=createHisto("thgvsthe", "th_gamma vs th_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
+    photThgvElecTh=createHisto("photThgvElecTh", "th_{#gamma} vs th_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
     
 
     pionmass2=createHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "Kine");
@@ -409,7 +424,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
    // XvsY_electron_after.fill(ev.elec_x,ev.elec_y);
     W.fill(ev.Wp().mass());
     Q2.fill(-ev.Q().mass2());
-    hadmom.fill(ev.vhadron.p());
+    
     WvsQ2.fill(ev.Wp().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
     q2vst.fill( -1*ev.t().mass2(),-1*ev.Q().mass2());
@@ -461,25 +476,29 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 
     
 
-    ThvsPhi.fill(Math.toDegrees(ev.vhadron.phi()),Math.toDegrees(ev.vhadron.theta()));
+    hadrThvsPhi.fill(Math.toDegrees(ev.vhadron.phi()),Math.toDegrees(ev.vhadron.theta()));
     elecThvsPhi.fill(Math.toDegrees(ev.velectron.phi()),Math.toDegrees(ev.velectron.theta()));
     photThvsPhi.fill(Math.toDegrees(ev.vphoton.phi()),Math.toDegrees(ev.vphoton.theta()));
-    ThvsP.fill(Math.toDegrees(ev.vhadron.theta()),ev.vhadron.p());
-    elecThvsP.fill(Math.toDegrees(ev.velectron.theta()),ev.velectron.p());
+    hadrThvsP.fill(ev.vhadron.p(),Math.toDegrees(ev.vhadron.theta()));
+    elecThvsP.fill(ev.velectron.p(),Math.toDegrees(ev.velectron.theta()));
     photThvsP.fill(ev.vphoton.p(),Math.toDegrees(ev.vphoton.theta()));
 
-    thgvsthe.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
+    photThgvElecTh.fill(Math.toDegrees(ev.velectron.theta()),Math.toDegrees(ev.vphoton.theta()));
     pionmass2.fill(ev.vpion.mass2());
     //System.out.println(ev.vpion.mass2());
 //Xbj=ev.Xb();
 
-    hgTh.fill(Math.toDegrees(ev.vphoton.theta()));
-    hgEn.fill(ev.vphoton.e());
+    photTh.fill(Math.toDegrees(ev.vphoton.theta()));
+    hadrTh.fill(Math.toDegrees(ev.vhadron.theta()));
+    elecTh.fill(Math.toDegrees(ev.velectron.theta()));
+    photP.fill(ev.vphoton.p());
+    hadrP.fill(ev.vhadron.p());
+    elecP.fill(ev.velectron.p());
     //DAngleGammaHist.fill(ev.DTheta());
     
-    MissThetaHist.fill(Math.toDegrees(ev.X("eh").theta()));
+    edXmissingTh.fill(Math.toDegrees(ev.X("eh").theta()));
     PhiPlaneHist.fill(ev.PhiPlane());
-    DPhiHist.fill(ev.DPhi());
+    DPhiHist.fill(Math.toDegrees(ev.DPhi()));
     DeltaPhiPlaneHist.fill(ev.deltaPhiPlane());
     DeltaPhiPlaneMattHist.fill(ev.deltaPhiPlane2());
     dphiPlanevsdphiPlane2.fill(ev.deltaPhiPlane2(),ev.deltaPhiPlane());
