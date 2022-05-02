@@ -697,6 +697,22 @@ public class DvcsEvent {
     double py = (this.vBeam.py() - this.velectron.py() - this.vhadron.py() - this.vphoton.py());
     return Math.sqrt(px * px + py * py);
   }
+
+  public double pPerp(String particle) {//particle can be "g" or "m" meson)
+  double px=this.vBeam.px() - this.velectron.px() - this.vhadron.px();
+  double py=this.vBeam.py() - this.velectron.py() - this.vhadron.py();
+    if(particle == "m"){
+     px = ( px- this.vpion.px());
+     py = ( py- this.vpion.py());
+    }
+    else if(particle =="g"){
+    px = (px - this.vphoton.px());
+    py = (py - this.vphoton.py());
+    }
+    return Math.sqrt(px * px + py * py);
+  }
+
+  
   public double pPerp_mis() {
     double px = (this.vBeam.px() - this.velectron.px() - this.vhadron_mis.px() - this.vphoton.px());
     double py = (this.vBeam.py() - this.velectron.py() - this.vhadron_mis.py() - this.vphoton.py());
@@ -840,6 +856,10 @@ public class DvcsEvent {
   }
   public boolean Exclusivitycut() {
     boolean cut = false;
+    String missingpart="g";
+    if(processInput.getPi0mode()){
+      missingpart="m";
+    }
     
    
     
@@ -854,11 +874,11 @@ public class DvcsEvent {
           // the coneangle cut in the PrelimExclusivitycut
           // && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25))
           /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-          this.X("ehg").mass2() > -0.75 && this.X("ehg").mass2() < 0.25 && // was none
-              this.X("ehg").e() < 1 // Was 2, not a big change of FT
-              && this.pPerp() < 0.5
-              && this.X("ehg").p() < 0.5// was 1.5
-              && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
+          this.X("eh"+missingpart).mass2() > -0.75 && this.X("eh"+missingpart).mass2() < 0.25 && // was none
+              this.X("eh"+missingpart).e() < 1 // Was 2, not a big change of FT
+              && this.pPerp(missingpart) < 0.5
+              && this.X("eh"+missingpart).p() < 0.5// was 1.5
+              // && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
               // && Math.abs(this.chi2pid()) < 3.5
               // && this.X("eh").mass() < 1.5//was 0.7
           // && dedxCut
@@ -871,14 +891,14 @@ public class DvcsEvent {
       // coneangle cut in the PrelimExclusivitycut
       // && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25))
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      this.X("ehg").mass2() > -0.25 && this.X("ehg").mass2() < 0.25 // >-0.75
-          && this.X("ehg").e() < 2// was 3 //was 2// probably removing pions
-          && this.pPerp() < 0.5
-          && this.X("ehg").p() < 0.8// was 1.5
-          && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
+      this.X("eh"+missingpart).mass2() > -0.25 && this.X("ehg").mass2() < 0.25 // >-0.75
+          && this.X("eh"+missingpart).e() < 2// was 3 //was 2// probably removing pions
+          && this.pPerp(missingpart) < 0.5
+          && this.X("eh"+missingpart).p() < 0.8// was 1.5
+          // && this.X("eg").mass2()<4.5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
-          && this.X("eh").mass() < 0.7// was 1.5//was nothing - desperate attempt to reduce pion background
+          // && this.X("eh").mass() < 0.7// was 1.5//was nothing - desperate attempt to reduce pion background
       // && dedxCut
       /* && getDedxDeut()> (-30*vhadron.p()+30) */);
     }
