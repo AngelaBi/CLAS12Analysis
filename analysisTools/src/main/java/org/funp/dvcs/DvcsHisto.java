@@ -107,6 +107,8 @@ public class DvcsHisto {
   public H1F egXmissingM2; // missing mass of gamma electron final state (to be compared with hadron)
   public H1F egXmissingM;
   public H2F egXmissingM2vsTh;
+  public H2F egXmissingM2vsEg;
+  public H2F egXmissingM2vsPd;
   
   public H1F egXmissingM2_mis;
   public H2F egXmissingM_D_vs_mis;
@@ -290,6 +292,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     egXmissingM2=createHisto("egXmissingM2","egammaX Missing Mass2","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     egXmissingM=createHisto("egXmissingM","egammaX Mass","",100,-0,5, "Excl");//M_e_gamma_X [GeV/c^2]
     egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//egammaX MM^2 vs th
+    egXmissingM2vsEg=createHisto("egXmissingM2vsEg","","","",100,0,12,100,0,10, "Excl");//egammaX MM^2 vs th
+    egXmissingM2vsPd=createHisto("egXmissingM2vsPd","","","",100,0,3,100,0,10, "Excl");//egammaX MM^2 vs th
 
     egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM D vs mis D","","",100,0,5,100,0,5,"Excl");
     egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
@@ -455,6 +459,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       edXmissingM2_misvsegXmissingM2.fill(ev.X(excl2part).mass2(),ev.X_mis(excl2part).mass2());
 
       egXmissingM2vsTh.fill(Math.toDegrees(ev.vhadron.theta()),ev.X(excl2part).mass2());
+      egXmissingM2vsPd.fill(ev.vhadron.p(),ev.X(excl2part).mass2());
+      egXmissingM2vsEg.fill(ev.vphoton.p(),ev.X(excl2part).mass2());
       coneanglevsedgXM2.fill(ev.coneangle(excl1part),ev.X(excl3part).mass2());
       coneanglevsegXM2.fill(ev.coneangle(excl1part),ev.X(excl2part).mass2());
       coneanglevsedXM2.fill(ev.coneangle(excl1part),ev.X("eh").mass2());
