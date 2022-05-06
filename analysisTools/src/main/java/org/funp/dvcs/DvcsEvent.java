@@ -891,11 +891,11 @@ public class DvcsEvent {
       // coneangle cut in the PrelimExclusivitycut
       // && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25))
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      this.X("eh"+missingpart).mass2() > -0.25 && this.X("ehg").mass2() < 0.25 // >-0.75
+      this.X("eh"+missingpart).mass2() > -0.25 && this.X("ehg").mass2() < 0.08 // >-0.75 was <0.25
           && this.X("eh"+missingpart).e() < 2// was 3 //was 2// probably removing pions
-          && this.pPerp(missingpart) < 0.5
-          && this.X("eh"+missingpart).p() < 0.8// was 1.5
-          && this.X("e"+missingpart).mass2()<5 //(trying to remove the peak at 5)
+          && this.pPerp(missingpart) < 0.5 
+          && this.X("eh"+missingpart).p() < 0.3// was 1.5 //was 0.8
+          && this.X("e"+missingpart).mass2()<4.5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
           // && this.X("eh").mass() < 0.7// was 1.5//was nothing - desperate attempt to reduce pion background
