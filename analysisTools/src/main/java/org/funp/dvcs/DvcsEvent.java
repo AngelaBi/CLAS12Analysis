@@ -1400,7 +1400,7 @@ public class DvcsEvent {
                   // vphoton.print();
                 } else {
                   // System.out.println("here"+!processInput.getMCmode());
-                  vphoton = Correct_FD_E(vphoton, 0.0);
+                  // vphoton = Correct_FD_E(vphoton, 0.0);
                 }
               }
               //
