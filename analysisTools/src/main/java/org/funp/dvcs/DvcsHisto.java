@@ -223,11 +223,11 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"Kine");
 
     hadrP=createHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
-    photP=createHisto("photP", "Photon energy","E #gamma",100,0,12,"Kine");
+    photP=createHisto("photP", gm+" Energy","E #gamma",100,0,12,"Kine");
     elecP=createHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
-    hadrTh=createHisto("hadrTh", gm+" Deuteron Theta", "th "+gm,100,30,140,"Kine");
-    elecTh=createHisto("elecTh", gm+" Electron Theta", "th "+gm,100,0,35,"Kine");
-    photTh=createHisto("photTh", gm+" Photon Theta", "th "+gm,100,0,35,"Kine");
+    hadrTh=createHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"Kine");
+    elecTh=createHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"Kine");
+    photTh=createHisto("photTh", gm+" Theta", "th "+gm,100,0,35,"Kine");
     
 
     
@@ -267,18 +267,18 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
    
     //START OF EXC POTS
     //edgX
-    edgXmissingE =createHisto("edgXmissingE", "eDgammaX Missing Energy", "", 100,-3,3, "Excl");
-    edgXmissingM2=createHisto("edgXmissingM2", "eDgammaX Missing Mass^2", "", 100,-0.6,0.6, "Excl");
-    edgXmissingP=createHisto("edgXmissingP", "eDgammaX Missing p", "", 100,0,2, "Excl");
-    edgXmissingPx=createHisto("edgXmissingPx", "eDgammaX Missing px", "", 100,-0.6,0.6, "Excl");
-    edgXmissingPy=createHisto("edgXmissingPy", "eDgammaX Missing py", "", 100,-0.6,0.6, "Excl");
-    edgXmissingPz=createHisto("edgXmissingPz", "eDgammaX Missing pz", "", 100,-3,3, "Excl");
-    pPerphisto=createHisto("edgXmissingpPerp", "eDgammaX pPerp", "", 100,0,0.8, "Excl");
+    edgXmissingE =createHisto("edgXmissingE", "eD"+gm+"X Missing Energy", "", 100,-3,3, "Excl");
+    edgXmissingM2=createHisto("edgXmissingM2", "eD"+gm+"X Missing Mass^2", "", 100,-0.6,0.6, "Excl");
+    edgXmissingP=createHisto("edgXmissingP", "eD"+gm+"X Missing p", "", 100,0,2, "Excl");
+    edgXmissingPx=createHisto("edgXmissingPx", "eD"+gm+"X Missing px", "", 100,-0.6,0.6, "Excl");
+    edgXmissingPy=createHisto("edgXmissingPy", "eD"+gm+"X Missing py", "", 100,-0.6,0.6, "Excl");
+    edgXmissingPz=createHisto("edgXmissingPz", "eD"+gm+"X Missing pz", "", 100,-3,3, "Excl");
+    pPerphisto=createHisto("edgXmissingpPerp", "eD"+gm+"X pPerp", "", 100,0,0.8, "Excl");
 
-    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eDgammaX Missing Energy with proton", "", 100,-3,3, "Excl");
-    edgXmissingM2_mis=createHisto("edgXmissingM2_mis", "edgammaX Missing Mass^2 with proton", "", 100,-0.6,0.6, "Excl");
-    edgXmissingP_mis=createHisto("edgXmissingP_mis", "eDgammaX Missing p with proton", "", 100,0,2, "Excl");
-    pPerphisto_mis=createHisto("edgXmissingpPerp_mis", "eDgammaX pPerp with proton", "", 100,0,0.8, "Excl");
+    edgXmissingE_mis =createHisto("edgXmissingE_mis", "eD"+gm+"X Missing Energy with proton", "", 100,-3,3, "Excl");
+    edgXmissingM2_mis=createHisto("edgXmissingM2_mis", "ed"+gm+"X Missing Mass^2 with proton", "", 100,-0.6,0.6, "Excl");
+    edgXmissingP_mis=createHisto("edgXmissingP_mis", "eD"+gm+"X Missing p with proton", "", 100,0,2, "Excl");
+    pPerphisto_mis=createHisto("edgXmissingpPerp_mis", "eD"+gm+"X pPerp with proton", "", 100,0,0.8, "Excl");
      //edX
     edXmissingE =createHisto("edXmissingE", "eDX Missing Energy", "", 100,0,10, "Excl");
     edXmissingM2=createHisto("edXmissingM2", "eDX Missing Mass^2", "", 100,-6,6, "Excl");//M_e_D_X^2 [GeV/c^2]^2
@@ -290,8 +290,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     edXmissingM2_D_vs_mis=createHisto("edXM2_vs_mis","eDXmissingM2 D vs mis D","","",100,-8,8,100,-8,8,"Excl");
     edXmissingM2_misvsegXmissingM2=createHisto("edXprotvsegX", "edXprotvsegX", "", "", 100, 0, 10, 100, -4, 4, "Excl");
     //egX
-    egXmissingM2=createHisto("egXmissingM2","egammaX Missing Mass2","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
-    egXmissingM=createHisto("egXmissingM","egammaX Mass","",100,-0,5, "Excl");//M_e_gamma_X [GeV/c^2]
+    egXmissingM2=createHisto("egXmissingM2","e"+gm+"X Missing Mass2","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
+    egXmissingM=createHisto("egXmissingM","e"+gm+"X Mass","",100,-0,5, "Excl");//M_e_gamma_X [GeV/c^2]
     egXmissingM2vsTh=createHisto("egXmissingM2vsTh","","","",100,0,140,100,0,10, "Excl");//egammaX MM^2 vs th
     egXmissingM2vsEg=createHisto("egXmissingM2vsEg","","","",100,0,12,100,0,10, "Excl");//egammaX MM^2 vs E gamma
     egXmissingM2vsPd=createHisto("egXmissingM2vsPd","","","",100,0,3,100,0,10, "Excl");//egammaX MM^2 vs p deut
@@ -299,17 +299,17 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM D vs mis D","","",100,0,5,100,0,5,"Excl");
     egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     //Phi planes
-    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and Dgamma", "", 100,-8,8, "Excl");
-    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2gamma", "", 100,-8,8, "Excl");
+    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and D"+gm, "", 100,-8,8, "Excl");
+    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2"+gm, "", 100,-8,8, "Excl");
     dphiPlanevsdphiPlane2=createHisto("phiPlanevsPhiPlane2", "phiPlane vs PhiPlane2", "", "", 100, -10, 10, 100, -10, 10, "Excl");
     //cone angles
-    ConeAngleHist=createHisto("ConeAngleHist", "Angle between gamma and missing eDX", "", 100,0,10, "Excl");
-    coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eDGammaX MM2 vs thgammaX", "", ")", 100,0,15,100,-3,4, "Excl");
-    coneanglevsedXM2=createHisto("coneanglevsedXM2","edX MM2 vs thgammaX","","",100,0,15,100,-10,10, "Excl");
-    coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs thgammaX","","", 100,0,15,100,0,3,"Excl");
-    coneanglevsegXM2=createHisto("coneanglevsegXM2","egX MM2 vs thgammaX","","",100,0,15,100,0,7,"Excl");
+    ConeAngleHist=createHisto("ConeAngleHist", "Angle between "+gm+" and missing eDX", "", 100,0,10, "Excl");
+    coneanglevsedgXM2=createHisto("coneanglevsedgXM2", "eD"+gm+"X MM2 vs th"+gm+"X", "", ")", 100,0,15,100,-3,4, "Excl");
+    coneanglevsedXM2=createHisto("coneanglevsedXM2","edX MM2 vs th"+gm+"X","","",100,0,15,100,-10,10, "Excl");
+    coneanglevspperp=createHisto("coneanglevsPperp","Pperp vs th"+gm+"aX","","", 100,0,15,100,0,3,"Excl");
+    coneanglevsegXM2=createHisto("coneanglevsegXM2","egX MM2 vs th"+gm+"X","","",100,0,15,100,0,7,"Excl");
     
-    coneanglevsedXM2_mis=createHisto("coneanglevsedXM2_mis","MM2 edX vs thgammaX with proton","","",100,0,15,100,-10,10, "Excl");
+    coneanglevsedXM2_mis=createHisto("coneanglevsedXM2_mis","MM2 edX vs th"+gm+"X with proton","","",100,0,15,100,-10,10, "Excl");
    
     
     //Pid histograms
@@ -479,7 +479,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     //edXmissingM.fill(ev.X("eh").mass());
 
     edXmissingM2_mis.fill(ev.X_mis("eh").mass2());
-    edgXmissingE_D_vs_mis.fill(ev.X_mis("ehg").e(),ev.X("ehg").e());
+    edgXmissingE_D_vs_mis.fill(ev.X_mis(excl3part).e(),ev.X(excl3part).e());
     edXmissingM2_D_vs_mis.fill(ev.X_mis("eh").mass2(),ev.X("eh").mass2());
 
     
@@ -495,11 +495,18 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     pionmass2.fill(ev.vpion.mass2());
     //System.out.println(ev.vpion.mass2());
 //Xbj=ev.Xb();
-
-    photTh.fill(Math.toDegrees(ev.vphoton.theta()));
+    if(gm=="pion"){
+      photTh.fill(Math.toDegrees(ev.vpion.theta()));
+      photP.fill(ev.vpion.p());
+    }
+    else if(gm=="gamma"){
+      photTh.fill(Math.toDegrees(ev.vphoton.theta()));
+      photP.fill(ev.vphoton.p());
+    }
+    
     hadrTh.fill(Math.toDegrees(ev.vhadron.theta()));
     elecTh.fill(Math.toDegrees(ev.velectron.theta()));
-    photP.fill(ev.vphoton.p());
+    
     hadrP.fill(ev.vhadron.p());
     elecP.fill(ev.velectron.p());
     //DAngleGammaHist.fill(ev.DTheta());
