@@ -763,7 +763,8 @@ public class DvcsEvent {
     boolean cut = (-this.Q().mass2() > 1.0 // TEMP!!!!!!
         && this.Wp().mass() > 2
         && this.vhadron.p() < 2
-        && this.vphoton.e() > 2 // changed from 1//proton analysis was 1 not sure when we changed it to 2
+        && this.vphoton.e() > 1 // changed from 2//proton analysis was 1 not sure when we changed it to 2
+        //with the shift in FD cut in 2 reduces the statistics
         && this.angleBetweenElectronPhoton() > 8
         // && fiducialCutPhoton
         );
@@ -891,10 +892,13 @@ public class DvcsEvent {
       // coneangle cut in the PrelimExclusivitycut
       // && ((this.beta()-this.BetaCalc()) > (0.05*this.chi2pid()-0.25))
       /* && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()+0.25)) */
-      this.X("eh"+missingpart).mass2() > -0.25 && this.X("ehg").mass2() < 0.08 // >-0.75 was <0.25
-          && this.X("eh"+missingpart).e() < 2// was 3 //was 2// probably removing pions
+      //tight this.X("eh"+missingpart).mass2() > -0.25 && this.X("ehg").mass2() < 0.08
+      //tight && this.X("eh"+missingpart).e() < 2// was 3 //was 2// probably removing pions
+      //tight && this.X("eh"+missingpart).p() < 0.3// was 1.5 //was 0.8
+      this.X("eh"+missingpart).mass2() > -0.75 && this.X("ehg").mass2() < 0.25 // >-0.75 was <0.25
+          && this.X("eh"+missingpart).e() < 3
           && this.pPerp(missingpart) < 0.5 
-          && this.X("eh"+missingpart).p() < 0.3// was 1.5 //was 0.8
+          && this.X("eh"+missingpart).p() < 0.8
           && this.X("e"+missingpart).mass2()<4.5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
