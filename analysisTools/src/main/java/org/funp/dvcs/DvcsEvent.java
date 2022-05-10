@@ -600,7 +600,8 @@ public class DvcsEvent {
           //System.out.println(beta);
           //System.out.println(ctofen);
           //System.out.println(dedxDeutCTOF);
-          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
+          //if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
+          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 3 ) {
           //if (beta > 0.16 && ctofen > 5 ) {
             //System.out.println("good 45");
             // THis is for no ML
@@ -609,7 +610,8 @@ public class DvcsEvent {
                 particles.getFloat("py", npart),
                 particles.getFloat("pz", npart),
                 this.MNUC);
-            if (vtmp.e() > this.d_en_max) {
+            //if (vtmp.e() > this.d_en_max) {
+              if (vtmp.e() > this.d_en_max && vtmp.p()>0.4) {
               nd = npart;
               this.d_en_max = vtmp.e();
             }
