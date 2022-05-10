@@ -113,6 +113,7 @@ public class DvcsHisto {
   
   public H1F egXmissingM2_mis;
   public H2F egXmissingM_D_vs_mis;
+  public H2F egXmissingM2_misvsPd;
 
   public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
   public H1F DeltaPhiPlaneMattHist;//angle planes Q2/hadron and Q2/gamma
@@ -298,6 +299,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     egXmissingM2vstfx=createHisto("egXmissingM2vstfx","","","",100,0,2,100,0,10, "Excl");//egammaX MM^2 vs PhiPlane2
     egXmissingM_D_vs_mis=createHisto("egXmissingM_D_vs_mis","egXmissingM D vs mis D","","",100,0,5,100,0,5,"Excl");
     egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
+    egXmissingM2_misvsPd=createHisto("egXmissingM2_misvsPd","egammaX Missing Mass^2 with proton vs P deut","","",100,0,3,100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     //Phi planes
     DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and D"+gm, "", 100,-8,8, "Excl");
     DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2"+gm, "", 100,-8,8, "Excl");
@@ -456,6 +458,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       egXmissingM.fill(ev.X(excl2part).mass());
 
       egXmissingM2_mis.fill(ev.X_mis(excl2part).mass2());
+      egXmissingM2_mis.fill(ev.vhadron.p(),ev.X_mis(excl2part).mass2());
       egXmissingM_D_vs_mis.fill(ev.X_mis(excl2part).mass(),ev.X(excl2part).mass());
       edXmissingM2_misvsegXmissingM2.fill(ev.X(excl2part).mass2(),ev.X_mis(excl2part).mass2());
 
