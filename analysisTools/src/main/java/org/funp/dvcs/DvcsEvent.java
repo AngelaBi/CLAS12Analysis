@@ -247,8 +247,8 @@ public class DvcsEvent {
       if (Math.abs(particles.getInt("status", ng)) >= 1000 && Math.abs(particles.getInt("status", ng)) < 2000) {
         // vphoton.print();
         // System.out.println("here");
-        vphoton = Correct_FT_E(vphoton, 0.0);
-        vphoton = Correct_FT_theta(vphoton);
+        //vphoton = Correct_FT_E(vphoton, 0.0); //XXXXX removing corrections
+        //vphoton = Correct_FT_theta(vphoton);
         // vphoton.print();
       } else {
         // System.out.println("here"+!processInput.getMCmode());
