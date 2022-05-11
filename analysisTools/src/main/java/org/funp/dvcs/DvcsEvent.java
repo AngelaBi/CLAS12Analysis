@@ -601,17 +601,18 @@ public class DvcsEvent {
           //System.out.println(ctofen);
           //System.out.println(dedxDeutCTOF);
           //if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 1) {
-          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 3 ) {
-          //if (beta > 0.16 && ctofen > 5 ) {
-            //System.out.println("good 45");
-            // THis is for no ML
-            ndeut++;
             vtmp.setPxPyPzM(particles.getFloat("px", npart),
                 particles.getFloat("py", npart),
                 particles.getFloat("pz", npart),
                 this.MNUC);
+          if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 3 &&  vtmp.p()>0.4 ) {
+          //if (beta > 0.16 && ctofen > 5 ) {
+            //System.out.println("good 45");
+            // THis is for no ML
+            ndeut++;
+            
             //if (vtmp.e() > this.d_en_max) {
-              if (vtmp.e() > this.d_en_max && vtmp.p()>0.4) {
+              if (vtmp.e() > this.d_en_max) {
               nd = npart;
               this.d_en_max = vtmp.e();
             }
@@ -952,14 +953,22 @@ public class DvcsEvent {
     // tmp.sub(velectron);
 
     //vector perp to hadron and the two electrons
-    Vector3 norm_Had_VPho = (vhadron.vect().cross(Q().vect()));
+    Vector3 norm_Had_VPho = (vhadron.vect().cross(Q().vect()));;
     //vector perp hadron and photon
     Vector3 norm_Had_Pho = (vhadron.vect().cross(vphoton.vect()));
+
+    deltaphi= Math.toDegrees(Math.acos(norm_Had_VPho.dot(norm_Had_Pho)/norm_Had_VPho.mag()/norm_Had_Pho.mag()));
     // deltaphi = Math.toDegrees(norm_Had_Pho.angle(norm_Had_VPho));
     //angle between the plane containing electrons and hadron and plane containing hadron and photn
-    deltaphi = norm_Had_Pho.theta(norm_Had_VPho);
+    //deltaphi = norm_Had_Pho.theta(norm_Had_VPho);
+    
     if (norm_Had_VPho.dot(vphoton.vect()) < 0)
       deltaphi = -1 * deltaphi;
+    // System.out.println(deltaphi); 
+    // System.out.println(norm_Had_VPho.mag()); 
+    // System.out.println(norm_Had_Pho.mag()); 
+    // vhadron.print();
+    // Q().print();
     return deltaphi;
   }
 
@@ -972,6 +981,8 @@ public class DvcsEvent {
     Vector3 norm_VPho_Pho = (this.Q().vect().cross(vphoton.vect()));
     // deltaphiplane = Math.toDegrees(norm_Had_VPho.angle(norm_VPho_Pho));
     deltaphiplane = norm_Had_VPho.theta(norm_VPho_Pho);
+    // Phi is always [0,180] but we want Phi's [0, 360] when hadronic plane
+    // is below leptonic
     if (norm_Had_VPho.dot(vphoton.vect()) < 0)
       deltaphiplane = -1 * deltaphiplane;
     return deltaphiplane;

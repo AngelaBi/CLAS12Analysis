@@ -77,7 +77,8 @@ public class DvcsHisto {
   public H1F thisto;
   public H1F tHhisto;
   public H1F tfxhisto;
-  public H2F tvstfx;
+  public H2F thvstfx;
+  public H2F dtvstfx;
 
   public H1F Phiplus;
   public H1F Phiminus;
@@ -268,7 +269,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tHhisto=createHisto("mtH","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tfxhisto=createHisto("mtfx","-t","-t [GeV/c]^2",100,0,2,"Kine");
-    tvstfx=createHisto("tvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
+    thvstfx=createHisto("thvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
+    dtvstfx=createHisto("dtvstfx", "dt vs t fx", "", "", 100, 0, 2, 100, -1, 1, "Kine");
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
     Phiminus=createHisto("Phiminus","Phi Minus","",10,0,360,"Asym");
     Phi=createHisto("Phi","Phi","",10,0,360,"Asym");
@@ -308,8 +310,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     egXmissingM2_mis=createHisto("egXmissingM2_mis","egammaX Missing Mass^2 with proton","",100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     egXmissingM2_misvsPd=createHisto("egXmissingM2_misvsPd","egammaX Missing Mass^2 with proton vs P deut","","",100,0,3,100,-0,10, "Excl");//M_e_gamma_X^2 [GeV/c^2]^2
     //Phi planes
-    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and D"+gm, "", 100,-8,8, "Excl");
-    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2"+gm, "", 100,-8,8, "Excl");
+    DeltaPhiPlaneHist=createHisto("DeltaPhiPlane", "Delta Phi between planes Q2D and D"+gm, "", 100,-6,6, "Excl");
+    DeltaPhiPlaneMattHist=createHisto("DeltaPhiPlane2", "Delta Phi between planes Q2D and Q2"+gm, "", 100,-6,6, "Excl");
     dphiPlanevsdphiPlane2=createHisto("phiPlanevsPhiPlane2", "phiPlane vs PhiPlane2", "", "", 100, -10, 10, 100, -10, 10, "Excl");
     //cone angles
     ConeAngleHist=createHisto("ConeAngleHist", "Angle between "+gm+" and missing eDX", "", 100,0,10, "Excl");
@@ -559,7 +561,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     thisto.fill(-1*ev.t().mass2());
     tHhisto.fill(-1*ev.tH().mass2());
     tfxhisto.fill(-1*ev.tFX());
-    tvstfx.fill(-1*ev.tFX(),-1*ev.t().mass2());
+    thvstfx.fill(-1*ev.tFX(),-1*ev.tH().mass2());
+    dtvstfx.fill(-1*ev.tFX(),ev.tH().mass2() -ev.tFX());
     pPerphisto.fill(ev.pPerp());
     pPerphisto_mis.fill(ev.pPerp_mis());
 
