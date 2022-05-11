@@ -59,6 +59,10 @@ public class DvcsHisto {
 
   public H1F PhiPlaneHist ; //angle between electrons plane and hadron/gamma plane
   public H1F DPhiHist ;//phi gamma minus phi missing hadron+e vector
+  public H1F DtHtFX ;//tH -tFX
+  public H1F DtHt ;//tH -t
+  public H1F DttFX ;//t-tFX
+
 
   public H1F ConeAngleBtElectronPhotonFD;
 
@@ -251,6 +255,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     
     PhiPlaneHist=createHisto("PhiPlaneHist", "PhiPlaneHist","",100,0,50,"Kine" );
     DPhiHist=createHisto("DPhiHist", "phi measured gamma minus phi of edX", "", 100,-180,180, "Excl");
+    DtHtFX=createHisto("DtHtFX", "DtHtFX","",100,-1,1,"Kine" );
+    DtHt=createHisto("DtHt", "DtHt","",100,-1,1,"Kine" );
+    DttFX=createHisto("DttFX", "DttFX","",100,-1,1,"Kine" );
     ConeAngleBtElectronPhotonFD=createHisto("ConeAngleBtElectronandPhoton", "Cone Angle Between Electron and Photon", "", 100,0,80, "Kine");
     phivshelicityPlus=createHisto("phivshelicityP", "phi vs helicity plus", "", "", 100,0,360,100,-4,4, "Kine");
     phivshelicityMinus=createHisto("phivshelicityM", "phi vs helicity minus", "", "", 100,0,360,100,-4,4, "Kine");
@@ -520,7 +527,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     DeltaPhiPlaneHist.fill(ev.deltaPhiPlane());
     DeltaPhiPlaneMattHist.fill(ev.deltaPhiPlane2());
     dphiPlanevsdphiPlane2.fill(ev.deltaPhiPlane2(),ev.deltaPhiPlane());
-
+    DtHtFX.fill(ev.tH().mass2() -ev.tFX());
+    DtHt.fill(ev.tH().mass2() -ev.t().mass2());
+    DttFX.fill(ev.t().mass2() -ev.tFX());
     
 
     ConeAngleBtElectronPhotonFD.fill(ev.angleBetweenElectronPhoton()); 
