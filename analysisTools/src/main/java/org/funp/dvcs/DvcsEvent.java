@@ -881,6 +881,7 @@ public class DvcsEvent {
               this.X("eh"+missingpart).e() < 1 // Was 2, not a big change of FT
               && this.pPerp(missingpart) < 0.5
               && this.X("eh"+missingpart).p() < 0.5// was 1.5
+              && this.tH().mass2() -this.tFX() >-0.24//NEW CUT on Delta t!
               //&& this.X("e"+missingpart).mass2()<5 //(trying to remove the peak at 5)
               // && Math.abs(this.chi2pid()) < 3.5
               // && this.X("eh").mass() < 1.5//was 0.7
@@ -901,6 +902,7 @@ public class DvcsEvent {
           && this.X("eh"+missingpart).e() < 3
           && this.pPerp(missingpart) < 0.5 
           && this.X("eh"+missingpart).p() < 0.8
+          && this.tH().mass2() -this.tFX() >-0.3//NEW CUT on Delta t!
           //&& this.X("e"+missingpart).mass2()<5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
