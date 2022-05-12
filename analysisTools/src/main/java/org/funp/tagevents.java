@@ -138,6 +138,9 @@ public class tagevents
 
 
       }
+      else if(processInput.getMCmode() ){
+        ev.BeamEnergy=10.607;
+      }
       else {
         System.out.println("Uknown beam energy for this run setting to default of so I am skipping this\n\n\n\n\n\n\n\n" );
       }
