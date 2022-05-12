@@ -694,7 +694,14 @@ public class DvcsEvent {
     return -(MNUC * q2 + 2 * MNUC * mu * (mu - THETA)) / (MNUC + mu - THETA);
 
   }
+  public double tFX_mis() {
+    double q2 = this.Q().mass2();
+    double mu = this.Q().e();
+    double costhetagvg = (this.Q().vect().dot(this.vphoton.vect())) / this.Q().vect().mag() / this.vphoton.vect().mag();
+    double THETA = Math.sqrt(Math.pow(mu, 2) + q2) * costhetagvg;
+    return -(MPROT * q2 + 2 * MPROT * mu * (mu - THETA)) / (MPROT + mu - THETA);
 
+  }
   public double pPerp() {
     double px = (this.vBeam.px() - this.velectron.px() - this.vhadron.px() - this.vphoton.px());
     double py = (this.vBeam.py() - this.velectron.py() - this.vhadron.py() - this.vphoton.py());
@@ -883,7 +890,7 @@ public class DvcsEvent {
               && this.pPerp(missingpart) < 0.5
               && this.X("eh"+missingpart).p() < 0.5// was 1.5
               && this.tH().mass2() -this.tFX() >-0.24 &&  this.tH().mass2() -this.tFX() <0.12//NEW CUT on Delta t!
-              && (this.tH().mass2() -this.tFX())>0.2-1.5*(-1*this.tFX())
+              //&& (this.tH().mass2() -this.tFX())>0.2-1.5*(-1*this.tFX())//NEW cut to remove low t Meh
               //&& this.X("e"+missingpart).mass2()<5 //(trying to remove the peak at 5)
               // && Math.abs(this.chi2pid()) < 3.5
               // && this.X("eh").mass() < 1.5//was 0.7
@@ -905,7 +912,7 @@ public class DvcsEvent {
           && this.pPerp(missingpart) < 0.5 
           && this.X("eh"+missingpart).p() < 0.8
           && this.tH().mass2() -this.tFX() >-0.3 &&  this.tH().mass2() -this.tFX() <0.09//NEW CUT on Delta t!
-          && (this.tH().mass2() -this.tFX())>0.-0.6*(-1*this.tFX())
+          //&& (this.tH().mass2() -this.tFX())>0.-0.6*(-1*this.tFX())//NEW CUT to remove low t MEH
           //&& this.X("e"+missingpart).mass2()<5 //(trying to remove the peak at 5)
           // && ((this.beta()-this.BetaCalc()) < (0.05*this.chi2pid()-0.1)
           // && Math.abs(this.chi2pid()) < 3.5
