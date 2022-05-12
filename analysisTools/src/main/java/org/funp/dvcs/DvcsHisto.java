@@ -77,6 +77,7 @@ public class DvcsHisto {
   public H1F thisto;
   public H1F tHhisto;
   public H1F tfxhisto;
+  public H1F tfxhisto_mis;
   public H2F thvstfx;
   public H2F dtvstfx;
 
@@ -229,7 +230,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     Q2=createHisto("Q2","Q2","Q^2 [GeV/c^2]^2",100, 0.1, 4.0,"Kine");
 
     hadrP=createHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
-    photP=createHisto("photP", gm+" Energy","E #gamma",100,0,12,"Kine");
+    photP=createHisto("photP", gm+" Energy","E "+gm,100,0,12,"Kine");
     elecP=createHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
     hadrTh=createHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"Kine");
     elecTh=createHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"Kine");
@@ -269,6 +270,8 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     thisto=createHisto("mt","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tHhisto=createHisto("mtH","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tfxhisto=createHisto("mtfx","-t","-t [GeV/c]^2",100,0,2,"Kine");
+    tfxhisto_mis=createHisto("mtfx_mis","-t","-t [GeV/c]^2",100,0,2,"Kine");
+
     thvstfx=createHisto("thvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
     dtvstfx=createHisto("dtvstfx", "dt vs t fx", "", "", 100, 0, 2, 100, -1, 1, "Kine");
     Phiplus=createHisto("Phiplus","Phi Plus","",10,0,360,"Asym");
@@ -561,6 +564,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     thisto.fill(-1*ev.t().mass2());
     tHhisto.fill(-1*ev.tH().mass2());
     tfxhisto.fill(-1*ev.tFX());
+    tfxhisto_mis.fill(-1*ev.tFX_mis());
     thvstfx.fill(-1*ev.tFX(),-1*ev.tH().mass2());
     dtvstfx.fill(-1*ev.tFX(),ev.tH().mass2() -ev.tFX());
     pPerphisto.fill(ev.pPerp());
