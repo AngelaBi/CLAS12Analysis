@@ -9,7 +9,7 @@ import org.jlab.jnp.hipo4.data.*;
 //---- imports for PHYSICS library
 //import org.jlab.jnp.physics.*;
 //import org.jlab.jnp.reader.*;
-
+import org.apache.commons.lang.ObjectUtils.Null;
 import org.funp.dvcs.*; 
 import org.funp.utilities.*;
 import java.io.FileNotFoundException;
@@ -92,16 +92,23 @@ public class tagevents
     while(reader.hasNext()==true){
         Bank  particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
         Bank  scint     = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
-        Bank  scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+        Bank  scintExtras = null;
+        if(!processInput.getRGAmode()){
+        scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+        }
+        else scintExtras=scint;
         Bank  calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
         Bank  runEvent       = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
 
         reader.nextEvent(event);
         event.read(particles);
 	      event.read(scint);
-        event.read(scintExtras);
+        if(!processInput.getRGAmode()){
+          event.read(scintExtras);
+          }
+        
         event.read(runEvent);
-	event.read(runconfig);
+	      event.read(runconfig);
         totalcounter++;
         if (runMap.get(runNumber).get(0) == 0.0 && runMap.get(runNumber).get(1) == 0.0){//all events are good
                 
@@ -133,13 +140,6 @@ public class tagevents
         System.out.println("total counter: " + totalcounter);
         System.out.println("total e d gamma events: " + ndegamma);
         reader.close();
-
-
-
-
-      }
-      else if(processInput.getMCmode() ){
-        ev.BeamEnergy=10.607;
       }
       else {
         System.out.println("Uknown beam energy for this run setting to default of so I am skipping this\n\n\n\n\n\n\n\n" );
