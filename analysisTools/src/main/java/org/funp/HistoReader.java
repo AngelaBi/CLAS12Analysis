@@ -111,8 +111,7 @@ public class HistoReader {
     // TCanvas ect1pi0 = new TCanvas("AsymtFTpi0", 1200, 500);
     // drawAsymtbinspi0(ect1pi0, hAC);
 
-    TCanvas ecasym = new TCanvas("Asym"+detector, 500, 500);
-    drawAsym(ecasym, hAC);
+    
     
     TCanvas oc = new TCanvas("other cuts"+detector, 1200, 500);
     displayOthercuts(oc,hAC);
@@ -120,6 +119,8 @@ public class HistoReader {
     TCanvas bc = new TCanvas("binning"+detector,1200,500);
     ShowBinning(bc,hAC);
  
+    TCanvas ecasym = new TCanvas("Asym"+detector, 500, 500);
+    drawAsym(ecasym, hAC);
   
   // TCanvas ec4 = new TCanvas("ExclDCFD", 1400, 1200);
   // displayExcCuts(ec4, hDCFD,"FD");
@@ -621,16 +622,20 @@ public class HistoReader {
 
   public static void ShowBinning(TCanvas c, DvcsHisto h){
     c.divide(3, 1);
-    c.cd(0).draw(h.tfxhisto);
-    drawCut(h.tbins[1], h.tfxhisto, c, 0);
-    drawCut(h.tbins[2], h.tfxhisto, c, 0);
-    drawCut(h.tbins[3], h.tfxhisto, c, 0);
+    c.cd(0).draw(h.thisto);
+    h.thisto.setOptStat(111111);
+    drawCut(h.tbins[1], h.thisto, c, 0);
+    drawCut(h.tbins[2], h.thisto, c, 0);
+    drawCut(h.tbins[3], h.thisto, c, 0);
     c.cd(1).draw(h.Q2);
+    h.Q2.setOptStat(111111);
     drawCut(h.q2bins[1], h.Q2, c,1);
     drawCut(h.q2bins[2], h.Q2, c, 1);
     drawCut(h.q2bins[3], h.Q2, c, 1);
+
     
     c.cd(2).draw(h.Xbj);
+    h.Xbj.setOptStat(111111);
     drawCut(h.xbbins[1], h.Xbj, c,2);
     drawCut(h.xbbins[2], h.Xbj, c, 2);
     drawCut(h.xbbins[3], h.Xbj, c, 2);
