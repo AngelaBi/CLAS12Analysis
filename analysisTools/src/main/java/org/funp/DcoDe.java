@@ -166,7 +166,12 @@ public class DcoDe {
           Bank particles = new Bank(reader.getSchemaFactory().getSchema("REC::Particle"));
           Bank runEvent = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
           Bank scint = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
-          Bank scintExtras = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+          Bank scintExtras=null;
+          if(!processInput.getRGAmode()){
+            scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
+            }
+            else scintExtras=scint;
+          //Bank scintExtras = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
           Bank calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
           // runconfig = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
           goodEvent = 0;
