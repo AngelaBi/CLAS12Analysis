@@ -815,10 +815,10 @@ public class DvcsEvent {
           // (this.X("eh").mass2() < (-20/6* this.coneangle()+10) This is a test for when
           // i do tag evetns
           (this.X("eh").mass2() < (-1.5 * this.coneangle(missingpart) + 2)
-              && this.X("eh").mass2() > -1);
+              && this.X("eh").mass2() > -1 && this.X("eh").mass2()<1);
     } else if (conf == 2) {
       cut = (this.X("eh").mass2() < (-1 * this.coneangle(missingpart) + 2)
-          && this.X("eh").mass2() > -1
+          && this.X("eh").mass2() > -1 && this.X("eh").mass2()<1
       // && this.X("eg").mass2()< +12-1.5*this.coneangle()
       );
     }
