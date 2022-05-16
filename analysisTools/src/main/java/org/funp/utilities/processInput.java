@@ -25,6 +25,7 @@ public class processInput {
 	public List<String> filenames = new ArrayList<String>();
 	public String OutputLocation=new String(".");
 	private static boolean MCmode=false;
+	private static boolean RGAmode=false;
 	private static boolean nTmode=false;
 	private static boolean MLmode=false;
 	private static boolean pass0=false;
@@ -45,6 +46,7 @@ public class processInput {
 		options.addOption("pi0","pion0",false,"Enable pi0 analysis");
 		options.addOption("dt", "detectortype", true, "Set FT/FD in historeader");
 		options.addOption("ct", "cuttype", true, "Set DC/CC/AC in historeader");
+		options.addOption("rga", "rgafiles", false, "enable rga mode");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -73,6 +75,10 @@ public class processInput {
 			if (cmd.hasOption("MC")){
 				System.out.println("setting MC mode");
 				MCmode=true;
+			}
+			if (cmd.hasOption("rga")){
+				System.out.println("setting rga mode");
+				RGAmode=true;
 			}
 			if (cmd.hasOption("nT")){
 				System.out.println("setting no tags mode");
@@ -210,6 +216,9 @@ public class processInput {
 	}
 	public static boolean  getMCmode(){
 		return MCmode;
+	}
+	public static boolean  getRGAmode(){
+		return RGAmode;
 	}
 
 	public static boolean getnTmode(){
