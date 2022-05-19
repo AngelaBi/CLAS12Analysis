@@ -80,6 +80,7 @@ public class DvcsHisto {
   public H1F tfxhisto_mis;
   public H2F thvstfx;
   public H2F dtvstfx;
+  public H2F chisqHadvstH;
 
   public H1F Phiplus;
   public H1F Phiminus;
@@ -142,7 +143,6 @@ public class DvcsHisto {
   public H2F deltabetavschi2;//y
   public H1F deltabeta;//y
   public H2F ctofdedxvsp;
-  public H2F dedxDeutvsP;
   public H2F dedxCTOFvsP;
   public H2F dedxCNDvsP;
 
@@ -271,6 +271,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     tHhisto=createHisto("mtH","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tfxhisto=createHisto("mtfx","-t","-t [GeV/c]^2",100,0,2,"Kine");
     tfxhisto_mis=createHisto("mtfx_mis","-t","-t [GeV/c]^2",100,0,2,"Kine");
+    chisqHadvstH=createHisto("chisqHadvstH","chisqHadvstH","","",100,0,2,100,-25,25,"Kine");
 
     thvstfx=createHisto("thvstfx", "t vs t fx", "", "", 100, 0, 2, 100, 0, 2, "Kine");
     dtvstfx=createHisto("dtvstfx", "dt vs t fx", "", "", 100, 0, 2, 100, -1, 1, "Kine");
@@ -331,10 +332,9 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     betacalchisto=createHisto("betacalc","beta calc","beta calculated from relativistic momentum",100,0,1,"Pid");
     betacalcvsP=createHisto("BetaCalcvsP","Beta calc vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
     betavsP=createHisto("BetavsP","Beta vs P", "", "", 100,0,10.2,100,0,1.1, "Pid");
-    deltabetavschi2=createHisto("Deltabeta_dvschi2PID","Deltabeta_d vs chi^2 PID", "chi^2 PID", "Deltabeta_d", 100,-30,30,100,-0.6,0., "Pid");
-    deltabeta=createHisto("BetamBetaCalc", "Beta - BetaCalc", "" ,100,-0.6,0., "Pid");
+    deltabetavschi2=createHisto("Deltabeta_dvschi2PID","Deltabeta_d vs chi^2 PID", "chi^2 PID", "Deltabeta_d", 100,-30,30,100,-0.6,0.6, "Pid");
+    deltabeta=createHisto("BetamBetaCalc", "Beta - BetaCalc", "" ,100,-0.6,0.6, "Pid");
     ctofdedxvsp=createHisto("ctofdedxvsp", "ctofdedxvsp", "", "", 100,0,2,100,0,100, "Pid");
-    dedxDeutvsP =createHisto("dedxDeutvsP","de/dx Deut vs P", "", "", 100,0,2,100,0,30, "Pid");
     dedxCTOFvsP= createHisto("dedxCTOFvsP", "de/dx CTOF vs P", "","",100,0,2,100,0,30, "Pid");
     dedxCNDvsP=createHisto("dedxCNDvsP", "de/dx CND vs P", "", "", 100,0,2,100,0,30, "Pid");
     photThgvElecTh=createHisto("photThgvElecTh", "th_{#gamma} vs th_e", "", "", 100, 0, 40, 100, 0, 40, "Kine");
@@ -437,7 +437,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 
     dedxCTOFvsP.fill(ev.vhadron.p(),ev.dedxDeutCTOF);
     dedxCNDvsP.fill(ev.vhadron.p(),ev.dedxDeutCND);
-  
+   
     
     XvsY_electron.fill(ev.elec_x,ev.elec_y);
    // XvsY_electron_after.fill(ev.elec_x,ev.elec_y);
@@ -554,9 +554,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 
     targetmass.fill(ev.vTarget.mass());
     hadronmass.fill(ev.vhadron.mass());
-    dedxDeutvsP.fill(ev.vhadron.p(),ev.getDedxDeut());
+    
     chisqHad.fill(ev.chi2pid());
     deltabetavschi2.fill(ev.chi2pid(),ev.beta()-ev.BetaCalc());
+    chisqHadvstH.fill(-1*ev.tH().mass2(),ev.chi2pid());
     
 
     helicityhisto.fill(ev.helicity);
