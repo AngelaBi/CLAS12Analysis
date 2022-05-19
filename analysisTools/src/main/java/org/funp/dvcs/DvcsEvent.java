@@ -837,13 +837,22 @@ public class DvcsEvent {
   }
   public boolean VertexCut(int runNumber){
     boolean vertexCut = false;
-    if (runNumber < 6700 && vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron)
+    if(processInput.getRGAmode()){
+      if ( vertexElectron > -4 && vertexElectron < -1 && vertexElectron > (-1.5 + vertexDeuteron)
+      && vertexElectron < (1.5 + vertexDeuteron)) {
+    vertexCut = true;
+      } 
+    }
+    else{
+    if ( vertexElectron > -6 && vertexElectron < 0 && vertexElectron > (-1.5 + vertexDeuteron)
     && vertexElectron < (1.5 + vertexDeuteron)) {
   vertexCut = true;
-} else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
-    && vertexElectron < (1.8 + vertexDeuteron)) {
-  vertexCut = true;
-}
+    } 
+// else if (runNumber > 6700 && vertexElectron > -7 && vertexElectron < 0 && vertexElectron > (-1.8 + vertexDeuteron)
+//     && vertexElectron < (1.8 + vertexDeuteron)) {
+//   vertexCut = true;
+// }
+    }
   return vertexCut;
   }
   public boolean PIDdeutCut(){
@@ -1146,9 +1155,7 @@ public class DvcsEvent {
     return vertexDeuteron;
   }
 
-  public double getDedxDeut() {
-    return dedxDeutCTOF;
-  }
+
 
   public static Map<Integer, List<Integer>> loadMapByIndex(
       Bank fromBank,
