@@ -470,7 +470,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       egXmissingM.fill(ev.X(excl2part).mass());
 
       egXmissingM2_mis.fill(ev.X_mis(excl2part).mass2());
-      egXmissingM2_mis.fill(ev.vhadron.p(),ev.X_mis(excl2part).mass2());
+      egXmissingM2_misvsPd.fill(ev.vhadron.p(),ev.X_mis(excl2part).mass2());
       egXmissingM_D_vs_mis.fill(ev.X_mis(excl2part).mass(),ev.X(excl2part).mass());
       edXmissingM2_misvsegXmissingM2.fill(ev.X(excl2part).mass2(),ev.X_mis(excl2part).mass2());
 
