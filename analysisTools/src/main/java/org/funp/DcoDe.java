@@ -296,7 +296,8 @@ public class DcoDe {
         // (Math.toDegrees(ev.vphoton.theta())<5) Math.abs(ev.deltaPhiPlane2())<20
         // (ev.beta()-ev.BetaCalc())>-0.3 && Math.abs(ev.deltaPhiPlane())<1 && &&
         // (ev.beta()-ev.BetaCalc())>-0.3
-        if(pionCut  && ev.X_mis("eh").mass2()<-0.4){//XX add true if you don't want to exclude pions 
+        //if(pionCut  && ev.X_mis("eh").mass2()<-0.4){
+        if(pionCut ){//XX add true if you don't want to exclude pions 
         //XX added a cut to remove protons
         // if (ev.GetConf() == 1) {
         //   hPCFT.fillBasicHisto(ev);
