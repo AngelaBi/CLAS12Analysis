@@ -521,6 +521,7 @@ public class DvcsEvent {
 
           // }
         } else if (pid == 2212 && Math.abs(status) >= 4000) {
+          System.out.println("found proton");
           dedxDeutCTOF_prot = -999999;
           dedxDeutCND_prot = -999999;
           vtmp.setPxPyPzM(particles.getFloat("px", npart),
