@@ -563,7 +563,7 @@ public class DvcsEvent {
         // status 4000 is FD
         // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
         else if (pid == PIDNUC && Math.abs(status) >= 4000) {
-          System.out.println("found proton");
+          //System.out.println("found proton");
 
           dedxDeutCTOF = -999999;
           dedxDeutCND = -999999;
