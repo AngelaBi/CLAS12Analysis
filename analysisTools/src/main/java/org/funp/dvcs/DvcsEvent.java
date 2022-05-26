@@ -80,9 +80,9 @@ public class DvcsEvent {
   double el_en_max = 0;
   double ph_en_max = 0;
   double d_en_max = 0;
-  int PIDNUC = 45;
+  //int PIDNUC = 45;
   //TMP
-  //int PIDNUC=2212;
+  int PIDNUC=2212;
   int nelec = 0;
   int nphot = 0;
   int ndeut = 0;
