@@ -88,25 +88,25 @@ public class DvcsHisto {
   public H2F tvsPhi;
 
   //Exclusivity plots - All these are in Missing quant folder
-  public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingE; // missing energy of a complete DVCS final state e hadron gamma
   public H1F edgXmissingM2 ; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingP ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingP ; // missing momentum of a complete DVCS final state e hadron gamma
   public H1F edgXmissingPx;// missing px of a complete DVCS final state e hadron gamma
   public H1F edgXmissingPy;// missing py of a complete DVCS final state e hadron gamma
   public H1F edgXmissingPz;// missing pz of a complete DVCS final state e hadron gamma
   public H1F pPerphisto;
 
-  public H1F edgXmissingE_mis; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingM2_mis ; // missing mass of a complete DVCS final state e hadron gamma
-  public H1F edgXmissingP_mis ; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingE_mis; //
+  public H1F edgXmissingM2_mis ; // 
+  public H1F edgXmissingP_mis ; // 
   public H1F pPerphisto_mis;
 
-  public H1F edXmissingE;
+  public H1F edXmissingE; // missing energy of hadron electron final state (to be compared with gamma)
   public H1F edXmissingM2; // missing mass of hadron electron final state (to be compared with gamma)
   public H1F edXmissingTh;//theta missing hadron+e vector
   //public H1F edXmissingM;
 
-  public H1F edXmissingM2_mis; // missing mass of hadron electron final state (to be compared with gamma)
+  public H1F edXmissingM2_mis; // missing mass of hadron electron final state (to be compared with gamma) using proton target
   
   public H2F edgXmissingE_D_vs_mis;
   public H2F edXmissingM2_D_vs_mis;
