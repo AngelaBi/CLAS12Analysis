@@ -30,6 +30,8 @@ public class processInput {
 	private static boolean MLmode=false;
 	private static boolean pass0=false;
 	private static boolean pi0mode=false;
+	private static boolean pDVCSmode=false;
+	private static boolean fakeDmode=false;
 	public processInput(String[] args) {
 
 		this.args = args;
@@ -46,7 +48,12 @@ public class processInput {
 		options.addOption("pi0","pion0",false,"Enable pi0 analysis");
 		options.addOption("dt", "detectortype", true, "Set FT/FD in historeader");
 		options.addOption("ct", "cuttype", true, "Set DC/CC/AC in historeader");
+		//rga mode fix the proble with the scintextra bank in rgb but not rga, also apply a different vertex cut to
+		//remove the target windows
 		options.addOption("rga", "rgafiles", false, "enable rga mode");
+		options.addOption("pDVCS","protonDVCS",false,"Enable proton DVCS analysis with target and final state set to proton");
+		//To study protons identified as deutorons in rga data
+		options.addOption("fakeD","fakeDeuterons",false,"This select PID 45 even in the pDVCS mode in rga");
 		this.parse();
 		this.GetFileNames(this.FileListName);
 		//String inputParam.DataLocation="/Users/biselli/Data/clas12/rgB/pass0v16/";
@@ -95,6 +102,14 @@ public class processInput {
 			if (cmd.hasOption("pi0")){
 				System.out.println("pi0 analysis");
 				pi0mode = true;
+			}
+			if (cmd.hasOption("pDVCS")){
+				System.out.println("pDVCS analysis");
+				pDVCSmode = true;
+			}
+			if (cmd.hasOption("fakeD")){
+				System.out.println("fake Deuterons analysis");
+				fakeDmode = true;
 			}
 			if (cmd.hasOption("o")) {
 				//System.out.println("here"+cmd.getOptionValue("l"));
@@ -233,6 +248,12 @@ public class processInput {
 	}
 	public static boolean getPi0mode(){
 		return pi0mode;
+	}
+	public static boolean getpDVCSmode(){
+		return pDVCSmode;
+	}
+	public static boolean getfakeDmode(){
+		return fakeDmode;
 	}
 	public String getFileName(int i){
 		//String tmp=new String();

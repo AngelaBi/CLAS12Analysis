@@ -47,19 +47,21 @@ public class DvcsEvent {
   }
 
 
-  //double MNUC = 1.875612;
+  
   //TMP
-  double MNUC =0.93828;
+  //double MNUC =0.93828;
   double MPIONP = 0.139570;
   double MPION = 0.1349768;
   double MKAON = 0.4977;
   double MPROT = 0.93828;
+  double MNUC = 1.875612;
+  double MHADR=MNUC;
   
   // Dmass = 1.8756;
   // double MNUC=0.938;
   public double BeamEnergy = 10.1998;
   public LorentzVector vBeam = new LorentzVector(0.0, 0.0, BeamEnergy, BeamEnergy);
-  public LorentzVector vTarget = new LorentzVector(0.0, 0.0, 0.0, MNUC);
+  public LorentzVector vTarget = new LorentzVector(0.0, 0.0, 0.0, MHADR);
   public LorentzVector vTargetP = new LorentzVector(0.0, 0.0, 0.0, MPROT);
   public LorentzVector velectron = new LorentzVector();
   public LorentzVector vphoton = new LorentzVector();
@@ -80,9 +82,11 @@ public class DvcsEvent {
   double el_en_max = 0;
   double ph_en_max = 0;
   double d_en_max = 0;
-  //int PIDNUC = 45;
+  int PIDNUC = 45;
+  int PIDPROT=2212;
+  int PIDHADR=PIDNUC;
   //TMP
-  int PIDNUC=2212;
+  //int PIDNUC=2212;
   int nelec = 0;
   int nphot = 0;
   int ndeut = 0;
@@ -144,13 +148,19 @@ public class DvcsEvent {
 
   public DvcsEvent() {
     // This constructor no parameter.
-    // System.out.println("setting the default DVCS event for hadron :" + MNUC );
+    if(processInput.getpDVCSmode()){
+      MHADR=MPROT;
+      if(!processInput.getfakeDmode())PIDHADR=2212;
+      vTarget.setPxPyPzM(0.0, 0.0, 0.0, MHADR);
+    }
+    System.out.println("setting the default DVCS event for hadron :" + MHADR );
+    System.out.println("setting the default PID of the hadron in the final state:" + PIDHADR );
   }
 
   public DvcsEvent(double mass) {
     // This constructor no parameter.
-    MNUC = mass;
-    System.out.println("setting the default DVCS event for hadron :" + MNUC);
+    MHADR = mass;
+    System.out.println("setting the default DVCS event for hadron :" + MHADR);
   }
 
   public void setElectron(Bank particles, Bank calos, int ne) {
@@ -349,7 +359,7 @@ public class DvcsEvent {
     vhadron.setPxPyPzM(particles.getFloat("px", nh),
         particles.getFloat("py", nh),
         particles.getFloat("pz", nh),
-        this.MNUC);
+        this.MHADR);
     vhadron_mis.setPxPyPzM(particles.getFloat("px", nh),
         particles.getFloat("py", nh),
         particles.getFloat("pz", nh),
@@ -562,7 +572,7 @@ public class DvcsEvent {
         }
         // status 4000 is FD
         // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
-        else if (pid == PIDNUC && Math.abs(status) >= 4000) {
+        else if (pid == PIDHADR && Math.abs(status) >= 4000) {
           //System.out.println("found proton");
 
           dedxDeutCTOF = -999999;
@@ -596,7 +606,7 @@ public class DvcsEvent {
           vtmp.setPxPyPzM(particles.getFloat("px",npart),
           particles.getFloat("py",npart),
           particles.getFloat("pz",npart),
-          this.MNUC);
+          this.MHADR);
           builder.append(vtmp.p() + ",");
           builder.append("1\n");
           }
@@ -607,7 +617,7 @@ public class DvcsEvent {
             vtmp.setPxPyPzM(particles.getFloat("px", npart),
                 particles.getFloat("py", npart),
                 particles.getFloat("pz", npart),
-                this.MNUC);
+                this.MHADR);
           if (beta > 0.16 && ctofen > 5 && dedxDeutCTOF > 3 &&  vtmp.p()>0.4 ) {
           //if (beta > 0.16 && ctofen > 5 ) {
             //System.out.println("good 45");
@@ -694,7 +704,7 @@ public class DvcsEvent {
     double mu = this.Q().e();
     double costhetagvg = (this.Q().vect().dot(this.vphoton.vect())) / this.Q().vect().mag() / this.vphoton.vect().mag();
     double THETA = Math.sqrt(Math.pow(mu, 2) + q2) * costhetagvg;
-    return -(MNUC * q2 + 2 * MNUC * mu * (mu - THETA)) / (MNUC + mu - THETA);
+    return -(MHADR * q2 + 2 * MHADR * mu * (mu - THETA)) / (MHADR + mu - THETA);
 
   }
   public double tFX_mis() {
@@ -1131,7 +1141,7 @@ public class DvcsEvent {
   }
 
   public double BetaCalc() {
-    double betaCalc = vhadron.p() / Math.sqrt(MNUC * MNUC + vhadron.p() * vhadron.p());
+    double betaCalc = vhadron.p() / Math.sqrt(MHADR * MHADR + vhadron.p() * vhadron.p());
     return betaCalc;
   }
 
