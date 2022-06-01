@@ -530,7 +530,7 @@ public class DvcsEvent {
           // else if(status>=2000 && status<4000)conf=2;
 
           // }
-        } else if (pid == 1010101 && Math.abs(status) >= 4000) {//sub with 2212
+        } else if (pid == 0000000000 && Math.abs(status) >= 4000) {//sub with 2212
           dedxDeutCTOF_prot = -999999;
           dedxDeutCND_prot = -999999;
           vtmp.setPxPyPzM(particles.getFloat("px", npart),
@@ -574,7 +574,7 @@ public class DvcsEvent {
         // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
         else if (pid == PIDHADR && Math.abs(status) >= 4000) {
           //System.out.println("found proton");
-
+          System.out.println("found pid45");
           dedxDeutCTOF = -999999;
           dedxDeutCND = -999999;
           ctofen = -10;
