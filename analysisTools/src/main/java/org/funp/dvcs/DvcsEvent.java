@@ -150,7 +150,8 @@ public class DvcsEvent {
     // This constructor no parameter.
     if(processInput.getpDVCSmode()){
       MHADR=MPROT;
-      if(!processInput.getfakeDmode())PIDHADR=2212;
+      PIDHADR=PIDPROT;
+      if(processInput.getfakeDmode())PIDHADR=PIDNUC;
       vTarget.setPxPyPzM(0.0, 0.0, 0.0, MHADR);
     }
     System.out.println("setting the default DVCS event for hadron :" + MHADR );
