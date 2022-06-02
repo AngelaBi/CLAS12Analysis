@@ -29,11 +29,11 @@ public class tagevents
   static StringBuilder builder;
   public static void main( String[] args ) throws FileNotFoundException, IOException
   {
-
+    processInput inputParam=new processInput(args);
     event = new Event();
     ev    = new DvcsEvent();
     runMap = runUtil.createMapGagikStyle();
-    processInput inputParam=new processInput(args);
+    
     //ev.setArgs(args);
     //ev.isML(processInput.getMLmode());
     //runUtil runInfo=new runUtil();
