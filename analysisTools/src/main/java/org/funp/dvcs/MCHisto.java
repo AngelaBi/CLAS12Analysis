@@ -150,7 +150,7 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
     WvsQ2.fill(ev.W().mass(),-ev.Q().mass2());
     Q2vsXbj.fill(ev.Xb(),-ev.Q().mass2());
     tvsq2.fill( -1*ev.Q().mass2(),-1*ev.t().mass2());
-thisto.fill(-1*ev.t().mass2());
+    thisto.fill(-1*ev.t().mass2());
     MomentumX_elec.fill(ev.velectron.px());
     MomentumY_elec.fill(ev.velectron.py());
     MomentumZ_elec.fill(ev.velectron.pz());
@@ -272,15 +272,15 @@ thisto.fill(-1*ev.t().mass2());
     rootdir.mkdir(sub[0]);
     rootdir.cd(sub[0]);
     rootdir.addDataSet(MomentumX_elec);
-    rootdir.addDataSet(MomentumX_elec);
-    rootdir.addDataSet(MomentumX_elec);
+    rootdir.addDataSet(MomentumY_elec);
+    rootdir.addDataSet(MomentumZ_elec);
     rootdir.addDataSet(MomentumX_phot);
-    rootdir.addDataSet(MomentumX_phot);
+    rootdir.addDataSet(MomentumY_phot);
 
-    rootdir.addDataSet(MomentumX_phot);
+    rootdir.addDataSet(MomentumZ_phot);
+    rootdir.addDataSet(MomentumX_deut);
     rootdir.addDataSet(MomentumY_deut);
-    rootdir.addDataSet(MomentumY_deut);
-    rootdir.addDataSet(MomentumY_deut);
+    rootdir.addDataSet(MomentumZ_deut);
     rootdir.addDataSet(WvsQ2);
 
     rootdir.addDataSet(Q2vsXbj);
