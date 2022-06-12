@@ -17,7 +17,7 @@ import org.jlab.groot.data.TDirectory;
 //import org.funp.dvcs.DvcsEvent;;
 
 public class MCHisto {
-    public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
+  public H1F edgXmissingE; // missing mass of a complete DVCS final state e hadron gamma
   public H1F edgXmissingM2 ; // missing mass of a complete DVCS final state e hadron gamma
   public H1F edgXmissingP ; // missing mass of a complete DVCS final state e hadron gamma
   public H1F edgXmissingPx;// missing px of a complete DVCS final state e hadron gamma
@@ -264,6 +264,30 @@ thisto.fill(-1*ev.t().mass2());
     //ec4.getScreenShot();
 
 
+
+  }
+  public  void writeHipooutput(TDirectory rootdir,String directory){
+    String hipodirectory = "/"+directory;
+    String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid",hipodirectory+"/Asym"};
+    rootdir.mkdir(sub[0]);
+    rootdir.cd(sub[0]);
+    rootdir.addDataSet(MomentumX_elec);
+    rootdir.addDataSet(MomentumX_elec);
+    rootdir.addDataSet(MomentumX_elec);
+    rootdir.addDataSet(MomentumX_phot);
+    rootdir.addDataSet(MomentumX_phot);
+
+    rootdir.addDataSet(MomentumX_phot);
+    rootdir.addDataSet(MomentumY_deut);
+    rootdir.addDataSet(MomentumY_deut);
+    rootdir.addDataSet(MomentumY_deut);
+    rootdir.addDataSet(WvsQ2);
+
+    rootdir.addDataSet(Q2vsXbj);
+    rootdir.addDataSet(W);
+    rootdir.addDataSet(Q2);
+    rootdir.addDataSet(tvsq2);
+    rootdir.addDataSet(thisto);
 
   }
 

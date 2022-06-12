@@ -7,6 +7,7 @@ import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
+import org.jlab.groot.data.TDirectory;
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
@@ -24,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.jlab.groot.data.TDirectory;
+
 import java.io.File;
 import java.io.PrintWriter;
 

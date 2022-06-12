@@ -6,6 +6,7 @@ import org.jlab.jnp.hipo4.data.*;
 //---- imports for GROOT library
 import org.jlab.groot.data.*;
 import org.jlab.groot.graphics.*;
+import org.jlab.groot.data.TDirectory;
 //---- imports for PHYSICS library
 import org.jlab.clas.physics.*;
 //import org.jlab.jnp.reader.*;
@@ -56,6 +57,7 @@ public class MC
    
     static int PIDNUC;
     static double MNUC;
+    static TDirectory rootdir;
 
 
   public static void main( String[] args ) throws FileNotFoundException, IOException 
@@ -65,6 +67,7 @@ public class MC
     processInput inputParam=new processInput(args);
     //runUtil runInfo=new runUtil();
     dir = new TDirectory();
+    rootdir = new TDirectory();
     dir.mkdir("/test");
 
    
@@ -100,7 +103,7 @@ public class MC
      
     
 
-        BeamEnergy = 10.3;
+        BeamEnergy = 10.6;
         System.out.println("Beam energy found is "+BeamEnergy);
         
   
@@ -144,7 +147,8 @@ public class MC
     System.out.println("total events after excl cuts: " + counter);
   
   
-
+    hNC.writeHipooutput(rootdir, "MC");
+    rootdir.writeFile(inputParam.OutputLocation + "/" + inputParam.gethipoFile());
    
 
 
