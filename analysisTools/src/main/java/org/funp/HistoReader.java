@@ -622,8 +622,8 @@ public class HistoReader {
 
   public static void ShowBinning(TCanvas c, DvcsHisto h){
     c.divide(3, 1);
-    c.cd(0).draw(h.thisto);
-    h.thisto.setOptStat(111111);
+    c.cd(0).draw(h.tHhisto);
+    h.tHhisto.setOptStat(111111);
     drawCut(h.tbins[1], h.thisto, c, 0);
     drawCut(h.tbins[2], h.thisto, c, 0);
     drawCut(h.tbins[3], h.thisto, c, 0);
