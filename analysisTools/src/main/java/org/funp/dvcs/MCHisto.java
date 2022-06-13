@@ -77,7 +77,7 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
       MomentumY_elec.setTitleX("momentum y electron");
       MomentumZ_elec = new H1F("pze",100,-3,10);
       MomentumZ_elec.setTitleX("momentum Z electron");
-      Momentum_elec = new H1F("pe",100,0,10);
+      Momentum_elec = new H1F("pe",100,0,11);
       Momentum_elec.setTitleX("momentum electron");
       Theta_elec=new H1F("the",100,0,60);
 
@@ -87,7 +87,7 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
       MomentumY_phot.setTitleX("momentum y photon");
       MomentumZ_phot = new H1F("pzg",100,-3,10);
       MomentumZ_phot.setTitleX("momentum Z photon");
-      Momentum_phot = new H1F("pg",100,0,10);
+      Momentum_phot = new H1F("pg",100,0,11);
       Momentum_phot.setTitleX("momentum photon");
       Theta_phot=new H1F("thg",100,0,60);
 
@@ -97,7 +97,7 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
       MomentumY_deut.setTitleX("momentum y deuteron");
       MomentumZ_deut = new H1F("pzd",100,-3,3);
       MomentumZ_deut.setTitleX("momentum Z deuteron");
-      Momentum_deut = new H1F("pd",100,-3,3);
+      Momentum_deut = new H1F("pd",100,0,3);
       Momentum_deut.setTitleX("momentum deuteron");
       Theta_deut=new H1F("thd",100,0,100);
 
@@ -308,7 +308,7 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
     rootdir.addDataSet(MomentumY_deut);
     rootdir.addDataSet(MomentumZ_deut);
     rootdir.addDataSet(Momentum_deut);
-    rootdir.addDataSet(Theta_phot);
+    rootdir.addDataSet(Theta_deut);
     rootdir.addDataSet(WvsQ2);
 
     rootdir.addDataSet(Q2vsXbj);
