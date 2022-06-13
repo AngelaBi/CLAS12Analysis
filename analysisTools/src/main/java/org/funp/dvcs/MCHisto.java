@@ -79,7 +79,8 @@ public H1F DeltaPhiPlaneHist; //angle planes Q2/hadron and gamma/hadrom
       MomentumZ_elec.setTitleX("momentum Z electron");
       Momentum_elec = new H1F("pe",100,0,11);
       Momentum_elec.setTitleX("momentum electron");
-      Theta_elec=new H1F("the",100,0,40);
+
+      Theta_elec=new H1F("the",100,0,30);
 
       MomentumX_phot = new H1F("pxg",100,-3,3);
       MomentumX_phot.setTitleX("momentum x photon");
