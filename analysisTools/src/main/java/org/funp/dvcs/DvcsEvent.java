@@ -661,6 +661,103 @@ public class DvcsEvent {
     // NewEvent=true;
     return FoundEvent;
   }
+//ELASTIC FILTER
+public boolean FilterParticlesElastic(Bank particles, Bank scint, Bank hel, Bank scintExtras, Bank calos, int runNumber) {
+  LorentzVector vtmp = new LorentzVector();
+  FoundEvent = false;
+  this.el_en_max = 0;
+  this.ph_en_max = 0;
+  this.d_en_max = 0;
+  ArrayList<Integer> photonsNumber = new ArrayList<Integer>();
+  photonsNumber.clear();
+  Map<Integer, List<Integer>> scintMap = loadMapByIndex(scint, "pindex");
+  int status = 0;
+  nelec = 0;
+  nphot = 0;
+  ndeut = 0;
+  nother = 0;
+  ne = -1;
+  ng = -1;
+  nd = -1;
+  vpion.setPxPyPzM(99, 99, 99, 99);
+
+  double ctofen = -10;
+
+  if (particles.getRows() > 0) {// loop over the events
+    for (int npart = 0; npart < particles.getRows(); npart++) {// loop over the particles in
+      ctofen = -10;
+      dedxDeutCTOF = -10;
+      dedxDeutCTOF = -10;
+      vertexDeuteron = -100;
+      vertexElectron = -100;
+      int pid = particles.getInt("pid", npart);
+      status = particles.getInt("status", npart);
+      float beta = particles.getFloat("beta", npart);
+
+      // status 2000-2999 is FD
+      // if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
+
+      if (pid == 11 && Math.abs(status) >= 1000 && Math.abs(status) < 4000) {
+        nelec++;
+        vtmp.setPxPyPzM(particles.getFloat("px", npart),
+            particles.getFloat("py", npart),
+            particles.getFloat("pz", npart),
+            0.0005);
+        if (vtmp.e() > this.el_en_max) {
+          ne = npart;
+          this.el_en_max = vtmp.e();
+        }
+      }
+      
+      // status 4000 is FD
+      // else if(pid==PIDNUC && beta>0.16 && Math.abs(status)>=4000 && ctofen>5){
+      else if (pid == PIDHADR ) {
+        
+
+
+        
+          vtmp.setPxPyPzM(particles.getFloat("px", npart),
+              particles.getFloat("py", npart),
+              particles.getFloat("pz", npart),
+              this.MHADR);
+        if (beta > 0.0  ) {
+        
+          ndeut++;
+          
+          
+            if (vtmp.e() > this.d_en_max) {
+            nd = npart;
+            this.d_en_max = vtmp.e();
+          }
+
+
+
+        }
+
+      } else {
+        nother++;
+      }
+
+    }
+
+    // beginning of new way to select photon
+
+    if (ndeut >= 1 && nelec >= 1) {
+      this.setElectron(particles, calos, ne);
+      this.setHadron(particles, scint, scintExtras, nd);
+      this.setHelicity(hel, runNumber);
+      FoundEvent = true;
+
+    }
+  }
+  // NewEvent=true;
+  return FoundEvent;
+}
+
+
+
+
+
 
   public LorentzVector W() { //does not make any sense?
     LorentzVector tmp = new LorentzVector();
