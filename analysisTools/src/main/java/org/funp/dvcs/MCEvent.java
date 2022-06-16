@@ -34,7 +34,7 @@ public class MCEvent {
   public LorentzVector  velectron = new LorentzVector();
   public LorentzVector  vphoton = new LorentzVector();
   public LorentzVector  vhadron = new LorentzVector();
- int PIDNUC=45;
+  int PIDNUC=45;
   int nelec_MC=0;
   int nphot_MC=0;
   int ndeut_MC=0;
