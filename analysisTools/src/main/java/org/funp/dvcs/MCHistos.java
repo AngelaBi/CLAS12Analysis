@@ -81,7 +81,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
   rootDirfile=rootdir;
   baseDir=basedir;
   Config=conf;
-  SetHisto();
+  SetMCHisto();
   
 }
   
@@ -90,9 +90,9 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     this.outputdir=otherdir;
     this.pi0analysis=pi0mode;
     setAnalysisStrings();
-    SetHisto();
+    SetMCHisto();
   }
-  public void SetHisto(){
+  public void SetMCHisto(){
     
   
     
@@ -184,7 +184,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
 
   
 
-  public void fillBasicHisto(DvcsEvent ev) {
+  public void fillMCBasicHisto(DvcsEvent ev) {
     
 
     
@@ -228,7 +228,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
 
   }
 
-  public  void writeHipooutput(TDirectory rootdir,String directory){
+  public  void writeMCHipooutput(TDirectory rootdir,String directory){
     String hipodirectory = "/"+directory;
 
     String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid",hipodirectory+"/Asym"};

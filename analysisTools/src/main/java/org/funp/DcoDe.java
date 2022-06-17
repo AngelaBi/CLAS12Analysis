@@ -102,7 +102,7 @@ public class DcoDe {
     hACFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1  
     hACFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2    
 
-    hMC = new MCHistos(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2    
+    hMC = new MCHistos(processInput.getPi0mode(),inputParam.getOutputDir());//MC   
 
     ndvcs = 0;
     ndegamma = 0;
@@ -253,7 +253,7 @@ public class DcoDe {
     hACFD.writeHipooutput(rootdir, "ACFD");
     hACFT.writeHipooutput(rootdir, "ACFT");
 
-    hMC.writeHipooutput(rootdir, "MC");
+    hMC.writeMCHipooutput(rootdir, "MC");
     rootdir.writeFile(inputParam.OutputLocation + "/" + inputParam.gethipoFile());
 
     if (processInput.getMLmode()) {
@@ -323,7 +323,7 @@ public class DcoDe {
     }
     if(processInput.getMCmode() && ev.MCParticles(lund)){
       //fill MC histos
-      hMC.fillBasicHisto(ev);
+      hMC.fillMCBasicHisto(ev);
     }
   }// end of goodEventFilterParticle
 
