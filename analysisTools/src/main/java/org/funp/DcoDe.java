@@ -63,6 +63,13 @@ public class DcoDe {
   static int FDCounter;
   static int FTCounter;
 
+  static int n1;
+  static int n2;
+  static int n3;
+  static int n4;
+  static int n5;
+
+
   
   static HashMap<Integer, List<Double>> runMap;
 
@@ -109,6 +116,12 @@ public class DcoDe {
     counter = 0;
     FDCounter = 0;
     FTCounter = 0;  
+
+    n1=0;
+    n2=0;
+    n3=0;
+    n4=0;
+    n5=0;
 
     //READING MAP FOR GOOD RUNS
     runMap = runUtil.createMapGagikStyle();
@@ -236,6 +249,11 @@ public class DcoDe {
     System.out.println("total events after excl cuts: " + counter);
     System.out.println("total events after excl cuts in FT: " + FTCounter);
     System.out.println("total events after excl cuts in FD: " + FDCounter);
+    System.out.println("n1 : " + n1);
+    System.out.println("n2 : " + n2);
+    System.out.println("n3 : " + n3);
+    System.out.println("n4 : " + n4);
+    System.out.println("n5 : " + n5);
    
     //hNC.writeHipooutput(rootdir, "NC");
     hNCFD.writeHipooutput(rootdir, "NCFD");
@@ -278,8 +296,23 @@ public class DcoDe {
         hNCFD.fillBasicHisto(ev);
       }
       ndegamma++;
-      //if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {//XXXX temp
-      if (ev.DVCScut() ) {  
+      if(ev.VertexCut(runNumber)){
+        n1++;
+        if(ev.FiducialCuts()){
+          n2++;
+          if(-ev.Q().mass2() > 1.0){
+            n3++;
+            if(ev.angleBetweenElectronPhoton()>8){
+              n4++;
+              if(ev.vphoton.e() > 1 ){
+                n5++;
+              }
+            }
+          }
+        }
+        }
+      }
+      if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {  
         ndvcs++;
         //hDC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
