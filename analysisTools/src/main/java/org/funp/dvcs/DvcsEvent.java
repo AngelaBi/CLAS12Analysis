@@ -577,6 +577,9 @@ public class DvcsEvent {
     ng = -1;
     nd = -1;
     vpion.setPxPyPzM(99, 99, 99, 99);
+    vphoton.setPxPyPzM(99, 99, 99, 99);
+    vhadron.setPxPyPzM(99, 99, 99, 99);
+    velectron.setPxPyPzM(99, 99, 99, 99);
 
     double ctofen = -10;
 
@@ -741,7 +744,8 @@ public class DvcsEvent {
       //
       int mingamma=1;
       if(processInput.getPi0mode())mingamma=2;
-      if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {
+      //if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {//XXXXXX
+      if (ndeut >= 1 || nelec >= 1 || nphot >= mingamma) {  
         this.setElectron(particles, calos, ne);
         this.setHadron(particles, scint, scintExtras, nd);
         this.setPhoton(particles, calos, photonsNumber);
