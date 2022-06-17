@@ -27,7 +27,7 @@ public class DvcsHisto {
   public double[] tbins={0,0.3,0.6,10};//{0,0.39,0.57,10}
   public double[] xbbins={0,0.128,0.182,10};
 
-  private H1F Xbj;
+  public H1F Xbj;
   public H1F W; //invariant mass of e target -> e' X
   public H1F Q2;//Momentum transfer squared  of e-e'
 
