@@ -627,7 +627,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
 
     String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid",hipodirectory+"/Asym"};
     
-    rootdir.cd(directory);
+    
     rootdir.mkdir(sub[0]);
     rootdir.cd(sub[0]);
     for (Object obj: this.kinehistos) {
