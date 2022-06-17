@@ -36,8 +36,8 @@ public class DcoDe {
   static DvcsEvent ev;
 
   //static DvcsHisto hNC;// No cuts
-  //static DvcsHisto hNCFT;// No cuts FT
-  //static DvcsHisto hNCFD;// No cuts FD
+  static DvcsHisto hNCFT;// No cuts FT
+  static DvcsHisto hNCFD;// No cuts FD
 
   //static DvcsHisto hDC;// DVCS cuts
   static DvcsHisto hDCFT;// DVCS cuts conf 1
@@ -86,8 +86,8 @@ public class DcoDe {
     
     // NO CUTS
     //hNC = new DvcsHisto();// No cuts
-    //hNCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
-    //hNCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
+    hNCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
+    hNCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
     
     dir = new TDirectory();
     rootdir = new TDirectory();
@@ -238,8 +238,8 @@ public class DcoDe {
     System.out.println("total events after excl cuts in FD: " + FDCounter);
    
     //hNC.writeHipooutput(rootdir, "NC");
-    //hNCFD.writeHipooutput(rootdir, "NCFD");
-    //hNCFT.writeHipooutput(rootdir, "NCFT");
+    hNCFD.writeHipooutput(rootdir, "NCFD");
+    hNCFT.writeHipooutput(rootdir, "NCFT");
     //hDC.writeHipooutput(rootdir, "DC");
     hDCFD.writeHipooutput(rootdir, "DCFD");
     hDCFT.writeHipooutput(rootdir, "DCFT");
@@ -272,11 +272,11 @@ public class DcoDe {
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
       if(ev.MLSelection() ||true){
-      // if (ev.GetConf() == 1) {
-      //   hNCFT.fillBasicHisto(ev);
-      // } else if (ev.GetConf() == 2) {
-      //   hNCFD.fillBasicHisto(ev);
-      // }
+      if (ev.GetConf() == 1) {
+        hNCFT.fillBasicHisto(ev);
+      } else if (ev.GetConf() == 2) {
+        hNCFD.fillBasicHisto(ev);
+      }
       ndegamma++;
       if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {
         ndvcs++;
