@@ -278,7 +278,8 @@ public class DcoDe {
         hNCFD.fillBasicHisto(ev);
       }
       ndegamma++;
-      if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {
+      //if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {//XXXX temp
+      if (ev.DVCScut() ) {  
         ndvcs++;
         //hDC.fillBasicHisto(ev);
         if (ev.GetConf() == 1) {
