@@ -576,10 +576,10 @@ public class DvcsEvent {
     ne = -1;
     ng = -1;
     nd = -1;
-    vpion.setPxPyPzM(99, 99, 99, 99);
-    vphoton.setPxPyPzM(99, 99, 99, 99);
-    vhadron.setPxPyPzM(99, 99, 99, 99);
-    velectron.setPxPyPzM(99, 99, 99, 99);
+    vpion.setPxPyPzM(0, 0, 99, 99);
+    vphoton.setPxPyPzM(0, 0, 99, 99);
+    vhadron.setPxPyPzM(0, 0, 99, 99);
+    velectron.setPxPyPzM(0, 0, 99, 99);
 
     double ctofen = -10;
 
@@ -605,6 +605,7 @@ public class DvcsEvent {
               0.0005);
           if (vtmp.e() > this.el_en_max) {
             ne = npart;
+            System.out.println("Warning electron picked is not the first");
             this.el_en_max = vtmp.e();
           }
         }
@@ -866,7 +867,7 @@ public boolean FilterParticlesElastic(Bank particles, Bank scint, Bank hel, Bank
   ne = -1;
   ng = -1;
   nd = -1;
-  vpion.setPxPyPzM(99, 99, 99, 99);
+  vpion.setPxPyPzM(0, 0, 99, 99);
 
   double ctofen = -10;
 
