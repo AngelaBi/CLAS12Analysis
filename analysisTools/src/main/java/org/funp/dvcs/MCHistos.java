@@ -135,8 +135,6 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h.setTitleX(titlex);
         if(type == "Kine"){
           this.kinehistosMC.add(h);
-          System.out.println(name);
-
         }
         else if(type == "Excl"){
           this.exclhistosMC.add(h);
