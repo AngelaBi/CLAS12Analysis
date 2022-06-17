@@ -71,6 +71,11 @@ public class DvcsEvent {
   //public LorentzVector vproton = new LorentzVector();
   public LorentzVector vpion = new LorentzVector();
   
+  public LorentzVector velectronMC = new LorentzVector();
+  public LorentzVector vphotonMC = new LorentzVector();
+  public LorentzVector vhadronMC = new LorentzVector();
+  public LorentzVector vpionMC = new LorentzVector();
+
 
   public byte detectorHad;
   public byte detectorProt;
@@ -82,6 +87,11 @@ public class DvcsEvent {
   double el_en_max = 0;
   double ph_en_max = 0;
   double d_en_max = 0;
+
+  double el_en_max_MC = 0;
+  double ph_en_max_MC = 0;
+  double d_en_max_MC = 0;
+
   int PIDNUC = 45;
   int PIDPROT=2212;
   int PIDHADR=PIDNUC;
@@ -91,11 +101,23 @@ public class DvcsEvent {
   int nphot = 0;
   int ndeut = 0;
   int nother = 0;
+
+  int nelec_MC = 0;
+  int nphot_MC = 0;
+  int ndeut_MC = 0;
+  int nother_MC = 0;
+
   int npositives = 0;
   int ne = -1;
   int ng = -1;
   int nd = -1;
   int np = -1;
+
+  int ne_MC = -1;
+  int ng_MC = -1;
+  int nd_MC = -1;
+  int np_MC = -1;
+
   boolean FoundEvent = false;
   boolean FoundPositives = false;
   boolean FoundDeuteron = false;
@@ -398,6 +420,78 @@ public class DvcsEvent {
 
   }
 
+  public  void setMCElectron(Bank lund,  int ne) {
+    velectronMC.setPxPyPzM(lund.getFloat("px",ne),
+    lund.getFloat("py",ne),
+    lund.getFloat("pz",ne),
+    0.0005);
+    //System.out.println(velectron.p());
+    
+  }
+
+   public  void setMCPhoton(Bank lund,int ng) {
+    
+
+    //System.out.println("The end lowest energy is " + initialRemainingEnergy);
+    vphotonMC.setPxPyPzM( lund.getFloat("px",ng),
+    lund.getFloat("py",ng),
+    lund.getFloat("pz",ng),
+    0.0);
+
+  }
+
+  public  void setMCHadron(Bank lund, int nh) {
+    //tmpdeut++;
+ 
+    vhadronMC.setPxPyPzM(lund.getFloat("px",nh),
+    lund.getFloat("py",nh),
+    lund.getFloat("pz",nh),
+    MNUC);
+    // betahad=particles.getFloat("beta",nh);
+    // chi2pidhad=particles.getFloat("chi2pid",nh);
+    
+  }
+  public void setMCPion(Bank lund, ArrayList<Integer> photonsNumber ) {
+    //System.out.println(photonsNumber.size());
+    LorentzVector tmpphoton1=new LorentzVector();
+    LorentzVector tmpphoton2=new LorentzVector();
+    LorentzVector pair=new LorentzVector();
+    LorentzVector pairtmp=new LorentzVector();
+    
+    double diff=100000;
+
+    //System.out.println(pair.mass2()+" "+diff);
+    for (int i = 0; i < photonsNumber.size(); i++) {
+      for (int j = 0; j < photonsNumber.size(); j++) {
+       //&&( !(i==0 && j==1))
+        if(i<j ){
+          tmpphoton1.setPxPyPzM(lund.getFloat("px", photonsNumber.get(i)),
+          lund.getFloat("py", photonsNumber.get(i)),
+          lund.getFloat("pz", photonsNumber.get(i)),0.0);
+          tmpphoton2.setPxPyPzM(lund.getFloat("px", photonsNumber.get(j)),
+          lund.getFloat("py", photonsNumber.get(j)),
+          lund.getFloat("pz", photonsNumber.get(j)),0.0);
+          
+          pairtmp.copy(tmpphoton1);
+          pairtmp.add(tmpphoton2);
+          //pairtmp.print();
+          double difftmp=Math.abs(pairtmp.mass2()-MPION*MPION);
+          //System.out.println(pairtmp.mass2()+" "+difftmp);
+          if(difftmp<diff ){
+            pair.copy(pairtmp);
+           
+            diff=difftmp;
+      
+          }
+        }
+      }
+    }
+    //System.out.println("out");
+    //pair.print();
+    vpionMC.setPxPyPzE(pair.px(), pair.py(), pair.pz(), pair.e());;
+    //vpion.print();
+  }
+
   LorentzVector Correct_FT_E(LorentzVector x, double mass) {
 
     double E_new, Px_el, Py_el, Pz_el;
@@ -661,6 +755,95 @@ public class DvcsEvent {
     // NewEvent=true;
     return FoundEvent;
   }
+//MC filter
+public boolean MCParticles(Bank lund){
+  boolean goodMCEvent = false;
+  
+  nelec_MC=0;
+  nphot_MC=0;
+  ndeut_MC=0;
+  nother_MC=0;
+  ne_MC=-1;
+  ng_MC=-1;
+  nd_MC=-1;
+  el_en_max_MC=0;
+  ph_en_max_MC=0;
+  d_en_max_MC=0;
+  LorentzVector  vtmp = new LorentzVector();
+
+  ArrayList<Integer> photonsNumber = new ArrayList<Integer>();
+    photonsNumber.clear();
+
+  if(lund.getRows()>0){//loop over the events
+    for(int npart=0; npart<lund.getRows(); npart++){
+      int pid = lund.getInt("pid", npart);
+     // System.out.println(pid);
+      if(pid==11 /*&& Math.abs(status)>=2000 && Math.abs(status)<3000*/){
+        nelec_MC++;
+        vtmp.setPxPyPzM(lund.getFloat("px",npart),
+        lund.getFloat("py",npart),
+        lund.getFloat("pz",npart),
+        0.0005);
+        if(vtmp.e()>el_en_max){
+          ne_MC=npart;
+          el_en_max_MC=vtmp.e();
+        }
+      }
+
+      else if(pid==22 /*&& Math.abs(status)<4000*/){
+        photonsNumber.add(npart);
+          nphot++;
+        nphot_MC++;
+        vtmp.setPxPyPzM(lund.getFloat("px",npart),
+        lund.getFloat("py",npart),
+        lund.getFloat("pz",npart),
+        0.0);
+
+        if(vtmp.e()>ph_en_max){
+          ng_MC=npart;
+          ph_en_max_MC=vtmp.e();
+          // if(status<=2000)conf=1;
+          // else if(status>=2000 && status<4000)conf=2;
+
+        }
+      }
+
+      else if(pid==1000010020 /*&& Math.abs(status)>=4000*/ ){
+                  
+          //System.out.println("hello deuteron");
+
+        
+          ndeut_MC++;
+          vtmp.setPxPyPzM(lund.getFloat("px",npart),
+          lund.getFloat("py",npart),
+          lund.getFloat("pz",npart),
+          MNUC);
+          if(vtmp.e()>d_en_max){
+            nd_MC=npart;
+            d_en_max_MC=vtmp.e();
+          }
+      }
+      
+
+
+    }
+    if( ndeut_MC>=1 && nelec_MC>=1 && nphot_MC>=1){
+      setMCElectron(lund,ne_MC);
+      setMCHadron(lund,nd_MC);
+      setMCPhoton(lund,ng_MC);
+      if(nphot_MC>=2) this.setMCPion(lund,photonsNumber);
+
+      //this.setHelicity(hel,runNumber);
+      goodMCEvent=true;
+      
+    }
+    
+  }    
+return goodMCEvent;
+}
+
+
+
 //ELASTIC FILTER
 public boolean FilterParticlesElastic(Bank particles, Bank scint, Bank hel, Bank scintExtras, Bank calos, int runNumber) {
   LorentzVector vtmp = new LorentzVector();

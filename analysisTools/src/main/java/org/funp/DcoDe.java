@@ -52,6 +52,8 @@ public class DcoDe {
   static DvcsHisto hACFT;// All cuts conf 1
   static DvcsHisto hACFD;// All cuts conf 2
 
+  static MCHistos hMC;
+
   static TDirectory dir;
   static TDirectory rootdir;
 
@@ -85,39 +87,22 @@ public class DcoDe {
     // NO CUTS
     //hNC = new DvcsHisto();// No cuts
     //hNCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
-    
     //hNCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
     
     dir = new TDirectory();
     rootdir = new TDirectory();
     // DVCS CUTS
-    //hDC = new DvcsHisto();// DVCS cuts
-    //hDC.setOutputDir(inputParam.getOutputDir());
-    hDCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
-    //hDCFT.setOutputDir(inputParam.getOutputDir());
-    
+    hDCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1 
     hDCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
-    //hDCFD.setOutputDir(inputParam.getOutputDir());
     
-    // PION CUT
-    // hPCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
-    
-    // hPCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
-    
-    // Coneangle 2D cuts
     hCCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
-    //hCCFT.setOutputDir(inputParam.getOutputDir());
-    
     hCCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
-    //hCCFD.setOutputDir(inputParam.getOutputDir());
     
     // ALL CUTS
-    hACFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1
-    //hACFT.setOutputDir(inputParam.getOutputDir());
-    
-    hACFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2
-    //hACFD.setOutputDir(inputParam.getOutputDir());
-    
+    hACFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// DVCS cuts conf 1  
+    hACFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2    
+
+    hMC = new MCHistos(processInput.getPi0mode(),inputParam.getOutputDir());// All cuts conf 2    
 
     ndvcs = 0;
     ndegamma = 0;
@@ -168,6 +153,7 @@ public class DcoDe {
           Bank runEvent = new Bank(reader.getSchemaFactory().getSchema("REC::Event"));
           Bank scint = new Bank(reader.getSchemaFactory().getSchema("REC::Scintillator"));
           Bank scintExtras=null;
+          Bank lund=null;
           if(!processInput.getRGAmode()){
             scintExtras     = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
             }
@@ -175,6 +161,9 @@ public class DcoDe {
           //Bank scintExtras = new Bank(reader.getSchemaFactory().getSchema("REC::ScintExtras"));
           Bank calos = new Bank(reader.getSchemaFactory().getSchema("REC::Calorimeter"));
           // runconfig = new Bank(reader.getSchemaFactory().getSchema("RUN::config"));
+          if(processInput.getMCmode()){
+            lund = new Bank(reader.getSchemaFactory().getSchema("MC::Lund"));
+          }
           goodEvent = 0;
 
           reader.nextEvent(event);
@@ -185,6 +174,9 @@ public class DcoDe {
           event.read(runconfig);
           event.read(calos);
           event.read(runEvent);
+          if(processInput.getMCmode()){
+            event.read(lund);
+          }
           // System.out.println(" Current event number " + runconfig.getInt("event",0));
 
           // goodEventFilterParticles(particles,scint,hel,scintExtras);
@@ -218,7 +210,7 @@ public class DcoDe {
             goodEvent = 1;
           }
           if (goodEvent == 1)
-            goodEventFilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber);
+            goodEventFilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber,lund);
 
         }
         reader.close();
@@ -260,6 +252,8 @@ public class DcoDe {
     
     hACFD.writeHipooutput(rootdir, "ACFD");
     hACFT.writeHipooutput(rootdir, "ACFT");
+
+    hMC.writeHipooutput(rootdir, "MC");
     rootdir.writeFile(inputParam.OutputLocation + "/" + inputParam.gethipoFile());
 
     if (processInput.getMLmode()) {
@@ -270,7 +264,7 @@ public class DcoDe {
   }
 
   public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,
-      int runNumber) {
+      int runNumber,Bank lund) {
         boolean pionCut= false;
         
     if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber)) {
@@ -326,6 +320,10 @@ public class DcoDe {
       }
       }
       }
+    }
+    if(processInput.getMCmode() && ev.MCParticles(lund)){
+      //fill MC histos
+      hMC.fillBasicHisto(ev);
     }
   }// end of goodEventFilterParticle
 
