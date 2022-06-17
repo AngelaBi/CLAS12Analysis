@@ -134,16 +134,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h=new H1F(name,title,nbins,xmin,xmax);
         h.setTitleX(titlex);
         if(type == "Kine"){
-          kinehistos.add(h);
+          this.kinehistos.add(h);
         }
         else if(type == "Excl"){
-          exclhistos.add(h);
+          this.exclhistos.add(h);
         }
         else if(type == "Pid"){
-          pidhistos.add(h);
+          this.pidhistos.add(h);
         }
         else if(type == "Asym"){
-          asymhistos.add(h);
+          this.asymhistos.add(h);
         }
       }
       return h;
@@ -236,7 +236,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
   
     rootdir.mkdir(sub[0]);
     rootdir.cd(sub[0]);
-    for (Object obj: kinehistos) {
+    for (Object obj: this.kinehistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
