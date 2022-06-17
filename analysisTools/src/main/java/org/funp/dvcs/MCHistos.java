@@ -100,28 +100,28 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     
     
    
-    hadrP=createHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
-    photP=createHisto("photP", gm+" Energy","E "+gm,100,0,12,"Kine");
-    elecP=createHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
-    hadrTh=createHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"Kine");
-    elecTh=createHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"Kine");
-    photTh=createHisto("photTh", gm+" Theta", "th "+gm,100,0,35,"Kine");
+    hadrP=createMCHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
+    photP=createMCHisto("photP", gm+" Energy","E "+gm,100,0,12,"Kine");
+    elecP=createMCHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
+    hadrTh=createMCHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"Kine");
+    elecTh=createMCHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"Kine");
+    photTh=createMCHisto("photTh", gm+" Theta", "th "+gm,100,0,35,"Kine");
      
-    targetmass=createHisto("targetmass","target mass","",100,0,3,"Kine");
-    hadronmass=createHisto("hadronmass","target mass","",100,0,3,"Kine");
+    targetmass=createMCHisto("targetmass","target mass","",100,0,3,"Kine");
+    hadronmass=createMCHisto("hadronmass","target mass","",100,0,3,"Kine");
 
-    hadrThvsPhi=createHisto("hadrThvsPhi","Deuteron th vs phi", "", "", 100,-180,180,100,0,180, "Kine");
-    photThvsPhi=createHisto("photThvsPhi","Photon th vs phi", "", "", 100,-180,180,100,0,35, "Kine");
-    elecThvsPhi=createHisto("elecThvsPhi","Electron th vs phi", "" ,"", 100,-180,180,100,0,35, "Kine");
-    hadrThvsP=createHisto("hadrThvsP", "Deuteron th bs p", "", "", 100,0,3.00,100,0,180, "Kine");
-    elecThvsP=createHisto("elecThvsP", "Electron th vs p ", "", "",100,0,10.6,100,0,35, "Kine");
-    photThvsP=createHisto("photThvsP", "Photon th vs   p", "", "", 100,0,10.6,100,0,35, "Kine");
+    hadrThvsPhi=createMCHisto("hadrThvsPhi","Deuteron th vs phi", "", "", 100,-180,180,100,0,180, "Kine");
+    photThvsPhi=createMCHisto("photThvsPhi","Photon th vs phi", "", "", 100,-180,180,100,0,35, "Kine");
+    elecThvsPhi=createMCHisto("elecThvsPhi","Electron th vs phi", "" ,"", 100,-180,180,100,0,35, "Kine");
+    hadrThvsP=createMCHisto("hadrThvsP", "Deuteron th bs p", "", "", 100,0,3.00,100,0,180, "Kine");
+    elecThvsP=createMCHisto("elecThvsP", "Electron th vs p ", "", "",100,0,10.6,100,0,35, "Kine");
+    photThvsP=createMCHisto("photThvsP", "Photon th vs   p", "", "", 100,0,10.6,100,0,35, "Kine");
     
-    pionmass2=createHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "Kine");
+    pionmass2=createMCHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "Kine");
 
    
   }
-  public H1F createHisto(String name,
+  public H1F createMCHisto(String name,
       String title,String titlex,
       int nbins,double xmin,double xmax,String type){
         H1F h;
@@ -149,7 +149,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
       return h;
       
   }
-  public H2F createHisto(String name,
+  public H2F createMCHisto(String name,
       String title,String titlex,String titley,
       int nbinsx,double xmin,double xmax,
       int nbinsy,double ymin,double ymax,
