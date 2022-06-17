@@ -100,24 +100,24 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     
     
    
-    hadrP=createMCHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"Kine");
-    photP=createMCHisto("photP", gm+" Energy","E "+gm,100,0,12,"Kine");
-    elecP=createMCHisto("elecP", "Electron energy","E elec",100,0,12,"Kine");
-    hadrTh=createMCHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"Kine");
-    elecTh=createMCHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"Kine");
-    photTh=createMCHisto("photTh", gm+" Theta", "th "+gm,100,0,35,"Kine");
+    hadrP=createMCHisto("hadrP","Deuteron Momentum","p [GeV/c]",100,0,3,"KineMC");
+    photP=createMCHisto("photP", gm+" Energy","E "+gm,100,0,12,"KineMC");
+    elecP=createMCHisto("elecP", "Electron energy","E elec",100,0,12,"KineMC");
+    hadrTh=createMCHisto("hadrTh", "Deuteron Theta", "th "+gm,100,30,140,"KineMC");
+    elecTh=createMCHisto("elecTh", "Electron Theta", "th "+gm,100,0,35,"KineMC");
+    photTh=createMCHisto("photTh", gm+" Theta", "th "+gm,100,0,35,"KineMC");
      
-    targetmass=createMCHisto("targetmass","target mass","",100,0,3,"Kine");
-    hadronmass=createMCHisto("hadronmass","target mass","",100,0,3,"Kine");
+    targetmass=createMCHisto("targetmass","target mass","",100,0,3,"KineMC");
+    hadronmass=createMCHisto("hadronmass","target mass","",100,0,3,"KineMC");
 
-    hadrThvsPhi=createMCHisto("hadrThvsPhi","Deuteron th vs phi", "", "", 100,-180,180,100,0,180, "Kine");
-    photThvsPhi=createMCHisto("photThvsPhi","Photon th vs phi", "", "", 100,-180,180,100,0,35, "Kine");
-    elecThvsPhi=createMCHisto("elecThvsPhi","Electron th vs phi", "" ,"", 100,-180,180,100,0,35, "Kine");
-    hadrThvsP=createMCHisto("hadrThvsP", "Deuteron th bs p", "", "", 100,0,3.00,100,0,180, "Kine");
-    elecThvsP=createMCHisto("elecThvsP", "Electron th vs p ", "", "",100,0,10.6,100,0,35, "Kine");
-    photThvsP=createMCHisto("photThvsP", "Photon th vs   p", "", "", 100,0,10.6,100,0,35, "Kine");
+    hadrThvsPhi=createMCHisto("hadrThvsPhi","Deuteron th vs phi", "", "", 100,-180,180,100,0,180, "KineMC");
+    photThvsPhi=createMCHisto("photThvsPhi","Photon th vs phi", "", "", 100,-180,180,100,0,35, "KineMC");
+    elecThvsPhi=createMCHisto("elecThvsPhi","Electron th vs phi", "" ,"", 100,-180,180,100,0,35, "KineMC");
+    hadrThvsP=createMCHisto("hadrThvsP", "Deuteron th bs p", "", "", 100,0,3.00,100,0,180, "KineMC");
+    elecThvsP=createMCHisto("elecThvsP", "Electron th vs p ", "", "",100,0,10.6,100,0,35, "KineMC");
+    photThvsP=createMCHisto("photThvsP", "Photon th vs   p", "", "", 100,0,10.6,100,0,35, "KineMC");
     
-    pionmass2=createMCHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "Kine");
+    pionmass2=createMCHisto("pionmass2", "invariant mass gamma gamma", "", 100, -0.01, 0.05, "KineMC");
 
    
   }
@@ -133,16 +133,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         else{
         h=new H1F(name,title,nbins,xmin,xmax);
         h.setTitleX(titlex);
-        if(type == "Kine"){
+        if(type == "KineMC"){
           this.kinehistosMC.add(h);
         }
-        else if(type == "Excl"){
+        else if(type == "ExclMC"){
           this.exclhistosMC.add(h);
         }
-        else if(type == "Pid"){
+        else if(type == "PidMC"){
           this.pidhistosMC.add(h);
         }
-        else if(type == "Asym"){
+        else if(type == "AsymMC"){
           this.asymhistosMC.add(h);
         }
       }
@@ -165,16 +165,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h=new H2F(name,title,nbinsx,xmin,xmax,nbinsy,ymin,ymax);
         h.setTitleX(titlex);
         h.setTitleY(titley);
-        if(type == "Kine"){
+        if(type == "KineMC"){
           this.kinehistosMC.add(h);
         }
-        else if(type == "Excl"){
+        else if(type == "ExclMC"){
           this.exclhistosMC.add(h);
         }
-        else if(type == "Pid"){
+        else if(type == "PidMC"){
           this.pidhistosMC.add(h);
         }
-        else if(type == "Asym"){
+        else if(type == "AsymMC"){
           this.asymhistosMC.add(h);
         }
       }
@@ -231,7 +231,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
   public  void writeMCHipooutput(TDirectory rootdir,String directory){
     String hipodirectory = "/"+directory;
 
-    String[] sub={hipodirectory+"/Kine",hipodirectory+"/Excl",hipodirectory+"/Pid",hipodirectory+"/Asym"};
+    String[] sub={hipodirectory+"/KineMC",hipodirectory+"/ExclMC",hipodirectory+"/PidMC",hipodirectory+"/AsymMC"};
     
     
     rootdir.mkdir(sub[0]);
