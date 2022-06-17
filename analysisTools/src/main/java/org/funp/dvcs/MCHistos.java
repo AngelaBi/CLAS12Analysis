@@ -166,16 +166,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h.setTitleX(titlex);
         h.setTitleY(titley);
         if(type == "Kine"){
-          kinehistos.add(h);
+          this.kinehistos.add(h);
         }
         else if(type == "Excl"){
-          exclhistos.add(h);
+          this.exclhistos.add(h);
         }
         else if(type == "Pid"){
-          pidhistos.add(h);
+          this.pidhistos.add(h);
         }
         else if(type == "Asym"){
-          asymhistos.add(h);
+          this.asymhistos.add(h);
         }
       }
       return h;
