@@ -69,7 +69,7 @@ public class DcoDe {
   static int n4;
   static int n5;
 
-
+  static boolean MCelecCut; 
   
   static HashMap<Integer, List<Double>> runMap;
 
@@ -79,7 +79,7 @@ public class DcoDe {
 
 
     int goodEvent;
-    
+    MCelecCut = true;
 
     System.out.println("\n Processing arguments \n");
     processInput inputParam = new processInput(args);
@@ -284,8 +284,16 @@ public class DcoDe {
   public static void goodEventFilterParticles(Bank particles, Bank scint, Bank runEvent, Bank scintExtras, Bank calos,
       int runNumber,Bank lund) {
         boolean pionCut= false;
-        
-    if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber)) {
+        if(processInput.getMCmode()){
+          LorentzVector  vtmp = new LorentzVector();
+          vtmp.setPxPyPzM(lund.getFloat("px",0),
+        lund.getFloat("py",0),
+        lund.getFloat("pz",0),
+        0.0005);
+          MCelecCut=(Math.toDegrees(vtmp.theta())>6);
+
+        }
+    if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber) && MCelecCut) {
       //hNC.fillBasicHisto(ev);
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
@@ -354,7 +362,7 @@ public class DcoDe {
       }
       }
     }
-    if(processInput.getMCmode() && ev.MCParticles(lund)){
+    if(processInput.getMCmode() && ev.MCParticles(lund) && MCelecCut){
       //fill MC histos
       hMC.fillMCBasicHisto(ev);
     }
