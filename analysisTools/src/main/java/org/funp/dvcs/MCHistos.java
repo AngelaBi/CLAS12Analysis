@@ -242,30 +242,30 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
       } else if (obj instanceof H2F) {
         rootdir.addDataSet((H2F) obj);      } 
     }
-    rootdir.mkdir(sub[1]);
-    rootdir.cd(sub[1]);
-    for (Object obj: exclhistos) {
-      if (obj instanceof H1F){
-        rootdir.addDataSet((H1F) obj);
-      } else if (obj instanceof H2F) {
-        rootdir.addDataSet((H2F) obj);      } 
-    }
-    rootdir.mkdir(sub[2]);
-    rootdir.cd(sub[2]);
-    for (Object obj: pidhistos) {
-      if (obj instanceof H1F){
-        rootdir.addDataSet((H1F) obj);
-      } else if (obj instanceof H2F) {
-        rootdir.addDataSet((H2F) obj);      } 
-    }
-    rootdir.mkdir(sub[3]);
-    rootdir.cd(sub[3]);
-    for (Object obj: asymhistos) {
-      if (obj instanceof H1F){
-        rootdir.addDataSet((H1F) obj);
-      } else if (obj instanceof H2F) {
-        rootdir.addDataSet((H2F) obj);      } 
-    }
+    // rootdir.mkdir(sub[1]);
+    // rootdir.cd(sub[1]);
+    // for (Object obj: exclhistos) {
+    //   if (obj instanceof H1F){
+    //     rootdir.addDataSet((H1F) obj);
+    //   } else if (obj instanceof H2F) {
+    //     rootdir.addDataSet((H2F) obj);      } 
+    // }
+    // rootdir.mkdir(sub[2]);
+    // rootdir.cd(sub[2]);
+    // for (Object obj: pidhistos) {
+    //   if (obj instanceof H1F){
+    //     rootdir.addDataSet((H1F) obj);
+    //   } else if (obj instanceof H2F) {
+    //     rootdir.addDataSet((H2F) obj);      } 
+    // }
+    // rootdir.mkdir(sub[3]);
+    // rootdir.cd(sub[3]);
+    // for (Object obj: asymhistos) {
+    //   if (obj instanceof H1F){
+    //     rootdir.addDataSet((H1F) obj);
+    //   } else if (obj instanceof H2F) {
+    //     rootdir.addDataSet((H2F) obj);      } 
+    // }
     
    
   
