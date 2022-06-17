@@ -310,7 +310,6 @@ public class DcoDe {
             }
           }
         }
-        }
       }
       if (ev.DVCScut() && ev.FiducialCuts() && ev.VertexCut(runNumber)) {  
         ndvcs++;
