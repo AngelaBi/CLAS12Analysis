@@ -634,10 +634,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
       if (obj instanceof H1F){
         //System.out.println("**** " + sub[0] +((H1F) obj).getName());
         rootdir.addDataSet((H1F) obj);
-        System.out.println("**** " + sub[0] +"/"+((H1F) obj).getName());
+        //System.out.println("**** " + sub[0] +"/"+((H1F) obj).getName());
       } else if (obj instanceof H2F) {
         rootdir.addDataSet((H2F) obj);  
-        System.out.println("**** " + sub[0] +"/"+((H2F) obj).getName());    } 
+        //System.out.println("**** " + sub[0] +"/"+((H2F) obj).getName());    } 
     }
     rootdir.mkdir(sub[1]);
     rootdir.cd(sub[1]);
