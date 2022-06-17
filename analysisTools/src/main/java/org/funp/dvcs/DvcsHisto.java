@@ -632,6 +632,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     rootdir.cd(sub[0]);
     for (Object obj: this.kinehistos) {
       if (obj instanceof H1F){
+        System.out.println("**** " + sub[0] +((H1F) obj).getName());
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
         rootdir.addDataSet((H2F) obj);      } 
