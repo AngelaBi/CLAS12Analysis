@@ -26,9 +26,9 @@ import java.util.ArrayList;
 
 
 public class MCEvent {
-    double MNUC=1.875612;
-
-    public double BeamEnergy=10.3;
+  
+  double MNUC=1.875612;
+  public double BeamEnergy=10.3;
   public LorentzVector  vBeam   = new LorentzVector(0.0,0.0,BeamEnergy,BeamEnergy);
   public LorentzVector  vTarget = new LorentzVector(0.0,0.0,0.0,MNUC);
   public LorentzVector  velectron = new LorentzVector();
