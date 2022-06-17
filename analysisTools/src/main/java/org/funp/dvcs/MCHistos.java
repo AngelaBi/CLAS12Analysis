@@ -43,10 +43,10 @@ public class MCHistos {
  
   public H1F pionmass2;
 
-  ArrayList<Object> kinehistos;
-  ArrayList<Object> exclhistos;
-  ArrayList<Object> asymhistos;
-  ArrayList<Object> pidhistos;
+  ArrayList<Object> kinehistosMC;
+  ArrayList<Object> exclhistosMC;
+  ArrayList<Object> asymhistosMC;
+  ArrayList<Object> pidhistosMC;
   
   boolean readMode=false;
   private TDirectory rootDirfile;
@@ -96,7 +96,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     
   
     
-    this.kinehistos= new ArrayList<Object>();
+    this.kinehistosMC= new ArrayList<Object>();
     
     
    
@@ -134,16 +134,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h=new H1F(name,title,nbins,xmin,xmax);
         h.setTitleX(titlex);
         if(type == "Kine"){
-          this.kinehistos.add(h);
+          this.kinehistosMC.add(h);
         }
         else if(type == "Excl"){
-          this.exclhistos.add(h);
+          this.exclhistosMC.add(h);
         }
         else if(type == "Pid"){
-          this.pidhistos.add(h);
+          this.pidhistosMC.add(h);
         }
         else if(type == "Asym"){
-          this.asymhistos.add(h);
+          this.asymhistosMC.add(h);
         }
       }
       return h;
@@ -166,16 +166,16 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
         h.setTitleX(titlex);
         h.setTitleY(titley);
         if(type == "Kine"){
-          this.kinehistos.add(h);
+          this.kinehistosMC.add(h);
         }
         else if(type == "Excl"){
-          this.exclhistos.add(h);
+          this.exclhistosMC.add(h);
         }
         else if(type == "Pid"){
-          this.pidhistos.add(h);
+          this.pidhistosMC.add(h);
         }
         else if(type == "Asym"){
-          this.asymhistos.add(h);
+          this.asymhistosMC.add(h);
         }
       }
       return h;
@@ -236,7 +236,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
   
     rootdir.mkdir(sub[0]);
     rootdir.cd(sub[0]);
-    for (Object obj: this.kinehistos) {
+    for (Object obj: this.kinehistosMC) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
@@ -244,7 +244,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     }
     // rootdir.mkdir(sub[1]);
     // rootdir.cd(sub[1]);
-    // for (Object obj: this.exclhistos) {
+    // for (Object obj: this.exclhistosMC) {
     //   if (obj instanceof H1F){
     //     rootdir.addDataSet((H1F) obj);
     //   } else if (obj instanceof H2F) {
@@ -252,7 +252,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     // }
     // rootdir.mkdir(sub[2]);
     // rootdir.cd(sub[2]);
-    // for (Object obj: this.pidhistos) {
+    // for (Object obj: this.pidhistosMC) {
     //   if (obj instanceof H1F){
     //     rootdir.addDataSet((H1F) obj);
     //   } else if (obj instanceof H2F) {
@@ -260,7 +260,7 @@ public MCHistos(TDirectory rootdir, String basedir,String conf){
     // }
     // rootdir.mkdir(sub[3]);
     // rootdir.cd(sub[3]);
-    // for (Object obj: this.asymhistos) {
+    // for (Object obj: this.asymhistosMC) {
     //   if (obj instanceof H1F){
     //     rootdir.addDataSet((H1F) obj);
     //   } else if (obj instanceof H2F) {
