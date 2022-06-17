@@ -220,10 +220,10 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     
   
     
-    kinehistos= new ArrayList<Object>();
-    exclhistos= new ArrayList<Object>();
-    asymhistos = new ArrayList<Object>();
-    pidhistos = new ArrayList<Object>();
+    this.kinehistos= new ArrayList<Object>();
+    this.exclhistos= new ArrayList<Object>();
+    this.asymhistos = new ArrayList<Object>();
+    this.pidhistos = new ArrayList<Object>();
     
     Xbj=createHisto("Xbj","x_b_j", "", 100, 0., 1.,"Kine");
     W=createHisto("W","W","W [GeV]",100,0,10,"Kine");
@@ -382,16 +382,16 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
         h=new H1F(name,title,nbins,xmin,xmax);
         h.setTitleX(titlex);
         if(type == "Kine"){
-          kinehistos.add(h);
+          this.kinehistos.add(h);
         }
         else if(type == "Excl"){
-          exclhistos.add(h);
+          this.exclhistos.add(h);
         }
         else if(type == "Pid"){
-          pidhistos.add(h);
+          this.pidhistos.add(h);
         }
         else if(type == "Asym"){
-          asymhistos.add(h);
+          this.asymhistos.add(h);
         }
       }
       return h;
@@ -630,7 +630,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
   
     rootdir.mkdir(sub[0]);
     rootdir.cd(sub[0]);
-    for (Object obj: kinehistos) {
+    for (Object obj: this.kinehistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
@@ -638,7 +638,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     rootdir.mkdir(sub[1]);
     rootdir.cd(sub[1]);
-    for (Object obj: exclhistos) {
+    for (Object obj: this.exclhistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
@@ -646,7 +646,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     rootdir.mkdir(sub[2]);
     rootdir.cd(sub[2]);
-    for (Object obj: pidhistos) {
+    for (Object obj: this.pidhistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
@@ -654,7 +654,7 @@ public DvcsHisto(TDirectory rootdir, String basedir,String conf){
     }
     rootdir.mkdir(sub[3]);
     rootdir.cd(sub[3]);
-    for (Object obj: asymhistos) {
+    for (Object obj: this.asymhistos) {
       if (obj instanceof H1F){
         rootdir.addDataSet((H1F) obj);
       } else if (obj instanceof H2F) {
