@@ -569,6 +569,7 @@ public class DvcsEvent {
     photonsNumber.clear();
     Map<Integer, List<Integer>> scintMap = loadMapByIndex(scint, "pindex");
     int status = 0;
+    int charge = 0;
     nelec = 0;
     nphot = 0;
     ndeut = 0;
@@ -593,11 +594,12 @@ public class DvcsEvent {
         int pid = particles.getInt("pid", npart);
         status = particles.getInt("status", npart);
         float beta = particles.getFloat("beta", npart);
+        charge = particles.getInt("charge",npart);
 
         // status 2000-2999 is FD
         // if(pid==11 && Math.abs(status)>=2000 && Math.abs(status)<3000){
 
-        if (pid == 11 && Math.abs(status) >= 2000 && Math.abs(status) < 4000) {
+        if (pid == 11 && charge<0 && Math.abs(status) >= 2000 && Math.abs(status) < 4000) {
           nelec++;
           vtmp.setPxPyPzM(particles.getFloat("px", npart),
               particles.getFloat("py", npart),
@@ -745,8 +747,8 @@ public class DvcsEvent {
       //
       int mingamma=1;
       if(processInput.getPi0mode())mingamma=2;
-      //if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {//XXXXXX
-      if (nelec >= 1 ) {  
+      if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {//XXXXXX
+      //if (nelec >= 1 ) {  
         this.setElectron(particles, calos, ne);
         if(nd>=1) this.setHadron(particles, scint, scintExtras, nd);
         if(nphot>=1)this.setPhoton(particles, calos, photonsNumber);
