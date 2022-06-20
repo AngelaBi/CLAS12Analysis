@@ -35,7 +35,7 @@ public class DcoDe {
 
   static DvcsEvent ev;
 
-  //static DvcsHisto hNC;// No cuts
+  static DvcsHisto hNC;// No cuts
   static DvcsHisto hNCFT;// No cuts FT
   static DvcsHisto hNCFD;// No cuts FD
 
@@ -68,6 +68,8 @@ public class DcoDe {
   static int n3;
   static int n4;
   static int n5;
+  static int tot_e;
+  static int tot_e_MC;
 
   static boolean MCelecCut; 
   
@@ -93,6 +95,7 @@ public class DcoDe {
     
     // NO CUTS
     //hNC = new DvcsHisto();// No cuts
+    hNC = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
     hNCFT = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
     hNCFD = new DvcsHisto(processInput.getPi0mode(),inputParam.getOutputDir());// No cuts
     
@@ -122,6 +125,8 @@ public class DcoDe {
     n3=0;
     n4=0;
     n5=0;
+    tot_e=0;
+    tot_e_MC=0;
 
     //READING MAP FOR GOOD RUNS
     runMap = runUtil.createMapGagikStyle();
@@ -254,8 +259,10 @@ public class DcoDe {
     System.out.println("n3 : " + n3);
     System.out.println("n4 : " + n4);
     System.out.println("n5 : " + n5);
+    System.out.println("tot_e : " + tot_e);
+    System.out.println("tot_e_MC : " + tot_e_MC);
    
-    //hNC.writeHipooutput(rootdir, "NC");
+    hNC.writeHipooutput(rootdir, "NC");
     hNCFD.writeHipooutput(rootdir, "NCFD");
     hNCFT.writeHipooutput(rootdir, "NCFT");
     //hDC.writeHipooutput(rootdir, "DC");
@@ -294,7 +301,8 @@ public class DcoDe {
 
         }
     if (ev.FilterParticles(particles, scint, runEvent, scintExtras, calos, runNumber) && MCelecCut) {
-      //hNC.fillBasicHisto(ev);
+      tot_e++;
+      hNC.fillBasicHisto(ev);
       if(processInput.getPi0mode())pionCut=ev.SelectPion();
       else pionCut=!ev.SelectPion();
       if(ev.MLSelection() ||true){
@@ -304,6 +312,7 @@ public class DcoDe {
         hNCFD.fillBasicHisto(ev);
       }
       ndegamma++;
+      //COUNTERS TO DEBUG
       if(ev.VertexCut(runNumber)){
         n1++;
         if(ev.FiducialCuts()){
@@ -364,6 +373,7 @@ public class DcoDe {
     }
     if(processInput.getMCmode() && ev.MCParticles(lund) && MCelecCut){
       //fill MC histos
+      tot_e_MC++;
       hMC.fillMCBasicHisto(ev);
     }
   }// end of goodEventFilterParticle

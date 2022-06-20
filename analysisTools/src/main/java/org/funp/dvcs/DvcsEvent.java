@@ -747,8 +747,8 @@ public class DvcsEvent {
       //
       int mingamma=1;
       if(processInput.getPi0mode())mingamma=2;
-      if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {//XXXXXX
-      //if (nelec >= 1 ) {  
+      //if (ndeut >= 1 && nelec >= 1 && nphot >= mingamma) {//XXXXXX
+      if (nelec >= 1 ) {  
         this.setElectron(particles, calos, ne);
         if(nd>=1) this.setHadron(particles, scint, scintExtras, nd);
         if(nphot>=1)this.setPhoton(particles, calos, photonsNumber);
