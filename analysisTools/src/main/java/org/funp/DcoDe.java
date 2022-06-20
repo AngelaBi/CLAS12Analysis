@@ -69,6 +69,7 @@ public class DcoDe {
   static int n4;
   static int n5;
   static int tot_e;
+  static int tot_e_nf;
   static int tot_e_MC;
 
   static boolean MCelecCut; 
@@ -126,6 +127,7 @@ public class DcoDe {
     n4=0;
     n5=0;
     tot_e=0;
+    tot_e_nf=0;
     tot_e_MC=0;
 
     //READING MAP FOR GOOD RUNS
@@ -260,6 +262,7 @@ public class DcoDe {
     System.out.println("n4 : " + n4);
     System.out.println("n5 : " + n5);
     System.out.println("tot_e : " + tot_e);
+    System.out.println("tot_e : " + tot_e_nf);
     System.out.println("tot_e_MC : " + tot_e_MC);
    
     hNC.writeHipooutput(rootdir, "NC");

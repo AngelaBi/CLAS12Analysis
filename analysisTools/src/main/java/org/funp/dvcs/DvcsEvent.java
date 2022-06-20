@@ -607,7 +607,8 @@ public class DvcsEvent {
               0.0005);
           if (vtmp.e() > this.el_en_max) {
             ne = npart;
-            //System.out.println("Warning electron picked is not the first");
+            System.out.println("Warning electron picked is not the first");
+            //tot_e_nf++;
             this.el_en_max = vtmp.e();
           }
         }
