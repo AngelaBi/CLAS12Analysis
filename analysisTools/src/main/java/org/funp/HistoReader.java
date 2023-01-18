@@ -79,27 +79,27 @@ public class HistoReader {
     TCanvas cprelim = new TCanvas("ExcCutPrelim"+detector,1000,500);
     displayPrelim(cprelim, hDC,hCC,detector);
     TCanvas cexclDC=new TCanvas("ExcCutsDC"+detector,500,500);
-    displayExcCuts(cexclDC, hDC,detector,cut);
+    displayExcCuts(cexclDC, hDC,detector,"DC");
     TCanvas cexclDC2=new TCanvas("ExcCutsDC2"+detector,500,500);
-    displayExcCuts2(cexclDC2, hDC,detector,cut);
+    displayExcCuts2(cexclDC2, hDC,detector,"DC");
 
     TCanvas cexclCC=new TCanvas("ExcCutsCC"+detector,500,500);
-    displayExcCuts(cexclCC, hCC,detector ,cut);
+    displayExcCuts(cexclCC, hCC,detector ,"CC");
     TCanvas cexclCC2=new TCanvas("ExcCutsCC2"+detector,500,500);
-    displayExcCuts2(cexclCC2, hCC,detector,cut);
+    displayExcCuts2(cexclCC2, hCC,detector,"CC");
 
     TCanvas cexclAC=new TCanvas("ExcCutsAC"+detector,500,500);
-    displayExcCuts(cexclAC, hAC,detector,cut);
+    displayExcCuts(cexclAC, hAC,detector,"AC");
     TCanvas cexclAC2=new TCanvas("ExcCutsAC2"+detector,500,500);
-    displayExcCuts2(cexclAC2, hAC,detector,cut);
+    displayExcCuts2(cexclAC2, hAC,detector,"AC");
     
 
     TCanvas cprotDC=new TCanvas("ExclPlotwithProtDC"+detector,800,500);
-    displayExclPlotProt(cprotDC, hDC,detector,cut);
+    displayExclPlotProt(cprotDC, hDC,detector,"DC");
     TCanvas cprotCC=new TCanvas("ExclPlotwithProtCC"+detector,800,500);
-    displayExclPlotProt(cprotCC, hCC,detector,cut);
+    displayExclPlotProt(cprotCC, hCC,detector,"CC");
     TCanvas cprotAC=new TCanvas("ExclPlotwithProtAC"+detector,800,500);
-    displayExclPlotProt(cprotAC, hAC,detector,cut);
+    displayExclPlotProt(cprotAC, hAC,detector,"AC");
 
 
     // TCanvas ect1 = new TCanvas("Asymt"+detector, 1200, 500);
@@ -624,21 +624,21 @@ public class HistoReader {
     c.divide(3, 1);
     c.cd(0).draw(h.tHhisto);
     h.tHhisto.setOptStat(111111);
-    drawCut(h.tbins[1], h.thisto, c, 0);
-    drawCut(h.tbins[2], h.thisto, c, 0);
-    drawCut(h.tbins[3], h.thisto, c, 0);
+    //drawCut(h.tbins[1], h.thisto, c, 0);
+    //drawCut(h.tbins[2], h.thisto, c, 0);
+    //drawCut(h.tbins[3], h.thisto, c, 0);
     c.cd(1).draw(h.Q2);
     h.Q2.setOptStat(111111);
-    drawCut(h.q2bins[1], h.Q2, c,1);
-    drawCut(h.q2bins[2], h.Q2, c, 1);
-    drawCut(h.q2bins[3], h.Q2, c, 1);
+    //drawCut(h.q2bins[1], h.Q2, c,1);
+    //drawCut(h.q2bins[2], h.Q2, c, 1);
+    //drawCut(h.q2bins[3], h.Q2, c, 1);
 
     
     c.cd(2).draw(h.Xbj);
     h.Xbj.setOptStat(111111);
-    drawCut(h.xbbins[1], h.Xbj, c,2);
-    drawCut(h.xbbins[2], h.Xbj, c, 2);
-    drawCut(h.xbbins[3], h.Xbj, c, 2);
+    //drawCut(h.xbbins[1], h.Xbj, c,2);
+    //drawCut(h.xbbins[2], h.Xbj, c, 2);
+    //drawCut(h.xbbins[3], h.Xbj, c, 2);
 
   }
 
